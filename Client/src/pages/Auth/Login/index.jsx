@@ -4,14 +4,15 @@ import Input from "../components/Input";
 import Logo from "./../../../assets/UniConnectLogo.png";
 import {MdAlternateEmail} from "react-icons/md";
 import {FiLock} from "react-icons/fi";
-import {Link} from "react-router-dom";
-import { postRequest } from "../../../utils/requests";
+import {Link, useNavigate} from "react-router-dom";
+import {postRequest, setAuthToken} from "../../../utils/requests";
 
 const index = () => {
     let [inputs,
         setInputs] = useState({});
     let [error,
         setError] = useState(false);
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setInputs((prev) => ({
@@ -20,11 +21,21 @@ const index = () => {
         }));
     };
 
+    const handleLoginError = (error) => {
+        if (error.response.data.error.status === 401) {
+            setError(true)
+            setTimeout(() => {
+                setError(false)
+            }, 3000)
+        }
+    }
+
     const handleLogin = async(e) => {
         e.preventDefault()
 
-        const response = await postRequest("/api/login", inputs, false)
-        
+        const response = await postRequest("/api/login", inputs, false, handleLoginError)
+        response && setAuthToken(response.token)
+        // navigate("/register")
     }
 
     return (
@@ -61,7 +72,11 @@ const index = () => {
                         minLength="8"
                         icon={< FiLock color = "C1C5C5" size = {
                         27
-                    } />}/>
+                    } />}/> {error && (
+                        <p className="text-start text-danger font-medium">
+                            Wrong credentials
+                        </p>
+                    )}
                     <p className="text-start text-[#737373]">
                         Don't have an account?{" "}
                         <Link to="/register" className="text-primary font-medium">
