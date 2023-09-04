@@ -8,10 +8,10 @@ import {Link} from "react-router-dom";
 import {Fragment, useState} from "react";
 import Friend from "./../Friend"
 
-const index = () => {
+const index = ({type, setType}) => {
 
     let [friends, setFriends] = useState([<Friend />, <Friend />]);
-    let [communities, setCommunities] = useState([<Community />]);
+    // let [communities, setCommunities] = useState([<Community />]);
 
     return (
         <div
@@ -19,11 +19,13 @@ const index = () => {
             <div
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
+                    onClick={() => setType("community")}
                     className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent`}>
                     <AiFillHome size={25}/>
                     Communities
                 </div>
                 <div
+                    onClick={() => setType("inbox")}
                     className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent`}>
                     <MdEmail size={25}/>
                     Inbox
@@ -61,7 +63,7 @@ const index = () => {
                     <div className="my-2"></div>
                     <div className="bg-transparent w-full px-4">
                         <button
-                            onClick={() => setShowCommunityModal(true)}
+                            
                             className="py-3 mb-3 bg-primary text-white rounded-md w-full flex items-center justify-center gap-2 font-medium">
                             <AiOutlinePlus size={22}/>
                             New Community
