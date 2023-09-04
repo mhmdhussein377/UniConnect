@@ -7,15 +7,19 @@ import {FaUserPlus} from "react-icons/fa"
 import {Link} from "react-router-dom";
 import {Fragment, useState} from "react";
 import Friend from "./../Friend"
+import Community from "./../Community"
 
 const index = ({type, setType}) => {
 
-    let [friends, setFriends] = useState([<Friend />, <Friend />]);
-    // let [communities, setCommunities] = useState([<Community />]);
+    let [friends,
+        setFriends] = useState([ < Friend />, < Friend />
+    ]);
+    let [communities,
+        setCommunities] = useState([< Community />]);
 
     return (
         <div
-            className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar`}>
+            className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20]`}>
             <div
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
@@ -63,7 +67,6 @@ const index = ({type, setType}) => {
                     <div className="my-2"></div>
                     <div className="bg-transparent w-full px-4">
                         <button
-                            
                             className="py-3 mb-3 bg-primary text-white rounded-md w-full flex items-center justify-center gap-2 font-medium">
                             <AiOutlinePlus size={22}/>
                             New Community
