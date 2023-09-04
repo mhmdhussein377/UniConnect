@@ -1,12 +1,16 @@
 import './App.css'
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/Auth/Login"
+import Register from "./pages/Auth/Register"
 
 function App() {
 
   return (
-    <>
-      <h1 className='bg-blue-600'>Hello World</h1>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
 }
 
 export default App
