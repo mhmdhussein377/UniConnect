@@ -5,13 +5,14 @@ import {AiOutlineUser, AiOutlineIdcard} from "react-icons/ai";
 import {FiLock} from "react-icons/fi";
 import {postRequest} from "../../../utils/requests";
 import {useState} from "react";
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import Button from "../components/Button";
 
 const index = () => {
 
     let [inputs,
         setInputs] = useState({});
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setInputs((prev) => ({
@@ -20,9 +21,16 @@ const index = () => {
         }));
     };
 
+    const handleRegister = async(e) => {
+        e.preventDefault()
+
+        const response = await postRequest("/api/register", inputs, false)
+        response && navigate("/")
+    }
+
     return (
         <div className="flex justify-center items-center h-screen">
-            <form className="text-center flex flex-col gap-8 px-4">
+            <form onSubmit={handleRegister} className="text-center flex flex-col gap-8 px-4">
                 <div className="flex flex-col gap-4">
                     <div
                         className="m-auto w-[98px] h-[98px] bg-grayLight border-[2px] border-grayMedium rounded-full flex items-center justify-center">
