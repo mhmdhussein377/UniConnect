@@ -32,3 +32,42 @@ const Register = async(req, res, next) => {
             .json(error);
     }
 };
+
+const Login = async(req, res, next) => {
+    const {email, password} = req.body;
+
+    try {
+        const user = await User.findOne({email});
+        if (!user) 
+            return next(createError(401, "Wrong credentials"));
+        
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) 
+            return next(createError(401, "Wrong credentials"));
+        
+        const token = jwt.sign({
+            id: user._id
+        }, process.env.SECRET_KEY, {});
+
+        const {
+            password: pass,
+            ...others
+        } = user._doc;
+
+        return res
+            .status(200)
+            .json({
+                ...others,
+                token
+            });
+    } catch (error) {
+        return res
+            .status(500)
+            .json(error);
+    }
+};
+
+module.exports = {
+    Login,
+    Register
+};

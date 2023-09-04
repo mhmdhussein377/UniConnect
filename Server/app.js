@@ -18,6 +18,8 @@ app.listen(process.env.PORT, () => {
 // Routes
 const AuthRoutes = require("./routes/AuthRoutes")
 
+app.use('/api', AuthRoutes)
+
 app.use(verifyToken)
 
 app.use(handleError)
