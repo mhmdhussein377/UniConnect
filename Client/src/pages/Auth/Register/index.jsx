@@ -73,7 +73,7 @@ const index = () => {
                         icon={< FiLock color = "C1C5C5" size = {
                         27
                     } />}/>
-                    <p className="text-start text-[#737373]">Already have an account? <Link to="/" className="text-primary">Login</Link></p>
+                    <p className="text-start text-[#737373]">Already have an account? <Link to="/" className="text-primary font-medium">Login</Link></p>
                 </div>
                 <Button text="Sign Up" />
             </form>
