@@ -5,6 +5,7 @@ import Logo from "./../../../assets/UniConnectLogo.png";
 import {MdAlternateEmail} from "react-icons/md";
 import {FiLock} from "react-icons/fi";
 import {Link} from "react-router-dom";
+import { postRequest } from "../../../utils/requests";
 
 const index = () => {
     let [inputs,
@@ -19,9 +20,16 @@ const index = () => {
         }));
     };
 
+    const handleLogin = async(e) => {
+        e.preventDefault()
+
+        const response = await postRequest("/api/login", inputs, false)
+        
+    }
+
     return (
         <div className="flex justify-center items-center h-screen">
-            <form className="text-center flex flex-col gap-8 px-4">
+            <form onSubmit={handleLogin} className="text-center flex flex-col gap-8 px-4">
                 <div className="flex flex-col gap-4">
                     <div
                         className="m-auto w-[98px] h-[98px] bg-grayLight border-[2px] border-grayMedium rounded-full flex items-center justify-center">

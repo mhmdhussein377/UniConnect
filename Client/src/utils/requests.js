@@ -2,6 +2,16 @@ import axios from "axios";
 
 const baseURL = "http://localhost:8000";
 
+const setAuthToken = (token) => {
+    if(token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        localStorage.setItem("authToken", token)
+    }else {
+        delete axios.defaults.headers.common["Authorization"];
+        localStorage.removeItem("authToken")
+    }
+}
+
 const getAuthToken = () => {
     return localStorage.getItem("authToken")
 }
@@ -43,4 +53,4 @@ const postRequest = async(url, data = null, authRequired = true, errorHandler = 
     return makeRequest("POST", url, data, authRequired, {}, errorHandler)
 }
 
-export {getRequest, postRequest}
+export {getRequest, postRequest, setAuthToken}
