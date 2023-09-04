@@ -5,13 +5,14 @@ import {AiOutlinePlus} from "react-icons/ai"
 import {RiCommunityFill} from "react-icons/ri";
 import {FaUserPlus} from "react-icons/fa"
 import {Link} from "react-router-dom";
-import {Fragment} from "react";
+import {Fragment, useState} from "react";
+import Friend from "./../Friend"
 
 const index = () => {
 
     let [friends, setFriends] = useState([<Friend />, <Friend />]);
     let [communities, setCommunities] = useState([<Community />]);
-    
+
     return (
         <div
             className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar`}>

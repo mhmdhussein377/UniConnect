@@ -1,8 +1,7 @@
 import Logo from "./../../assets/UniConnectLogo.png";
-import SearchBar from "./../../components/ui/SearchBar";
+import SearchBar from "./../SearchBar"
 import {MdLightMode} from "react-icons/md";
 import {AiFillBell} from "react-icons/ai";
-import {useState} from "react";
 import {AiFillHome} from "react-icons/ai";
 import {Link} from "react-router-dom";
 
