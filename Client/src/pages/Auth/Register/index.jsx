@@ -12,6 +12,8 @@ const index = () => {
 
     let [inputs,
         setInputs] = useState({});
+    let [error,
+        setError] = useState({isError: false, type: "", message: ""})
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -21,16 +23,43 @@ const index = () => {
         }));
     };
 
+    const resetError = () => {
+        setTimeout(() => {
+            setError({isError: false, type: "", message: ""});
+        }, 3000)
+    }
+
+    const handleRegisterError = (error) => {
+        const errorMessage = error.response.data.error.message;
+        if (errorMessage === "User already exists! Login Instead") {
+            setError({isError: true, type: "email", message: errorMessage});
+            resetError();
+        } else if (errorMessage === "Invalid username!") {
+            setError({isError: true, type: "username", message: errorMessage});
+            resetError();
+        }
+    }
+
     const handleRegister = async(e) => {
         e.preventDefault()
 
-        const response = await postRequest("/api/register", inputs, false)
+        const {name, email, password, username} = inputs
+
+        if (!name || !email || !password || !username) {
+            setError({isError: true, type: "Missing fields", message: "All fields are requried"})
+            resetError()
+            return
+        }
+
+        const response = await postRequest("/api/register", inputs, false, handleRegisterError)
         response && navigate("/")
     }
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <form onSubmit={handleRegister} className="text-center flex flex-col gap-8 px-4">
+            <form
+                onSubmit={handleRegister}
+                className="text-center flex flex-col gap-8 px-4">
                 <div className="flex flex-col gap-4">
                     <div
                         className="m-auto w-[98px] h-[98px] bg-grayLight border-[2px] border-grayMedium rounded-full flex items-center justify-center">
@@ -53,7 +82,9 @@ const index = () => {
                         icon={< MdAlternateEmail size = {
                         27
                     }
-                    color = "C1C5C5" />}/>
+                    color = "C1C5C5" />}/> {error.isError && error.type === "email" && (
+                        <p className="text-start text-danger">{error.message}</p>
+                    )}
                     <Input
                         handleChange={handleChange}
                         type="text"
@@ -71,7 +102,9 @@ const index = () => {
                         icon={< AiOutlineUser size = {
                         27
                     }
-                    color = "C1C5C5" />}/>
+                    color = "C1C5C5" />}/> {error.isError && error.type === "username" && (
+                        <p className="text-start text-danger">{error.message}</p>
+                    )}
                     <Input
                         handleChange={handleChange}
                         type="password"
@@ -80,10 +113,17 @@ const index = () => {
                         minLength="8"
                         icon={< FiLock color = "C1C5C5" size = {
                         27
-                    } />}/>
-                    <p className="text-start text-[#737373]">Already have an account? <Link to="/" className="text-primary font-medium">Login</Link></p>
+                    } />}/> {error.isError && error.type === "Missing fields" && (
+                        <p className="text-danger text-start">All fields are required!</p>
+                    )}
+                    <p className="text-start text-[#737373]">
+                        Already have an account?{" "}
+                        <Link to="/" className="text-primary font-medium">
+                            Login
+                        </Link>
+                    </p>
                 </div>
-                <Button text="Sign Up" />
+                <Button text="Sign Up"/>
             </form>
         </div>
     );
