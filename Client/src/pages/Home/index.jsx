@@ -5,6 +5,7 @@ import CommunityConversation from "./../../components/CommunityConversation"
 import PrivateConversation from "./../../components/PrivateConversation"
 import CommunityDetails from "./../../components/CommunityDetails"
 import UserDetails from "./../../components/UserDetails"
+import CreateCommunity from "./../../components/CreateCommunity"
 
 const index = () => {
 
@@ -14,21 +15,27 @@ const index = () => {
         setOpenCommunityDetails] = useState(false);
     let [showUserDetails,
         setShowUserDetails] = useState(false);
+    let [showCommunityModal,
+        setShowCommunityModal] = useState(false);
 
     return (
         <div className="h-screen max-h-screen">
             <Header/>
             <div className="flex relative home-bottom">
-                <Sidebar setType={setType} type={type}/>{" "} {type === "community" && (<CommunityConversation setOpenCommunityDetails={setOpenCommunityDetails}/>)}
-                {type === "inbox" && <PrivateConversation setShowUserDetails={setShowUserDetails}/>}
+                <Sidebar setType={setType} type={type} setShowCommunityModal={setShowCommunityModal}/> 
+                {type === "community" && (<CommunityConversation setOpenCommunityDetails={setOpenCommunityDetails}/>)}
+                {type === "inbox" && (<PrivateConversation setShowUserDetails={setShowUserDetails}/>)}
             </div>
             {/* Sidebar to show details about the community */}
-            <CommunityDetails
+            {openCommunityDetails && (<CommunityDetails
                 setOpenCommunityDetails={setOpenCommunityDetails}
-                openCommunityDetails={openCommunityDetails}/> {/* Sidebar to show details of the user */}
-            {<UserDetails
+                openCommunityDetails={openCommunityDetails}/>)}
+            {/* Sidebar to show details of the user */}
+            {showUserDetails && (<UserDetails
                 showUserDetails={showUserDetails}
-                setShowUserDetails={setShowUserDetails}/>}
+                setShowUserDetails={setShowUserDetails}/>)}
+            {/* Modal to create communities */}
+            {showCommunityModal && (<CreateCommunity setShowCommunityModal={setShowCommunityModal}/>)}
         </div>
     );
 }

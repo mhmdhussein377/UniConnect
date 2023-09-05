@@ -9,7 +9,7 @@ import {Fragment, useState} from "react";
 import Friend from "./../Friend"
 import Community from "./../Community"
 
-const index = ({type, setType}) => {
+const index = ({type, setType, setShowCommunityModal}) => {
 
     let [friends,
         setFriends] = useState([ < Friend />, < Friend />
@@ -67,6 +67,7 @@ const index = ({type, setType}) => {
                     <div className="my-2"></div>
                     <div className="bg-transparent w-full px-4">
                         <button
+                            onClick={() => setShowCommunityModal(true)}
                             className="py-3 mb-3 bg-primary text-white rounded-md w-full flex items-center justify-center gap-2 font-medium">
                             <AiOutlinePlus size={22}/>
                             New Community
