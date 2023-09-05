@@ -4,8 +4,34 @@ import {MdLightMode} from "react-icons/md";
 import {AiFillBell} from "react-icons/ai";
 import {AiFillHome} from "react-icons/ai";
 import {Link} from "react-router-dom";
+import Notifications from "./../Notifications"
+import {useEffect, useRef, useState} from "react";
 
 const index = ({profile}) => {
+
+    const [showNotifications,
+        setShowNotifications] = useState(false);
+    const notificationsRef = useRef(null);
+    const bellIconRef = useRef(null);
+
+    const toggleNotifications = () => {
+        setShowNotifications(prev => !prev)
+    }
+
+    const handleClickOutside = (e) => {
+        if (notificationsRef.current && !notificationsRef.current.contains(e.target) && bellIconRef.current && !bellIconRef.current.contains(e.target)) {
+            setShowNotifications(false)
+        }
+    }
+
+    const handleBellClick = (event) => {
+        event.stopPropagation()
+        toggleNotifications()
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside)
+    }, [])
 
     return (
         <div
@@ -27,10 +53,17 @@ const index = ({profile}) => {
                 <div className="flex items-center gap-2.5">
                     <MdLightMode size={28} color="#575D65"/>
                     <div className="relative w-fit flex items-center justify-center">
-                        <AiFillBell
-                            className="cursor-pointer select-none"
-                            size={28}
-                            color="#575D65"/>{" "}
+                        <div
+                            className="cursor-pointer select-none bell"
+                            ref={bellIconRef}
+                            onClick={handleBellClick}>
+                            <AiFillBell size={28} color="#575D65"/>
+                        </div>
+                        {showNotifications && (
+                            <div ref={notificationsRef}>
+                                <Notifications/>
+                            </div>
+                        )}
                     </div>
                     <div className="w-[40px] h-[40px] rounded-full overflow-hidden">
                         <img

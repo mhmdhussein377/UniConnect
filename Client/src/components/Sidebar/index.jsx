@@ -12,10 +12,14 @@ import Community from "./../Community"
 const index = ({type, setType, setShowCommunityModal}) => {
 
     let [friends,
-        setFriends] = useState([ < Friend />, < Friend />
+        setFriends] = useState([ < Friend highlight = {
+            true
+        } />, < Friend />
     ]);
     let [communities,
-        setCommunities] = useState([< Community />]);
+        setCommunities] = useState([< Community highlight = {
+            true
+        } />]);
 
     return (
         <div
@@ -24,13 +28,13 @@ const index = ({type, setType, setShowCommunityModal}) => {
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
                     onClick={() => setType("community")}
-                    className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent`}>
+                    className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent ${type === "community" && "border-opacity-100 border-b-primary text-primary"}`}>
                     <AiFillHome size={25}/>
                     Communities
                 </div>
                 <div
                     onClick={() => setType("inbox")}
-                    className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent`}>
+                    className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent ${type === "inbox" && "border-opacity-100 border-b-primary text-primary"}`}>
                     <MdEmail size={25}/>
                     Inbox
                 </div>

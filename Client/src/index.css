@@ -17,3 +17,8 @@ body {
     height: calc(100vh - 70px);
     max-height: calc(100vh - 70px)
 }
+
+.big-shadow {
+    filter: drop-shadow(0 30px 30px rgb(0 0 0 / 0.25));
+    -webkit-filter: drop-shadow(0 30px 30px rgb(0 0 0 / 0.25));
+}
