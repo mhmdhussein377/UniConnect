@@ -4,7 +4,7 @@ import {CgSidebarOpen} from "react-icons/cg";
 import {FiUserPlus} from "react-icons/fi";
 import Message from "./../Message"
 
-const index = () => {
+const index = ({setOpenCommunityDetails}) => {
 
     const newCommunity = false;
 
@@ -18,8 +18,8 @@ const index = () => {
                 className="flex items-center justify-between px-4 py-1.5 border-b-[2px] border-grayHard">
                 <div className="flex flex-col items-center">
                     <div
-                        
-                        className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300">
+                        onClick={() => setOpenCommunityDetails(prev => !prev)}
+                        className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300 select-none">
                         <BsHash size={25}/>
                         First Community
                     </div>
