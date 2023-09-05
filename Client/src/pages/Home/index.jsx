@@ -6,6 +6,7 @@ import PrivateConversation from "./../../components/PrivateConversation"
 import CommunityDetails from "./../../components/CommunityDetails"
 import UserDetails from "./../../components/UserDetails"
 import CreateCommunity from "./../../components/CreateCommunity"
+import AddMembersModal from "./../../components/AddMembersModal"
 
 const index = () => {
 
@@ -17,6 +18,7 @@ const index = () => {
         setShowUserDetails] = useState(false);
     let [showCommunityModal,
         setShowCommunityModal] = useState(false);
+    let [showAddMembersModal, setShowAddMembersModal] = useState(false)
 
     return (
         <div className="h-screen max-h-screen">
@@ -27,15 +29,18 @@ const index = () => {
                 {type === "inbox" && (<PrivateConversation setShowUserDetails={setShowUserDetails}/>)}
             </div>
             {/* Sidebar to show details about the community */}
-            {openCommunityDetails && (<CommunityDetails
+            <CommunityDetails
                 setOpenCommunityDetails={setOpenCommunityDetails}
-                openCommunityDetails={openCommunityDetails}/>)}
+                openCommunityDetails={openCommunityDetails}
+                setShowAddMembersModal={setShowAddMembersModal}/>
             {/* Sidebar to show details of the user */}
-            {showUserDetails && (<UserDetails
+            <UserDetails
                 showUserDetails={showUserDetails}
-                setShowUserDetails={setShowUserDetails}/>)}
+                setShowUserDetails={setShowUserDetails}/>
             {/* Modal to create communities */}
             {showCommunityModal && (<CreateCommunity setShowCommunityModal={setShowCommunityModal}/>)}
+            {/* Modal to add members to communities */}
+            {showAddMembersModal && <AddMembersModal setShowAddMembersModal={setShowAddMembersModal} />}
         </div>
     );
 }

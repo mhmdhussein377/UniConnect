@@ -6,7 +6,7 @@ import Member from "./../Member"
 import {Link} from "react-router-dom";
 import {useState} from "react";
 
-const index = ({openCommunityDetails, setOpenCommunityDetails}) => {
+const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembersModal}) => {
 
     let [isAboutOpened,
         setIsAboutOpened] = useState(true)
@@ -53,7 +53,7 @@ const index = ({openCommunityDetails, setOpenCommunityDetails}) => {
                     className="flex items-center justify-between py-4 border-t-2 border-grayHard select-none">
                     Members
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center cursor-pointer text-primary font-medium select-none">
+                        <div onClick={() => {setShowAddMembersModal(true); setOpenCommunityDetails(false)}} className="flex items-center cursor-pointer text-primary font-medium select-none">
                             <GoPlus size={20}/>
                             Add Members
                         </div>

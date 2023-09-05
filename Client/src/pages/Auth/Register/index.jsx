@@ -40,6 +40,8 @@ const index = () => {
         }
     }
 
+    console.log(error)
+
     const handleRegister = async(e) => {
         e.preventDefault()
 
