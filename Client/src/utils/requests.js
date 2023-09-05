@@ -3,10 +3,10 @@ import axios from "axios";
 const baseURL = "http://localhost:8000";
 
 const setAuthToken = (token) => {
-    if(token) {
+    if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         localStorage.setItem("authToken", token)
-    }else {
+    } else {
         delete axios.defaults.headers.common["Authorization"];
         localStorage.removeItem("authToken")
     }
@@ -18,11 +18,11 @@ const getAuthToken = () => {
 
 const makeRequest = async(method, url, data = null, authRequired = true, config = {}, errorHandler = null) => {
     try {
-        if(authRequired) {
+        if (authRequired) {
             const token = getAuthToken()
-            if(token) {
+            if (token) {
                 config.headers = {
-                    'Authorization' : `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 }
             }
         }
@@ -36,7 +36,7 @@ const makeRequest = async(method, url, data = null, authRequired = true, config 
 
         return response.data
     } catch (error) {
-        if(errorHandler) {
+        if (errorHandler) {
             errorHandler(error)
         }
         console.log(error)
@@ -45,8 +45,7 @@ const makeRequest = async(method, url, data = null, authRequired = true, config 
 }
 
 const getRequest = async(url, authRequired = true, errorHandler = null) => {
-    // config will give an error because we are not passing anything
-    return makeRequest("GET", url, null, authRequired, errorHandler)
+    return makeRequest("GET", url, null, authRequired, {}, errorHandler)
 }
 
 const postRequest = async(url, data = null, authRequired = true, errorHandler = null) => {

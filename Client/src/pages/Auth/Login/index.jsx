@@ -11,7 +11,7 @@ const index = () => {
     let [inputs,
         setInputs] = useState({});
     let [error,
-        setError] = useState(false);
+        setError] = useState({});
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -21,21 +21,40 @@ const index = () => {
         }));
     };
 
+    const resetError = () => {
+        setTimeout(() => {
+            setError({isError: false, type: "", message: ""});
+        }, 3000);
+    };
+
     const handleLoginError = (error) => {
         if (error.response.data.error.status === 401) {
-            setError(true)
+            setError({isError: true, type: "Wrong credentials", message: "Wrong credentials"})
             setTimeout(() => {
                 setError(false)
             }, 3000)
+            return
         }
     }
 
     const handleLogin = async(e) => {
         e.preventDefault()
 
-        const response = await postRequest("/api/login", inputs, false, handleLoginError)
-        response && setAuthToken(response.token)
-        // navigate("/register")
+        const {email, password} = inputs
+
+        if (!email || !password) {
+            setError({isError: true, type: "missing fields", message: "All fields are required"});
+            resetError()
+            return
+        }
+
+        try {
+            const response = await postRequest("/api/login", inputs, false, handleLoginError);
+            response && setAuthToken(response.token)
+            response && navigate("/home");
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -72,11 +91,12 @@ const index = () => {
                         minLength="8"
                         icon={< FiLock color = "C1C5C5" size = {
                         27
-                    } />}/> {error && (
-                        <p className="text-start text-danger font-medium">
-                            Wrong credentials
-                        </p>
-                    )}
+                    } />}/> 
+                    {error.isError && (error.type === "Wrong credentials"
+                        ? <p className="text-start text-danger font-medium">
+                                Wrong credentials
+                            </p>
+                        : <p className="text-start text-danger font-medium">All fields are required</p>)}
                     <p className="text-start text-[#737373]">
                         Don't have an account?{" "}
                         <Link to="/register" className="text-primary font-medium">
