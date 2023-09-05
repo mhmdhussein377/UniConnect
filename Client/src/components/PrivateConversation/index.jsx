@@ -4,7 +4,7 @@ import {BsFillSendFill} from "react-icons/bs";
 import {CgSidebarOpen} from "react-icons/cg";
 import Message from "./../Message"
 
-const index = () => {
+const index = ({setShowUserDetails}) => {
     return (
         <div className="flex-[8.8] flex flex-col">
             <div
@@ -13,12 +13,17 @@ const index = () => {
                     <div
                         className="w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center">
                         <img
+                            onClick={() => setShowUserDetails(prev => !prev)}
                             className="cursor-pointer"
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                             alt="profile-picture"/>
                     </div>
                     <div>
-                        <div className="cursor-pointer text-lg font-medium">John Doe</div>
+                        <div
+                            onClick={() => setShowUserDetails(prev => !prev)}
+                            className="cursor-pointer text-lg font-medium select-none">
+                            John Doe
+                        </div>
                         <p>mhmd_hussein</p>
                     </div>
                 </div>
