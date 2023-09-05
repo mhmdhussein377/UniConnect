@@ -4,6 +4,7 @@ import {BiSolidBuildingHouse} from "react-icons/bi";
 import {FaLocationDot} from "react-icons/fa6";
 import {BsFillTelephoneFill} from "react-icons/bs";
 import {Link} from "react-router-dom";
+import UserDetail from "./../UserDetail"
 
 const index = ({showUserDetails, setShowUserDetails}) => {
     return (
@@ -30,16 +31,36 @@ const index = ({showUserDetails, setShowUserDetails}) => {
                 </div>
             </div>
             <div className="p-4 flex flex-col gap-2">
-                <div className="flex items-center">
-                    <div className="flex items-center gap-1.5 w-[120px] text-gray-600 text-[16px]">
-                        <MdEmail size={20}/>
-                        Email
-                    </div>
-                    <span
-                        className="overflow-hidden text-ellipsis whitespace-nowrap max-w-full font-medium">
-                        mohammad.hussein377@gmail.com
-                    </span>
-                </div>
+                <UserDetail
+                    icon={< MdEmail size = {
+                    20
+                } />}
+                    label="Email"
+                    value="mohammad.hussein377@gmail.com"/>
+                <UserDetail
+                    icon={< RiGraduationCapFill size = {
+                    20
+                } />}
+                    label="Major"
+                    value="Computer Science"/>
+                <UserDetail
+                    icon={< BiSolidBuildingHouse size = {
+                    20
+                } />}
+                    label="University"
+                    value="Toronto University"/>
+                <UserDetail
+                    icon={< FaLocationDot size = {
+                    20
+                } />}
+                    label="Location"
+                    value="Berlin, Germany"/>
+                <UserDetail
+                    icon={< BsFillTelephoneFill size = {
+                    20
+                } />}
+                    label="Phone"
+                    value="81 954 732"/>
             </div>
         </div>
     );
