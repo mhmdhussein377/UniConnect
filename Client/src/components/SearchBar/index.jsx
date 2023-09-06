@@ -29,7 +29,9 @@ const index = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        setShowSearchList(true);
+
+        if(searchTerm !== "")
+            setShowSearchList(true);
     };
 
     return (

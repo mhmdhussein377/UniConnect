@@ -1,4 +1,4 @@
-const index = ({own}) => {
+const index = ({own, communitMessage}) => {
     return (
         <div className={`flex gap-2 mt-4 ${own && "justify-start flex-row-reverse"}`}>
             <div
@@ -9,9 +9,10 @@ const index = ({own}) => {
             </div>
             <div className="flex flex-col max-w-[60%]">
                 <div
-                    className={`flex items-center justify-between ${own && "flex-row-reverse"}`}>
-                    <div>Jasmine Smith</div>
-                    <div className="text-sm">Today 5:54 AM</div>
+                    className={`w-full flex items-center justify-between ${own && "flex-row-reverse"}`}>
+                    {communitMessage && <div className="font-medium">Jasmine Smith</div>}
+                    {!communitMessage && <div></div>}
+                    <div className={`text-[14px]`}>Today 5:54 AM</div>
                 </div>
                 <div className={`px-4 py-2 bg-primary text-white rounded-md ${own ? "rounded-tr-none" : "rounded-tl-none"}`}>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, facere iste

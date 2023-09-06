@@ -18,7 +18,7 @@ const index = ({setOpenCommunityDetails}) => {
                 className="flex items-center justify-between px-4 py-1.5 border-b-[2px] border-grayHard">
                 <div className="flex flex-col items-center">
                     <div
-                        onClick={() => setOpenCommunityDetails(prev => !prev)}
+                        onClick={() => setOpenCommunityDetails((prev) => !prev)}
                         className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300 select-none">
                         <BsHash size={25}/>
                         First Community
@@ -31,10 +31,7 @@ const index = ({setOpenCommunityDetails}) => {
                         <span className="text-[#007D76] font-medium">1 online</span>
                     </div>
                 </div>
-                <CgSidebarOpen
-                    className="lg:hidden"
-                    
-                    size={30}/>
+                <CgSidebarOpen className="lg:hidden" size={30}/>
             </div>
             {newCommunity && (
                 <div
@@ -59,18 +56,15 @@ const index = ({setOpenCommunityDetails}) => {
             {!newCommunity && (
                 <div
                     className="flex-grow w-full bg-[#F4F3FC] max-h-full overflow-y-scroll scrollbar-hide px-6 py-2">
-                    <Message own={"yes"}/>
-                    <Message/>
-                    <Message/>
-                    <Message own={"yes"}/>
-                    <Message/>
-                    <Message own={"yes"}/>
-                    <Message/>
-                    <Message own={"yes"}/>
-                    <Message/>
-                    <Message/>
-                    <Message own={"yes"}/>
-                    <Message/>
+                    <Message own={"yes"} communitMessage={true}/>
+                    <Message communitMessage={true}/>
+                    <Message own={"yes"} communitMessage={true}/>
+                    <Message communitMessage={true}/>
+                    <Message own={"yes"} communitMessage={true}/>
+                    <Message own={"yes"} communitMessage={true}/>
+                    <Message communitMessage={true}/>
+                    <Message own={"yes"} communitMessage={true}/>
+
                 </div>
             )}
             {!newCommunity && (

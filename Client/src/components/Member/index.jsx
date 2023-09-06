@@ -18,7 +18,7 @@ const index = ({inModal, searched, isFollowed, onToggleIsFollowed}) => {
                 </div>
                 <div className="flex flex-col gap-0">
                     <div>Mohammad Hussein</div>
-                    <p className="text-sm">Computer Science</p>
+                    <p className="text-sm">mhmd388</p>
                 </div>
             </div>
             {inModal && (

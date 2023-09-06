@@ -1,6 +1,6 @@
 const index = () => {
     return (
-        <div className="flex items-center justify-between gap-4 drop-shadow-lg">
+        <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
                 <div
                     className="min-w-[35px] min-h-[35px] max-w-[35px] max-h-[35px] rounded-full flex items-center justify-center overflow-hidden">
@@ -10,7 +10,7 @@ const index = () => {
                 </div>
                 <div className="flex flex-row items-center gap-2 flex-wrap">
                     <span className="font-medium text-[18px]">Mohammad Hussein</span>
-                    sent you a friend request sent you a friend request
+                    sent you a friend request
                 </div>
             </div>
             <div className="flex items-center gap-4">

@@ -49,7 +49,7 @@ const index = () => {
         }
 
         try {
-            const response = await postRequest("/api/login", inputs, false, handleLoginError);
+            const response = await postRequest("/api/login", inputs, handleLoginError);
             response && setAuthToken(response.token)
             response && navigate("/home");
         } catch (error) {

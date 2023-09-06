@@ -16,16 +16,14 @@ const getAuthToken = () => {
     return localStorage.getItem("authToken")
 }
 
-const makeRequest = async(method, url, data = null, authRequired = true, config = {}, errorHandler = null) => {
+const makeRequest = async(method, url, data = null, config = {}, errorHandler = null) => {
     try {
-        if (authRequired) {
             const token = getAuthToken()
             if (token) {
                 config.headers = {
                     'Authorization': `Bearer ${token}`
                 }
             }
-        }
 
         const response = await axios({
             method,
@@ -44,12 +42,12 @@ const makeRequest = async(method, url, data = null, authRequired = true, config 
     }
 }
 
-const getRequest = async(url, authRequired = true, errorHandler = null) => {
-    return makeRequest("GET", url, null, authRequired, {}, errorHandler)
+const getRequest = async(url, errorHandler = null) => {
+    return makeRequest("GET", url, null, {}, errorHandler)
 }
 
-const postRequest = async(url, data = null, authRequired = true, errorHandler = null) => {
-    return makeRequest("POST", url, data, authRequired, {}, errorHandler)
+const postRequest = async(url, data = null, errorHandler = null) => {
+    return makeRequest("POST", url, data, {}, errorHandler)
 }
 
 export {getRequest, postRequest, setAuthToken}
