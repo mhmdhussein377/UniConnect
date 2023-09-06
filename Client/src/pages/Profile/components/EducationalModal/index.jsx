@@ -1,11 +1,13 @@
 import {GrClose} from "react-icons/gr";
 import {useRef, useState} from "react";
 import Input from "./../../../../components/Input"
+import {handleCloseModal} from "./../../../../utils/closeModal"
 
 const index = ({setShowEducationalInfoModal}) => {
 
     let [inputs,
         setInputs] = useState({universtiy: "", major: ""})
+    const boxRef = useRef();
 
     const handleChange = (e) => {
         setInputs({
@@ -16,10 +18,14 @@ const index = ({setShowEducationalInfoModal}) => {
 
     const handleEditEducationalInfo = () => {}
 
+    const closeModal = (e) => handleCloseModal(e, boxRef, setShowEducationalInfoModal);
+
     return (
         <div
+            onClick={closeModal}
             className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen">
             <div
+                ref={boxRef}
                 className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px]">
                 <div className="flex items-center justify-between pb-2 border-b-2">
                     <div className="text-lg font-semibold">
