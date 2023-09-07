@@ -3,14 +3,16 @@ import EducationalInfo from "./../../components/EducationalInfo"
 import UserDataSection from "./../../components/UserDataSection"
 import About from "./../../components/About"
 import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection"
+import { useState } from "react"
 // MODALS
 import EducationalModal from './components/EducationalModal'
-import { useState } from "react"
+import EditUserModal from './components/EditUserModal'
 
 const index = () => {
 
     let [showEducationalInfoModal,
-        setShowEducationalInfoModal] = useState(1);
+        setShowEducationalInfoModal] = useState(false);
+    let [showEditUserModal, setShowEditUserModal] = useState(true)
 
     const skills = [
         "HTML",
@@ -47,6 +49,7 @@ const index = () => {
                 </div>
             </div>
             {showEducationalInfoModal && <EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal} />}
+            {showEditUserModal && <EditUserModal setShowEditUserModal={setShowEditUserModal} />}
         </div>
     );
 }

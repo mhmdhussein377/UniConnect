@@ -23,8 +23,8 @@ body {
     -webkit-filter: drop-shadow(0 30px 30px rgb(0 0 0 / 0.25));
 }
 
-.notifications {
-    box-shadow: 104px 0px 13px 0px rgba(0,0,0,0.6) !important;
--webkit-box-shadow: 104px 0px 13px 0px rgba(0,0,0,0.6);
--moz-box-shadow: 104px 0px 13px 0px rgba(0,0,0,0.6);
+.notifications, .search {
+    box-shadow: -2px 0px 10px 0px rgba(0,0,0,0.55);
+-webkit-box-shadow: -2px 0px 10px 0px rgba(0,0,0,0.55);
+-moz-box-shadow: -2px 0px 10px 0px rgba(0,0,0,0.55);
 }

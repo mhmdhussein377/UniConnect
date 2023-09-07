@@ -53,7 +53,7 @@ const index = () => {
                 }}
                     size={30}/>)}
                 <div
-                    className={`absolute top-[60px] bg-white z-[99] rounded-md px-4 py-2 flex flex-col gap-2 max-h-[400px] w-[200%] -left-[50%] smd:w-[170%] smd:-left-[35%] md:w-[150%] md:-left-[25%] lg:w-[140%] lg:-left-[20%] xl:w-full xl:left-0 overflow-scroll scrollbar-hide ${showSearchList
+                    className={`search absolute top-[60px] bg-white z-[99] rounded-md px-4 py-2 flex flex-col gap-2 max-h-[400px] w-[200%] -left-[50%] smd:w-[170%] smd:-left-[35%] md:w-[150%] md:-left-[25%] lg:w-[140%] lg:-left-[20%] xl:w-full xl:left-0 overflow-scroll scrollbar-hide ${showSearchList
                     ? "visible"
                     : "invisible"}`}>
                     {isFollowedStates.map((isFollowed, index) => (<Member
