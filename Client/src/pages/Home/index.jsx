@@ -5,7 +5,7 @@ import CommunityConversation from "./../../components/CommunityConversation"
 import PrivateConversation from "./../../components/PrivateConversation"
 import CommunityDetails from "./../../components/CommunityDetails"
 import UserDetails from "./../../components/UserDetails"
-import CreateCommunity from "./../../components/CreateCommunity"
+import CreateCommunityModal from "../../components/CreateCommunityModal"
 import AddMembersModal from "./../../components/AddMembersModal"
 
 const index = () => {
@@ -38,7 +38,7 @@ const index = () => {
                 showUserDetails={showUserDetails}
                 setShowUserDetails={setShowUserDetails}/>
             {/* Modal to create communities */}
-            {showCommunityModal && (<CreateCommunity setShowCommunityModal={setShowCommunityModal}/>)}
+            {showCommunityModal && (<CreateCommunityModal setShowCommunityModal={setShowCommunityModal}/>)}
             {/* Modal to add members to communities */}
             {showAddMembersModal && <AddMembersModal setShowAddMembersModal={setShowAddMembersModal} />}
         </div>

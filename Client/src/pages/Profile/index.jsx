@@ -7,12 +7,14 @@ import { useState } from "react"
 // MODALS
 import EducationalModal from './components/EducationalModal'
 import EditUserModal from './components/EditUserModal'
+import LanguagesModal from "./components/LanguagesModal"
 
 const index = () => {
 
     let [showEducationalInfoModal,
         setShowEducationalInfoModal] = useState(false);
-    let [showEditUserModal, setShowEditUserModal] = useState(true)
+    let [showEditUserModal, setShowEditUserModal] = useState(false)
+    let [showLanguagesModal, setShowLanguagesModal] = useState(false)
 
     const skills = [
         "HTML",
@@ -32,7 +34,7 @@ const index = () => {
                 <div
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
                     <div className="flex-[7] flex flex-col gap-6">
-                        <UserDataSection/>
+                        <UserDataSection setShowEditUserModal={setShowEditUserModal}/>
                         <About/>
                         <SkillsLanguagesSection
                             text="Skills"
@@ -50,6 +52,7 @@ const index = () => {
             </div>
             {showEducationalInfoModal && <EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal} />}
             {showEditUserModal && <EditUserModal setShowEditUserModal={setShowEditUserModal} />}
+            {showLanguagesModal && <LanguagesModal languages={languages} setShowLanguagesModal={setShowLanguagesModal} />}
         </div>
     );
 }
