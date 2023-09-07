@@ -1,13 +1,27 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const communitSchema = new Schema({
-    name: String,
-    description: String,
-    privancy: String,
+const communitySchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    privacy: {
+        type: String,
+        enum: [
+            "public", "private"
+        ],
+        default: "public",
+        required: true
+    },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true,
     },
     members: [
         {
@@ -15,8 +29,7 @@ const communitSchema = new Schema({
             ref: "User"
         }
     ]
-}, {
-    timestamps: true
-});
+}, {timestamps: true});
 
-export const Community = mongoose.model("Community", communitySchema);
+const Community = mongoose.model("Community", communitySchema);
+module.exports = Community

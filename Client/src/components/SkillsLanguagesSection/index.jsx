@@ -2,7 +2,7 @@ import {useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {HiPencil} from "react-icons/hi";
 
-const index = ({data, maxDataToShow, text, emptyHeadline}) => {
+const index = ({data, maxDataToShow, text, emptyHeadline, setShowModal}) => {
 
     let [showAllData,
         setShowAllData] = useState(false);
@@ -11,7 +11,7 @@ const index = ({data, maxDataToShow, text, emptyHeadline}) => {
         <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="text-xl font-semibold flex items-center justify-between">
                 <div>{text}</div>
-                <HiPencil className="cursor-pointer" size={30}/>
+                <HiPencil onClick={() => setShowModal(true)} className="cursor-pointer" size={30}/>
             </div>
             <div className="flex flex-col gap-4">
                 {data?.length > 0

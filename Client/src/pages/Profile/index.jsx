@@ -19,7 +19,7 @@ const index = () => {
     let [showLanguagesModal,
         setShowLanguagesModal] = useState(false)
     let [showSkillsModal,
-        setShowSkillsModal] = useState(true);
+        setShowSkillsModal] = useState(false);
 
     const skills = [
         "HTML",
@@ -42,17 +42,19 @@ const index = () => {
                         <UserDataSection setShowEditUserModal={setShowEditUserModal}/>
                         <About/>
                         <SkillsLanguagesSection
+                            setShowModal={setShowSkillsModal}
                             text="Skills"
                             data={skills}
                             maxDataToShow={4}
                             emptyHeadline="Your skills will shine here."/>
                         <SkillsLanguagesSection
+                            setShowModal={setShowLanguagesModal}
                             text="Languages"
                             data={languages}
                             maxDataToShow={4}
                             emptyHeadline="Your multilingual talengts await."/>
                     </div>
-                    <EducationalInfo/>
+                    <EducationalInfo setShowEducationalInfoModal={setShowEducationalInfoModal}/>
                 </div>
             </div>
             {showEducationalInfoModal && (<EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal}/>)}

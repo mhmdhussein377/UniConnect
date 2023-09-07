@@ -33,8 +33,8 @@ const userSchema = new Schema({
         }
     ],
     profile: {
-        profilePicture: String,
-        coverPicture: String,
+        profileImage: String,
+        coverImage: String,
         nickname: String,
         major: String,
         university: String,
@@ -54,8 +54,14 @@ const userSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Community"
         }
+    ],
+    notifications: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Notification"
+        }
     ]
-});
+}, {timestamps: true});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

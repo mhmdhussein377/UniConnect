@@ -1,13 +1,13 @@
 import { HiPencil } from "react-icons/hi";
 
-const index = () => {
+const index = ({setShowEducationalInfoModal}) => {
     return (
         <div
             className="flex-[3] bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between font-semibold text-lg">
                     Educational Information
-                    <HiPencil className="cursor-pointer" size={30}/>
+                    <HiPencil onClick={() => setShowEducationalInfoModal(true)} className="cursor-pointer" size={30}/>
                 </div>
                 <div className="flex flex-col gap-2">
                     <div className="flex">
