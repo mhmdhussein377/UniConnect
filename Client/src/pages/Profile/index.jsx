@@ -3,18 +3,23 @@ import EducationalInfo from "./../../components/EducationalInfo"
 import UserDataSection from "./../../components/UserDataSection"
 import About from "./../../components/About"
 import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection"
-import { useState } from "react"
+import {useState} from "react"
 // MODALS
 import EducationalModal from './components/EducationalModal'
 import EditUserModal from './components/EditUserModal'
 import LanguagesModal from "./components/LanguagesModal"
+import SkillsModal from "./components/SkillsModal"
 
 const index = () => {
 
     let [showEducationalInfoModal,
         setShowEducationalInfoModal] = useState(false);
-    let [showEditUserModal, setShowEditUserModal] = useState(false)
-    let [showLanguagesModal, setShowLanguagesModal] = useState(false)
+    let [showEditUserModal,
+        setShowEditUserModal] = useState(false)
+    let [showLanguagesModal,
+        setShowLanguagesModal] = useState(false)
+    let [showSkillsModal,
+        setShowSkillsModal] = useState(true);
 
     const skills = [
         "HTML",
@@ -50,9 +55,10 @@ const index = () => {
                     <EducationalInfo/>
                 </div>
             </div>
-            {showEducationalInfoModal && <EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal} />}
-            {showEditUserModal && <EditUserModal setShowEditUserModal={setShowEditUserModal} />}
-            {showLanguagesModal && <LanguagesModal languages={languages} setShowLanguagesModal={setShowLanguagesModal} />}
+            {showEducationalInfoModal && (<EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal}/>)}
+            {showEditUserModal && (<EditUserModal setShowEditUserModal={setShowEditUserModal}/>)}
+            {showLanguagesModal && (<LanguagesModal languages={languages} setShowLanguagesModal={setShowLanguagesModal}/>)}
+            {showSkillsModal && (<SkillsModal skills={skills} setShowSkillsModal={setShowSkillsModal}/>)}
         </div>
     );
 }
