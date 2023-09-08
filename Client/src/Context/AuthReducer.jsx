@@ -6,6 +6,53 @@ const AuthReducer = (state, action) => {
             return {user: action.payload, isFetching: false, error: false};
         case "LOGIN_FAILURE":
             return {user: null, isFetching: false, error: true};
+        case "EDIT_EDUCATIONAL_INFO":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    profile: {
+                        ...state.user.profile,
+                        university: action.payload.university,
+                        major: action.payload.major
+                    }
+                }
+            };
+        case "EDIT_SKILLS":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    profile: {
+                        ...state.user.profile,
+                        skills: action.payload
+                    }
+                }
+            };
+        case "EDIT_LANGUAGES":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    profile: {
+                        ...state.user.profile,
+                        languages: action.payload
+                    }
+                }
+            };
+        case "EDIT_USER_INFO":
+            let {name, ...others} = action.payload;
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    name,
+                    profile: {
+                        ...state.user.profile,
+                        ...others
+                    }
+                }
+            };
         case "LOGOUT":
             return {user: null, isFetching: false, error: false};
         default:

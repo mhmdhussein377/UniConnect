@@ -3,7 +3,8 @@ import EducationalInfo from "./../../components/EducationalInfo"
 import UserDataSection from "./../../components/UserDataSection"
 import About from "./../../components/About"
 import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection"
-import {useState} from "react"
+import {useContext, useState} from "react"
+import {AuthContext} from "./../../Context/AuthContext"
 // MODALS
 import EducationalModal from './components/EducationalModal'
 import EditUserModal from './components/EditUserModal'
@@ -11,6 +12,8 @@ import LanguagesModal from "./components/LanguagesModal"
 import SkillsModal from "./components/SkillsModal"
 
 const index = () => {
+
+    const {user} = useContext(AuthContext)
 
     let [showEducationalInfoModal,
         setShowEducationalInfoModal] = useState(false);
@@ -21,16 +24,7 @@ const index = () => {
     let [showSkillsModal,
         setShowSkillsModal] = useState(false);
 
-    const skills = [
-        "HTML",
-        "CSS",
-        'Javascript',
-        "React",
-        "Express",
-        "MongoDB"
-    ]
-
-    const languages = ["Arabic", "English", "German"]
+    let {skills, languages, bio} = user.profile
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -40,7 +34,7 @@ const index = () => {
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
                     <div className="flex-[7] flex flex-col gap-6">
                         <UserDataSection setShowEditUserModal={setShowEditUserModal}/>
-                        <About/>
+                        {bio && <About/>}
                         <SkillsLanguagesSection
                             setShowModal={setShowSkillsModal}
                             text="Skills"

@@ -1,22 +1,29 @@
 import {GrClose} from "react-icons/gr";
-import {useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import Input from "./../../../../components/Input"
 import {handleCloseModal} from "./../../../../utils/closeModal"
+import { AuthContext } from "../../../../Context/AuthContext";
+import {postRequest} from "./../../../../utils/requests"
+import {handleChange} from "./../../../../utils/handleChange"
 
 const index = ({setShowEducationalInfoModal}) => {
 
-    let [inputs,
-        setInputs] = useState({universtiy: "", major: ""})
+    const {user, dispatch} = useContext(AuthContext)
+    const {university, major} = user.profile
+
+    let [inputs,setInputs] = useState({university: university || "", major: major || ""})
     const boxRef = useRef();
 
-    const handleChange = (e) => {
-        setInputs({
-            ...inputs,
-            [e.target.name]: e.target.value
-        });
+    const handleInputsChange = (e) => {
+        handleChange(e, setInputs)
     };
 
-    const handleEditEducationalInfo = () => {}
+    const handleEditEducationalInfo = async() => {
+        dispatch({ type: "EDIT_EDUCATIONAL_INFO", payload: inputs });
+        setShowEducationalInfoModal(false);
+
+        await postRequest("/api/user/edit-profile", inputs)
+    }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowEducationalInfoModal);
 
@@ -42,12 +49,12 @@ const index = ({setShowEducationalInfoModal}) => {
                         label="University"
                         name="university"
                         value={inputs.university}
-                        handleChange={handleChange}/>
+                        handleChange={handleInputsChange}/>
                     <Input
                         label="Major"
                         name="major"
                         value={inputs.major}
-                        handleChange={handleChange}/>{" "}
+                        handleChange={handleInputsChange}/>
                     <div>
                         <button
                             onClick={handleEditEducationalInfo}
