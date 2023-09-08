@@ -22,7 +22,7 @@ const index = ({setShowEducationalInfoModal}) => {
         dispatch({ type: "EDIT_EDUCATIONAL_INFO", payload: inputs });
         setShowEducationalInfoModal(false);
 
-        await postRequest("/api/user/edit-profile", inputs)
+        await postRequest("/user/edit-profile", inputs)
     }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowEducationalInfoModal);

@@ -1,7 +1,12 @@
-import {useRef} from "react";
+import {useContext, useRef} from "react";
 import {HiPencil} from "react-icons/hi";
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = ({setShowEditUserModal}) => {
+
+    const {user} = useContext(AuthContext);
+    const {name, friends} = user;
+    const {nickname, location} = user.profile;
 
     const coverPicRef = useRef();
     const profilePicRef = useRef();
@@ -28,13 +33,16 @@ const index = ({setShowEditUserModal}) => {
             </div>
             <div>
                 <div className="flex justify-end">
-                    <HiPencil onClick={() => setShowEditUserModal(true)} className="cursor-pointer" size={30}/>
+                    <HiPencil
+                        onClick={() => setShowEditUserModal(true)}
+                        className="cursor-pointer"
+                        size={30}/>
                 </div>
                 <div className="mt-8 flex flex-col gap-1.5">
-                    <div className="text-xl font-semibold">Mohammad Hussein</div>
-                    <div>Mhmd</div>
-                    <div>Saida, Lebanon</div>
-                    <div>3 Friends</div>
+                    <div className="text-xl font-semibold">{name}</div>
+                    <div>{nickname}</div>
+                    <div>{location}</div>
+                    <div>{friends?.length > 0? friends?.length: "No"} Friends</div>
                     <div className="mt-2">
                         <button className="bg-primary text-white px-2 py-1 5 rounded-md">
                             Add friend

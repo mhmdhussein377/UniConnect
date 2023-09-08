@@ -53,7 +53,7 @@ const index = () => {
             return
         }
 
-        const response = await postRequest("/api/register", inputs, handleRegisterError)
+        const response = await postRequest("/register", inputs, handleRegisterError)
         response && navigate("/")
     }
 

@@ -56,7 +56,7 @@ const index = () => {
 
             dispatch({type: "LOGIN_START"})
 
-            const response = await postRequest("/api/login", inputs, handleLoginError);
+            const response = await postRequest("/login", inputs, handleLoginError);
             response && setAuthToken(response.token)
 
             dispatch({type: "LOGIN_SUCCESS", payload: response})

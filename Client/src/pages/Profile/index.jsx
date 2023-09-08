@@ -34,7 +34,7 @@ const index = () => {
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
                     <div className="flex-[7] flex flex-col gap-6">
                         <UserDataSection setShowEditUserModal={setShowEditUserModal}/>
-                        {bio && <About/>}
+                        {bio && <About data={bio}/>}
                         <SkillsLanguagesSection
                             setShowModal={setShowSkillsModal}
                             text="Skills"
