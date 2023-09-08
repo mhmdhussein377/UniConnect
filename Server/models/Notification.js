@@ -6,8 +6,14 @@ const notificationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    type: String,
-    content: String,
+    type: {
+        type: String,
+        required: true,
+    },
+    content: {
+        type: String,
+        required: true
+    },
     isRead: Boolean,
 });
 

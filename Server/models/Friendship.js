@@ -10,7 +10,10 @@ const friendshipSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    status: String, // pending, accepted, rejected
+    status: {
+        type: String,
+        required: true
+    }, // pending, accepted, rejected
 });
 
 const Friendship = mongoose.model("Friendship", friendshipSchema);
