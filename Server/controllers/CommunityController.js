@@ -42,7 +42,39 @@ const CreateCommunity = async(req, res) => {
     }
 }
 
-const DeleteCommunity = async(req, res) => {}
+const DeleteCommunity = async(req, res) => {
+    const {communityId} = req.params
+    const userId = req.user.id
+
+    try {
+        const community = await Community.findById(communityId)
+        if(!community)
+            return res.status(404).json({error: "Community not found"})
+
+        if(community.creator.toString() !== userId)
+            return res.stauts(403).json({error: "Permission denied"})
+
+        const creator = await User.findById(community.creator)
+        if(creator) {
+            creator.createdCommunities = creator.createdCommunities.filter(community => community.id !== communityId)
+            await creator.save()
+        }
+
+        await User.updateMany({
+            joinedCommunities: communityId
+        }, {
+            $pull: {
+                joinedCommunities: communityId
+            }
+        })
+
+        await Community.findByIdAndDelete(communityId)
+
+        return res.status(204).json("Community deleted successfully");
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
 
 const UpdateCommunity = async(req, res) => {}
 
