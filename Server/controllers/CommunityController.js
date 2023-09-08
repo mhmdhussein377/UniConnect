@@ -99,23 +99,58 @@ const UpdateCommunity = async(req, res) => {
             return res.status(404).json({error: "Community not found"})
 
         if (community.creator.toString() !== req.user.id) {
-            return res.status(403).json({error: "Permission denied. You are not the creator of this community"});
+            return res
+                .status(403)
+                .json({error: "Permission denied. You are not the creator of this community"});
         }
 
-        if(name)
+        if (name) 
             community.name = name
-        if(description)
+        if (description) 
             community.description = description
-        if(privacy)
+        if (privacy) 
             community.privacy = privacy
 
-        res.stauts(200).json({message: "Community updated successfully", community})
+        res
+            .stauts(200)
+            .json({message: "Community updated successfully", community})
     } catch (error) {
-        res.status(500).json({error: "Internal Server Error"});
+        res
+            .status(500)
+            .json({error: "Internal Server Error"});
     }
 }
 
-const AddMembers = async(req, res) => {}
+const AddMembers = async(req, res) => {
+    const {communityId} = req.params
+    const { userIds } = req.body;
+
+    try {
+        const community = await Community.findById(communityId)
+
+        if (!community) 
+            return res.status(404).json({error: "Community not found"})
+
+        if (community.creator.toString() !== req.user.id) 
+            return res.status(403).json({error: "Permission denied. You are not the creator of this community"});
+
+        const usersToAdd = await User.find({
+            _id: {
+                $in: userIds
+            }
+        })
+
+        community.members.push(...usersToAdd.map(user => user._id))
+        await community.save()
+
+        return res.status(200).json({message: "Members added to the community successfully", community})
+        }
+    catch (error) {
+        res
+            .status(500)
+            .json({error: "Internal Server Error"});
+    }
+}
 
 module.exports = {
     getCommunity,
