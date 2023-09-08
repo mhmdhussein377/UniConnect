@@ -1,9 +1,13 @@
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {handleCloseModal} from "../../../../utils/closeModal";
 import {GrClose} from "react-icons/gr";
 import Skill from "./../Skill"
+import { AuthContext } from "../../../../Context/AuthContext";
+import { postRequest } from "../../../../utils/requests";
 
 const index = ({setShowSkillsModal, skills}) => {
+
+    const { dispatch } = useContext(AuthContext);
 
     let [selectedSkills, setSelectedSkills] = useState([]);
     let [skillInput, setSkillInput] = useState("");
@@ -26,7 +30,12 @@ const index = ({setShowSkillsModal, skills}) => {
         }
     }
 
-    const handleEditSkills = () => {}
+    const handleEditSkills = async() => {
+        dispatch({ type: "EDIT_SKILLS", payload: selectedSkills });
+        setShowSkillsModal(false);
+
+        await postRequest("/user/edit-profile", { skills: selectedSkills });
+    }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowSkillsModal);
 
