@@ -67,7 +67,60 @@ const Login = async(req, res, next) => {
     }
 };
 
+const GoogleLogin = async(req, res) => {
+    try {
+        const {sub, email, name, picture} = req.body;
+        let username = email.split("@")[0];
+
+        const existingUser = await User.findOne({googleId: sub});
+
+        if (existingUser) {
+            const token = jwt.sign({
+                id: existingUser._id
+            }, process.env.SECRET_KEY, {});
+
+            const {
+                googleId,
+                ...others
+            } = existingUser._doc;
+            return res
+                .status(200)
+                .json({user: others, token});
+        }
+
+        const newUser = new User({
+            googleId: sub,
+            email,
+            username,
+            name,
+            profile: {
+                profileImage: picture
+            }
+        });
+
+        await newUser.save();
+
+        const token = jwt.sign({
+            id: newUser._id
+        }, process.env.SECRET_KEY, {});
+
+        const {
+            googleId,
+            ...others
+        } = newUser._doc;
+        res
+            .status(201)
+            .json({user: others, token});
+    } catch (error) {
+        console.error("Error during registration:", error);
+        res
+            .status(500)
+            .json({error: "Registration failed"});
+    }
+};
+
 module.exports = {
     Login,
-    Register
+    Register,
+    GoogleLogin
 };

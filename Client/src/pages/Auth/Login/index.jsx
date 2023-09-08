@@ -7,6 +7,9 @@ import {FiLock} from "react-icons/fi";
 import {Link, useNavigate} from "react-router-dom";
 import {postRequest, setAuthToken} from "../../../utils/requests";
 import {AuthContext} from "./../../../Context/AuthContext"
+import {GoogleOAuthProvider, GoogleLogin} from "@react-oauth/google";
+import jwt_decode from "jwt-decode"
+import axios from "axios";
 
 const index = () => {
 
@@ -53,12 +56,10 @@ const index = () => {
         }
 
         try {
-
             dispatch({type: "LOGIN_START"})
 
             const response = await postRequest("/login", inputs, handleLoginError);
             response && setAuthToken(response.token)
-
             dispatch({type: "LOGIN_SUCCESS", payload: response})
 
             response && navigate("/home");
@@ -67,6 +68,24 @@ const index = () => {
             console.log(error)
         }
     }
+
+    const handleGoogleLoginSuccess = (credentialResponse) => {
+        const decoded = jwt_decode(credentialResponse.credential);
+
+        axios
+            .post("http://localhost:3000/api/register/google", decoded)
+            .then((response) => {
+                console.log("User registration successful:", response.data);
+                response && setAuthToken(response.data.token);
+
+                dispatch({type: "LOGIN_SUCCESS", payload: response.data.user});
+
+                navigate("/home");
+            })
+            .catch((error) => {
+                console.error("User registration error:", error);
+            });
+    };
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -102,12 +121,17 @@ const index = () => {
                         minLength="8"
                         icon={< FiLock color = "C1C5C5" size = {
                         27
-                    } />}/> 
-                    {error.isError && (error.type === "Wrong credentials"
-                        ? <p className="text-start text-danger font-medium">
+                    } />}/> {error.isError && (error.type === "Wrong credentials"
+                        ? (
+                            <p className="text-start text-danger font-medium">
                                 Wrong credentials
                             </p>
-                        : <p className="text-start text-danger font-medium">All fields are required</p>)}
+                        )
+                        : (
+                            <p className="text-start text-danger font-medium">
+                                All fields are required
+                            </p>
+                        ))}
                     <p className="text-start text-[#737373]">
                         Don't have an account?{" "}
                         <Link to="/register" className="text-primary font-medium">
@@ -115,7 +139,22 @@ const index = () => {
                         </Link>
                     </p>
                 </div>
-                <Button text="Login"/>
+                <div className="flex flex-col gap-3">
+                    <Button text={"Login"}/>
+                    <div className="min-w-full">
+                        <GoogleOAuthProvider
+                            clientId="646754230791-n2oto0g1ubdqmlppu7fjib64rdu45qhr.apps.googleusercontent.com">
+                            <GoogleLogin
+                                onSuccess={handleGoogleLoginSuccess}
+                                onError={() => {
+                                console.log("Login Failed");
+                            }}/>
+                        </GoogleOAuthProvider>
+                    </div>
+                    <Link to="/forgot-password" className="text-start text-primary">
+                        Forgot password?
+                    </Link>
+                </div>
             </form>
         </div>
     );
