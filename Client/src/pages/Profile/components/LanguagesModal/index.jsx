@@ -1,11 +1,15 @@
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {GrClose} from "react-icons/gr";
 import {handleCloseModal} from "../../../../utils/closeModal";
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {languagesData} from "./../../../../utils/LanguagesData"
 import Language from "./../Language"
+import { postRequest } from "../../../../utils/requests";
+import { AuthContext } from "../../../../Context/AuthContext";
 
 const index = ({setShowLanguagesModal, languages}) => {
+
+    const { dispatch } = useContext(AuthContext);
 
     const [selectedLanguages, setSelectedLanguages] = useState([]);
     let [showLanguagesList, setShowLanguagesList] = useState(false);
@@ -29,8 +33,11 @@ const index = ({setShowLanguagesModal, languages}) => {
         }
     }
 
-    const handleEditLanguages = () => {
-        
+    const handleEditLanguages = async() => {
+        dispatch({type: "EDIT_LANGUAGES", payload: selectedLanguages});
+        setShowLanguagesModal(false)
+
+        await postRequest("/user/edit-profile", {languages: selectedLanguages})
     }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowLanguagesModal);
