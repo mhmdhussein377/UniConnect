@@ -119,8 +119,52 @@ const GoogleLogin = async(req, res) => {
     }
 };
 
+const ForgotPassword = async(req, res) => {
+    const {email} = req.body;
+
+    try {
+        const user = await User.findOne({email});
+
+        if (!user) 
+            return res.json({status: "User doesn't exist"});
+        
+        const token = jwt.sign({
+            id: user._id
+        }, process.env.SECRET_KEY, {});
+
+        var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "mohammad.hussein377@gmail.com",
+                pass: "svre npuj glbm xnug"
+            }
+        });
+
+        var mailOptions = {
+            from: "mohammad.hussein377@gmail.com",
+            to: "mhmdmohd377@gmail.com",
+            subject: "Reset your password",
+            text: `http://localhost:5174/reset-password/${user._id}/${token}`
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                return res.json({status: "Success"});
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+const ResetPassword = async(req, res) => {}
+
 module.exports = {
     Login,
     Register,
-    GoogleLogin
+    GoogleLogin,
+    ForgotPassword,
+    ResetPassword
 };
