@@ -5,11 +5,15 @@ import {AiOutlinePlus} from "react-icons/ai"
 import {RiCommunityFill} from "react-icons/ri";
 import {FaUserPlus} from "react-icons/fa"
 import {Link} from "react-router-dom";
-import {Fragment, useState} from "react";
+import {Fragment, useContext, useState} from "react";
 import Friend from "./../Friend"
 import Community from "./../Community"
+import {AuthContext} from "../../Context/AuthContext";
 
 const index = ({type, setType, setShowCommunityModal}) => {
+
+    const {user} = useContext(AuthContext);
+    const {name, username} = user
 
     let [friends,
         setFriends] = useState([ < Friend highlight = {
@@ -90,8 +94,10 @@ const index = ({type, setType, setShowCommunityModal}) => {
                             alt="profile-picture"/>
                     </Link>
                     <div className="flex flex-col">
-                        <div className="text-lg font-semibold">Mohammad Hussein</div>
-                        <p className="text-[#737373] font-medium">mhmd377</p>
+                        <Link to={`/profile?username=${username}`}>
+                            <div className="text-lg font-semibold">{name}</div>
+                            <p className="text-[#737373] font-medium">{username}</p>
+                        </Link>
                     </div>
                 </div>
                 <BsThreeDots className="cursor-pointer" size={30}/>

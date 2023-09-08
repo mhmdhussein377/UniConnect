@@ -17,10 +17,13 @@ app.listen(process.env.PORT, () => {
 
 // Routes
 const AuthRoutes = require("./routes/AuthRoutes")
+const UserRoutes = require("./routes/UserRoutes")
 
 app.use('/api', AuthRoutes)
 
 app.use(verifyToken)
+
+app.use("/api/user", UserRoutes)
 
 app.use(handleError)
 

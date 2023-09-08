@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Logo from "./../../../assets/UniConnectLogo.png";
@@ -6,8 +6,12 @@ import {MdAlternateEmail} from "react-icons/md";
 import {FiLock} from "react-icons/fi";
 import {Link, useNavigate} from "react-router-dom";
 import {postRequest, setAuthToken} from "../../../utils/requests";
+import {AuthContext} from "./../../../Context/AuthContext"
 
 const index = () => {
+
+    const {dispatch} = useContext(AuthContext)
+
     let [inputs,
         setInputs] = useState({});
     let [error,
@@ -49,10 +53,17 @@ const index = () => {
         }
 
         try {
+
+            dispatch({type: "LOGIN_START"})
+
             const response = await postRequest("/api/login", inputs, handleLoginError);
             response && setAuthToken(response.token)
+
+            dispatch({type: "LOGIN_SUCCESS", payload: response})
+
             response && navigate("/home");
         } catch (error) {
+            dispatch({type: "LOGIN_FAILURE"})
             console.log(error)
         }
     }
