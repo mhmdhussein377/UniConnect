@@ -159,7 +159,29 @@ const ForgotPassword = async(req, res) => {
     }
 }
 
-const ResetPassword = async(req, res) => {}
+const ResetPassword = async(req, res) => {
+    const {password} = req.body
+    const {userId, token} = req.params
+
+    try {
+        jwt.verify(token, process.env.SECRET_KEY, async(err, decoded) => {
+            if(err)
+                return res.json({message: "Token not valid"})
+
+            const salt = bcrypt.genSaltSync(10)
+            const hashedPassword = bcrypt.hashSync(password, salt)
+
+            const user = await User.findById(userId)
+            if(!user)
+                return res.status(404).json("User not found")
+
+            await user.updateOne({password: hashedPassword})
+            return res.status(200).json("Password updated successfully")
+        })
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
 
 module.exports = {
     Login,
