@@ -85,14 +85,83 @@ const SearchUsers = async(req, res) => {
             }
         })
 
-        return res.status(200).json({ users });
+        return res
+            .status(200)
+            .json({users});
     } catch (error) {
-        res.status(500).json({ error: "Internval server error" });
+        res
+            .status(500)
+            .json({error: "Internval server error"});
+    }
+}
+
+const SearchUsersCommunities = async(req, res) => {
+    const {searchTerm} = req.params
+
+    try {
+        if (!searchTerm) 
+            return res.status(400).json({message: "Missing searchTerm"})
+
+        const results = await Promise.all([
+            User.aggregate([
+                {
+                    $match: {
+                        $or: [
+                            {
+                                name: {
+                                    $regex: searchTerm,
+                                    $options: "i"
+                                }
+                            }, {
+                                username: {
+                                    $regex: searchTerm,
+                                    $options: "i"
+                                }
+                            }
+                        ]
+                    }
+                }, {
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        username: 1,
+                        profileImage: 1,
+                        type: "user"
+                    }
+                }
+            ]),
+            Community.aggregate([
+                {
+                    $match: {
+                        name: {
+                            $regex: searchTerm,
+                            $options: "i"
+                        }
+                    }
+                }, {
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        privacy: 1,
+                        type: "community",
+                    }
+                }
+            ])
+        ]);
+
+        const combinedResults = [...results]
+
+        res.status(200).json({ results: combinedResults });
+    } catch (error) {
+        res
+            .status(500)
+            .json({error: "Internval server error"});
     }
 }
 
 module.exports = {
     EditProfile,
     UserData,
-    SearchUsers
+    SearchUsers,
+    SearchUsersCommunities
 }
