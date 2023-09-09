@@ -1,14 +1,15 @@
 const Community = require("./../models/Community")
 const User = require("./../models/User")
+const Notification = require("./../models/Notification")
 
-const getCommunity = async(req, res) => {
+const GetCommunity = async(req, res) => {
     const {communityId} = req.params
 
     try {
         const community = await Community.findById(communityId)
 
         if (!community) 
-            return res.status(404).json({error: "Community not found"})
+            return res.status(404).json({message: "Community not found"})
 
         return res
             .status(200)
@@ -28,7 +29,7 @@ const CreateCommunity = async(req, res) => {
         // check if the creator exists
         const user = await User.findById(creator)
         if (!user) 
-            return res.status(404).json({error: "Creator not found"})
+            return res.status(404).json({message: "Creator not found"})
 
         const community = new Community({name, description, privacy, creator})
         const savedCommunity = await community.save()
@@ -55,10 +56,10 @@ const DeleteCommunity = async(req, res) => {
     try {
         const community = await Community.findById(communityId)
         if (!community) 
-            return res.status(404).json({error: "Community not found"})
+            return res.status(404).json({message: "Community not found"})
 
         if (community.creator.toString() !== userId) 
-            return res.stauts(403).json({error: "Permission denied"})
+            return res.stauts(403).json({message: "Permission denied"})
 
         const creator = await User.findById(community.creator)
         if (creator) {
@@ -96,12 +97,12 @@ const UpdateCommunity = async(req, res) => {
         const community = await Community.findById(communityId)
 
         if (!community) 
-            return res.status(404).json({error: "Community not found"})
+            return res.status(404).json({message: "Community not found"})
 
         if (community.creator.toString() !== req.user.id) {
             return res
                 .status(403)
-                .json({error: "Permission denied. You are not the creator of this community"});
+                .json({message: "Permission denied. You are not the creator of this community"});
         }
 
         if (name) 
@@ -123,39 +124,83 @@ const UpdateCommunity = async(req, res) => {
 
 const AddMembers = async(req, res) => {
     const {communityId} = req.params
-    const { userIds } = req.body;
+    const {userIds} = req.body;
 
     try {
         const community = await Community.findById(communityId)
 
         if (!community) 
-            return res.status(404).json({error: "Community not found"})
+            return res.status(404).json({message: "Community not found"})
 
         if (community.creator.toString() !== req.user.id) 
-            return res.status(403).json({error: "Permission denied. You are not the creator of this community"});
-
+            return res.status(403).json({message: "Permission denied. You are not the creator of this community"});
+        
         const usersToAdd = await User.find({
             _id: {
                 $in: userIds
             }
         })
 
-        community.members.push(...usersToAdd.map(user => user._id))
+        community
+            .members
+            .push(...usersToAdd.map(user => user._id))
         await community.save()
 
-        return res.status(200).json({message: "Members added to the community successfully", community})
-        }
-    catch (error) {
+        return res
+            .status(200)
+            .json({message: "Members added to the community successfully", community})
+    } catch (error) {
         res
             .status(500)
             .json({error: "Internal Server Error"});
     }
 }
 
+const SendCommunityJoinRequest = async(req, res) => {
+    const {communityId} = req.params
+    const userId = req.user.id
+
+    try {
+        const user = await User.findById(userId)
+        const community = await Community.findById(communityId);
+
+        if(!user)
+            return res.status(404).json({message: "User not found"})
+
+        if (!community) 
+            return res.status(404).json({message: "Community not found"})
+
+        if (community.members.includes(userId)) {
+            return res
+                .status(400)
+                .json({message: "You are already a member of this community"});
+        }
+
+        if(community.privacy === "public") {
+            community.members.push(userId)
+            await community.save()
+            return res.status(200).json({message: "You have joined the public community"})
+        }
+
+        const notification = new Notification({
+            user: community.creator,
+            community: community._id,
+            type: "request to join a community",
+            content: `${user.name} wants to join your community "${community.name}"`,
+        })
+        await notification.save()
+
+        res.status(200).json({ message: "Community join request sent successfully" });
+    } catch (error) {
+        res.status(500).json({message: "Internal server error"});
+    }
+}
+
 module.exports = {
-    getCommunity,
-    CreateCommunity,
-    DeleteCommunity,
-    UpdateCommunity,
-    AddMembers
+  GetCommunity,
+  CreateCommunity,
+  DeleteCommunity,
+  UpdateCommunity,
+  AddMembers,
+  SendCommunityJoinRequest,
 };

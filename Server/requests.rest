@@ -1,9 +1,37 @@
-// Login
-###
-POST http://localhost:3000/api/login
-Content-Type: application/json
+// Register
+POST http://localhost:3000/api/register
+Content-Type : application/json
 
 {
-    "email": "mohammad.hussein377@gmail.com",
-    "password": "mhmd"
+    "name" : "Rachid Al Mustafa",
+    "username" : "rachid377",
+    "email" : "rachid@gmail.com",
+    "password" : "rachid123"
+}
+
+###
+// Login
+POST http://localhost:3000/api/login
+Content-Type : application/json
+
+{
+    "email" : "mohammad.hussein377@gmail.com",
+    "password" : "mhmd"
+}
+
+###
+// Edit user info
+POST http://localhost:3000/api/user/edit-profile
+Content-Type : application/json
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3YmFkMzJiMmRlZmNjZjk4ZiIsImlhdCI6MTY5NDI1MDM3NH0.yQdogXF76CGzZ-bc71ed_ffYrrs4UivdzNpckiQKI9Y
+
+{
+    "profileImage" : "new-new-profile-image.jpg",
+    "coverImage" : "new-cover-image.jpg",
+    "nickname" : "New Nickname",
+    "major" : "New Major",
+    "university" : "New University",
+    "location" : "New Location",
+    "bio" : "New Bio",
+    "skills" : ["Skill 1", "Skill 2"]
 }

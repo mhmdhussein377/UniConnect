@@ -31,15 +31,39 @@ const EditProfile = async(req, res) => {
         }, {new: true})
 
         if (!user) 
-            return res.status(404).json({error: "User not found"})
+            return res.status(404).json({message: "User not found"})
 
-        return res.status(200).json({user});
+        return res
+            .status(200)
+            .json({user});
 
     } catch (error) {
-        return res.status(500).json({error: "Internal server error"});
+        return res
+            .status(500)
+            .json({error: "Internal server error"});
     }
 }
 
+const UserData = async(req, res) => {
+    const {id} = req.params;
+
+    try {
+        const user = await User.findById(id);
+
+        if (!user) 
+            res.status(404).json({message: "User not found"});
+        
+        return res
+            .status(200)
+            .json({user});
+    } catch (error) {
+        res
+            .status(500)
+            .json({error: "Internal server error"});
+    }
+};
+
 module.exports = {
-    EditProfile
+    EditProfile,
+    UserData,
 }
