@@ -1,4 +1,5 @@
 const User = require("./../models/User")
+const Community = require("./../models/Community")
 
 const EditProfile = async(req, res) => {
     const userId = req.user.id
@@ -63,7 +64,35 @@ const UserData = async(req, res) => {
     }
 };
 
+const SearchUsers = async(req, res) => {
+    const {searchTerm} = req.searchTerm
+    const {communityId} = req.communityId
+
+    try {
+        const community = await Community.findById(communityId)
+
+        const users = await User.find({
+            name: {
+                $regex: searchTerm,
+                $options: 'i'
+            },
+            username: {
+                $regex: searchTerm,
+                $options: 'i'
+            },
+            _id: {
+                $nin: community.members
+            }
+        })
+
+        return res.status(200).json({ users });
+    } catch (error) {
+        res.status(500).json({ error: "Internval server error" });
+    }
+}
+
 module.exports = {
     EditProfile,
     UserData,
+    SearchUsers
 }
