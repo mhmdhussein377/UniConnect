@@ -7,6 +7,7 @@ import {postRequest} from "../../../utils/requests";
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
 import Button from "../components/Button";
+import { handleChange } from "../../../utils/handleChange";
 
 const index = () => {
 
@@ -16,11 +17,8 @@ const index = () => {
         setError] = useState({isError: false, type: "", message: ""})
     const navigate = useNavigate()
 
-    const handleChange = (e) => {
-        setInputs((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value
-        }));
+    const handleInputChange = (e) => {
+        handleChange(e, setInputs)
     };
 
     const resetError = () => {
@@ -39,8 +37,6 @@ const index = () => {
             resetError();
         }
     }
-
-    console.log(error)
 
     const handleRegister = async(e) => {
         e.preventDefault()
@@ -77,7 +73,7 @@ const index = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <Input
-                        handleChange={handleChange}
+                        handleChange={handleInputChange}
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -88,7 +84,7 @@ const index = () => {
                         <p className="text-start text-danger">{error.message}</p>
                     )}
                     <Input
-                        handleChange={handleChange}
+                        handleChange={handleInputChange}
                         type="text"
                         name="name"
                         placeholder="Full Name"
@@ -97,7 +93,7 @@ const index = () => {
                     }
                     color = "C1C5C5" />}/>
                     <Input
-                        handleChange={handleChange}
+                        handleChange={handleInputChange}
                         type="text"
                         name="username"
                         placeholder="Username"
@@ -108,7 +104,7 @@ const index = () => {
                         <p className="text-start text-danger">{error.message}</p>
                     )}
                     <Input
-                        handleChange={handleChange}
+                        handleChange={handleInputChange}
                         type="password"
                         name="password"
                         placeholder="Password"

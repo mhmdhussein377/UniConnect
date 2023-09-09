@@ -1,6 +1,8 @@
 import {useRef, useState} from "react";
 import {MdOutlineClose} from "react-icons/md";
 import {handleCloseModal} from "../../utils/closeModal";
+import {handleChange} from "../../utils/handleChange"
+import {postRequest} from "../../utils/requests"
 
 const index = ({setShowCommunityModal}) => {
 
@@ -9,11 +11,21 @@ const index = ({setShowCommunityModal}) => {
     let [errors, setErrors] = useState({})
     const boxRef = useRef()
 
-    const handleChange = (e) => {
-        setInputs({
-            ...inputs,
-            [e.target.name]: e.target.value
-        })
+    const handleInputChange = (e) => {
+        handleChange(e, setInputs)
+    }
+
+    const handleCreateCommunity = async(e) => {
+        e.preventDefault()
+
+        const {name, description, privacy} = inputs
+
+        if(!name || !description || !privacy)
+            setErrors({isError: true, type: "Missing fields", message: "All fields are required"})
+        setErrors({})
+        
+        const response = await postRequest("/community/create", inputs)
+        response && setShowCommunityModal(false)
     }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowCommunityModal);
@@ -23,6 +35,7 @@ const index = ({setShowCommunityModal}) => {
             onClick={closeModal}
             className="flex items-center justify-center absolute top-0 left-0 w-full h-screen bg-black/60 z-[20] px-4">
             <form
+                onSubmit={handleCreateCommunity}
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
@@ -37,7 +50,7 @@ const index = ({setShowCommunityModal}) => {
                     </div>
                     <input
                         id="community-name"
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         type="text"
                         name="name"
                         className="border-b-2 border-b-primary outline-none px-2"/>
@@ -48,7 +61,7 @@ const index = ({setShowCommunityModal}) => {
                     </label>
                     <input
                         id="community-desc"
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         type="text"
                         name="description"
                         className="border-b-2 border-b-primary outline-none px-2"/>
@@ -63,7 +76,7 @@ const index = ({setShowCommunityModal}) => {
                             htmlFor="public">
                             <input
                                 id="public"
-                                onChange={handleChange}
+                                onChange={handleInputChange}
                                 className="w-4 h-4 custom-radio"
                                 type="radio"
                                 name="privacy"
@@ -75,7 +88,7 @@ const index = ({setShowCommunityModal}) => {
                             htmlFor="private">
                             <input
                                 id="private"
-                                onChange={handleChange}
+                                onChange={handleInputChange}
                                 className="w-4 h-4 custom-radio"
                                 type="radio"
                                 name="privacy"
@@ -84,7 +97,7 @@ const index = ({setShowCommunityModal}) => {
                         </label>
                     </div>
                     <div className="mt-2">
-                        <button className="py-2 px-12 rounded-md bg-primary text-white font-medium">
+                        <button type="submit" className="py-2 px-12 rounded-md bg-primary text-white font-medium">
                             Create Community
                         </button>
                     </div>

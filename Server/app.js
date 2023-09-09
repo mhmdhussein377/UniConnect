@@ -19,6 +19,8 @@ app.listen(process.env.PORT, () => {
 const AuthRoutes = require("./routes/AuthRoutes")
 const UserRoutes = require("./routes/UserRoutes")
 const CommunityRoutes = require("./routes/CommunityRoutes");
+const FriendshipRoutes = require("./routes/FriendshipRoutes")
+const PrivateChatRoutes = require("./routes/PrivateChat")
 
 app.use('/api', AuthRoutes)
 
@@ -26,7 +28,11 @@ app.use(verifyToken)
 
 app.use("/api/user", UserRoutes)
 
+app.use("/api/friendship", FriendshipRoutes)
+
 app.use("/api/community", CommunityRoutes);
+
+app.use("/api/privateChat", PrivateChatRoutes)
 
 app.use(handleError)
 

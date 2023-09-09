@@ -1,6 +1,8 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {HiPencil} from "react-icons/hi";
+import { useParams } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = ({data, maxDataToShow, text, emptyHeadline, setShowModal}) => {
 

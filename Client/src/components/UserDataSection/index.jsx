@@ -32,7 +32,7 @@ const index = ({setShowEditUserModal}) => {
                 </div>
             </div>
             <div>
-                <div className="flex justify-end">
+                <div className={`flex justify-end`}>
                     <HiPencil
                         onClick={() => setShowEditUserModal(true)}
                         className="cursor-pointer"

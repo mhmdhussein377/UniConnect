@@ -3,10 +3,10 @@ POST http://localhost:3000/api/register
 Content-Type : application/json
 
 {
-    "name" : "Carla",
-    "username" : "carla",
-    "email" : "carla@gmail.com",
-    "password" : "carla123"
+    "name" : "Wow",
+    "username" : "wow",
+    "email" : "wow@gmail.com",
+    "password" : "wow"
 }
 
 ###
@@ -15,15 +15,15 @@ POST http://localhost:3000/api/login
 Content-Type : application/json
 
 {
-    "email" : "mohammad.hussein377@gmail.com",
-    "password" : "mhmd"
+    "email" : "wow@gmail.com",
+    "password" : "wow"
 }
 
 ###
 // Edit user info
 POST http://localhost:3000/api/user/edit-profile
 Content-Type : application/json
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJkOWI1NTI1MDU0ZDg5MDgzMCIsImlhdCI6MTY5NDI2NjA3OH0.g1ztUJTwF_Tz80fKNJ85dr3AYF6PyBdxpeO5SnZ1XYk
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmNkOWJhMzg4MTcxYjcyNjM3ZDYyZCIsImlhdCI6MTY5NDI5MjQyOH0.YRmvDT-PirijeM7_uqUARCcFMu-p3odjB4IgUqWfD6o
 
 {
     "profileImage" : "new-new-profile-image.jpg",
@@ -39,19 +39,19 @@ Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJk
 
 // get a specific user data
 ###
-GET http://localhost:3000/api/user/64ec7987bad32b2defccf98f
+GET http://localhost:3000/api/user/wow
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
 
 // search for users and communities
 ###
-GET http://localhost:3000/api/user/search/car
+GET http://localhost:3000/api/user/search/wow
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmNkOWJhMzg4MTcxYjcyNjM3ZDYyZCIsImlhdCI6MTY5NDI5Njk1NSwiZXhwIjoxNjk0MzAwNTU1fQ.SfbETe8hMv7rDb68lOVsLGkCw6URdO6JcRzSEoDi2-8
 
 // search for users to invite 
 ###
-GET http://localhost:3000/api/user/search/car/64fc501335e3102409bc028e
+GET http://localhost:3000/api/user/search/rac/64fc501335e3102409bc028e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
 
@@ -114,4 +114,40 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 
 {
     "userIds" : ["64ec7987bad32b2defccf98f", "64fc602d9b5525054d890830"]
+}
+
+
+
+// Friend Requests
+
+// send a friend request
+###
+POST http://localhost:3000/api/friendship/send-friend-request/64fc602d9b5525054d890830
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3YmFkMzJiMmRlZmNjZjk4ZiIsImlhdCI6MTY5NDI3MjQ2NX0.nUNS5JCvmc9O-WB50kWOc2KjAFoyRCpMuQS-L2y4wwM
+
+// reject a friend request
+###
+POST http://localhost:3000/api/friendship/reject-friend-request/64ec7987bad32b2defccf98f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJkOWI1NTI1MDU0ZDg5MDgzMCIsImlhdCI6MTY5NDI3NjEwN30.rVXzj3-X84POhTFzbqLQahJ7XZCDt3TqDY6j-IB2-UE
+
+// accept a friend request
+###
+POST http://localhost:3000/api/friendship/accept-friend-request/64ec7987bad32b2defccf98f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJkOWI1NTI1MDU0ZDg5MDgzMCIsImlhdCI6MTY5NDI3NjEwN30.rVXzj3-X84POhTFzbqLQahJ7XZCDt3TqDY6j-IB2-UE
+
+
+// Private chat
+
+// create a new private conversation
+###
+POST http://localhost:3000/api/privateChat/newPrivateConversation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3YmFkMzJiMmRlZmNjZjk4ZiIsImlhdCI6MTY5NDI3NDY2Nn0.QzPrr30diUcUtC_SJKdGcCUV1I9W4XPfCAUcyLoaW4o
+
+{
+    "userOne" : "64fc602d9b5525054d890830",
+    "userTwo" : "64ec7987bad32b2defccf98f"
 }

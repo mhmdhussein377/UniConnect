@@ -19,7 +19,7 @@ const notificationSchema = new Schema({
     type: {
         type: String,
         required: true,
-        enum: ["friend request", "community join request", "community invite request"]
+        enum: ["friend request", "community join request", "community invite request", "community join accepted", "friend request accepted"]
     },
     content: {
         type: String,

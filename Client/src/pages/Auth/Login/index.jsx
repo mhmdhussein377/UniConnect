@@ -10,6 +10,7 @@ import {AuthContext} from "./../../../Context/AuthContext"
 import {GoogleOAuthProvider, GoogleLogin} from "@react-oauth/google";
 import jwt_decode from "jwt-decode"
 import axios from "axios";
+import {handleChange} from "./../../../utils/handleChange.js"
 
 const index = () => {
 
@@ -21,11 +22,8 @@ const index = () => {
         setError] = useState({});
     const navigate = useNavigate()
 
-    const handleChange = (e) => {
-        setInputs((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value
-        }));
+    const handleInputChange = (e) => {
+        handleChange(e, setInputs)
     };
 
     const resetError = () => {
@@ -105,7 +103,7 @@ const index = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <Input
-                        handleChange={handleChange}
+                        handleChange={handleInputChange}
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -114,7 +112,7 @@ const index = () => {
                     }
                     color = "C1C5C5" />}/>
                     <Input
-                        handleChange={handleChange}
+                        handleChange={handleInputChange}
                         type="password"
                         name="password"
                         placeholder="Password"

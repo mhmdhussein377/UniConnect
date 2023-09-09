@@ -25,6 +25,10 @@ const CreateCommunity = async(req, res) => {
     const {name, description, privacy} = req.body
     const creator = req.user.id
 
+    console.log(creator)
+    console.log(req.body)
+    console.log(name, description, privacy)
+
     try {
         // check if the creator exists
         const user = await User.findById(creator)

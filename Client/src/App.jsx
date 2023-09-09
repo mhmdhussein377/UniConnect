@@ -13,7 +13,7 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Home />} />
-      <Route path='/profile' element={<Profile/>} />
+      <Route path='/profile/:username' element={<Profile/>} />
       <Route path="/community/:id" element={<CommunityProfile />} />
     </Routes>
   );

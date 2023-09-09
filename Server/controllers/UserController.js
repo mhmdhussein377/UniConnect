@@ -13,7 +13,9 @@ const EditProfile = async(req, res) => {
             skills,
             languages,
             location,
-            university
+            university,
+            profileImage,
+            coverImage,
         } = req.body
 
         const updatedFields = {
@@ -24,7 +26,9 @@ const EditProfile = async(req, res) => {
             "profile.skills": skills,
             "profile.languages": languages,
             "profile.location": location,
-            "profile.university": university
+            "profile.university": university,
+            "profile.profileImage" : profileImage,
+            "profile.coverImage" : coverImage
         };
 
         const user = await User.findByIdAndUpdate(userId, {
@@ -46,10 +50,10 @@ const EditProfile = async(req, res) => {
 }
 
 const UserData = async(req, res) => {
-    const {id} = req.params;
+    const {username} = req.params;
 
     try {
-        const user = await User.findById(id)
+        const user = await User.findOne({username})
 
         if (!user) 
             res.status(404).json({message: "User not found"});
@@ -159,7 +163,7 @@ const SearchUsersCommunities = async(req, res) => {
                         _id: 1,
                         name: 1,
                         username: 1,
-                        profile: 1,
+                        "profile.profileImage": 1,
                         type: "user"
                     }
                 }
