@@ -54,18 +54,20 @@ const DeleteCommunity = async(req, res) => {
     const userId = req.user.id
 
     try {
-        const community = await Community.findById(communityId)
+        const community = await Community.findById(communityId);
         if (!community) 
             return res.status(404).json({message: "Community not found"})
 
         if (community.creator.toString() !== userId) 
-            return res.stauts(403).json({message: "Permission denied"})
+            return res.status(403).json({message: "Permission denied"})
 
         const creator = await User.findById(community.creator)
+        console.log(creator)
         if (creator) {
+            console.log("in creator")
             creator.createdCommunities = creator
                 .createdCommunities
-                .filter(community => community.id !== communityId)
+                .filter(community => community.toString() !== communityId)
             await creator.save()
         }
 
@@ -80,8 +82,8 @@ const DeleteCommunity = async(req, res) => {
         await Community.findByIdAndDelete(communityId)
 
         return res
-            .status(204)
-            .json("Community deleted successfully");
+            .status(200)
+            .json({message: "Community deleted successfully"});
     } catch (error) {
         return res
             .status(500)
@@ -111,9 +113,10 @@ const UpdateCommunity = async(req, res) => {
             community.description = description
         if (privacy) 
             community.privacy = privacy
+        await community.save()
 
         res
-            .stauts(200)
+            .status(200)
             .json({message: "Community updated successfully", community})
     } catch (error) {
         res
@@ -141,14 +144,70 @@ const AddMembers = async(req, res) => {
             }
         })
 
+        let newMembers = []
+
+        await Promise.all(usersToAdd.map(async(user) => {
+            if (!community.members.includes(user._id)) {
+                user
+                    .joinedCommunities
+                    .push(communityId);
+                await user.save();
+                newMembers.push(user._id)
+            }
+        }));
+
         community
             .members
-            .push(...usersToAdd.map(user => user._id))
+            .push(...newMembers)
         await community.save()
 
         return res
             .status(200)
             .json({message: "Members added to the community successfully", community})
+    } catch (error) {
+        res
+            .status(500)
+            .json({error: "Internal Server Error"});
+    }
+}
+
+const RemoveMembers = async(req, res) => {
+    const {communityId} = req.params;
+    const {userIds} = req.body;
+
+    try {
+        const community = await Community.findById(communityId);
+
+        if (!community) 
+            return res.status(404).json({message: "Community not found"});
+        
+        if (community.creator.toString() !== req.user.id) 
+            return res.status(403).json({message: "Permission denied. You are not the creator of this community"});
+        
+        const usersToRemove = await User.find({
+            _id: {
+                $in: userIds
+            }
+        });
+
+        let removedMembers = []
+
+        await Promise.all(usersToRemove.map(async(user) => {
+            if (community.members.includes(user._id)) {
+                user.joinedCommunities = user
+                    .joinedCommunities
+                    .filter((community) => community.toString() !== communityId);
+                await user.save();
+                removedMembers.push(user._id.toString())
+            }
+        }));
+
+        community.members = community.members.filter((member) => !removedMembers.includes(member.toString()));
+        await community.save();
+
+        return res
+            .status(200)
+            .json({message: "Members removed from the community successfully", community});
     } catch (error) {
         res
             .status(500)
@@ -164,7 +223,7 @@ const SendCommunityJoinRequest = async(req, res) => {
         const user = await User.findById(userId)
         const community = await Community.findById(communityId);
 
-        if(!user)
+        if (!user) 
             return res.status(404).json({message: "User not found"})
 
         if (!community) 
@@ -176,31 +235,35 @@ const SendCommunityJoinRequest = async(req, res) => {
                 .json({message: "You are already a member of this community"});
         }
 
-        if(community.privacy === "public") {
-            community.members.push(userId)
+        if (community.privacy === "public") {
+            community
+                .members
+                .push(userId)
             await community.save()
-            return res.status(200).json({message: "You have joined the public community"})
+            return res
+                .status(200)
+                .json({message: "You have joined the public community"})
         }
 
-        const notification = new Notification({
-            user: community.creator,
-            community: community._id,
-            type: "request to join a community",
-            content: `${user.name} wants to join your community "${community.name}"`,
-        })
+        const notification = new Notification({user: community.creator, community: community._id, type: "request to join a community", content: `${user.name} wants to join your community "${community.name}"`})
         await notification.save()
 
-        res.status(200).json({ message: "Community join request sent successfully" });
+        res
+            .status(200)
+            .json({message: "Community join request sent successfully"});
     } catch (error) {
-        res.status(500).json({message: "Internal server error"});
+        res
+            .status(500)
+            .json({message: "Internal server error"});
     }
 }
 
 module.exports = {
-  GetCommunity,
-  CreateCommunity,
-  DeleteCommunity,
-  UpdateCommunity,
-  AddMembers,
-  SendCommunityJoinRequest,
+    GetCommunity,
+    CreateCommunity,
+    DeleteCommunity,
+    UpdateCommunity,
+    AddMembers,
+    SendCommunityJoinRequest,
+    RemoveMembers
 };

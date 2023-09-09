@@ -49,14 +49,19 @@ const UserData = async(req, res) => {
     const {id} = req.params;
 
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id)
 
         if (!user) 
             res.status(404).json({message: "User not found"});
         
+        const {
+            password,
+            ...others
+        } = user._doc
+
         return res
             .status(200)
-            .json({user});
+            .json({user: others});
     } catch (error) {
         res
             .status(500)
@@ -64,26 +69,55 @@ const UserData = async(req, res) => {
     }
 };
 
+// needs to be complete
+const GetFriends = async(req, res) => {
+    const userId = req.user.id
+
+    try {
+        const userFriends = await User
+            .findById(userId)
+            .populate("friends")
+
+    } catch (error) {
+        res
+            .status(500)
+            .json({error: "Internal server error"});
+    }
+}
+
 const SearchUsers = async(req, res) => {
-    const {searchTerm} = req.searchTerm
-    const {communityId} = req.communityId
+    const {searchTerm} = req.params
+    const {communityId} = req.params
 
     try {
         const community = await Community.findById(communityId)
 
         const users = await User.find({
-            name: {
-                $regex: searchTerm,
-                $options: 'i'
-            },
-            username: {
-                $regex: searchTerm,
-                $options: 'i'
-            },
-            _id: {
-                $nin: community.members
-            }
-        })
+            $or: [
+                {
+                    name: {
+                        $regex: searchTerm,
+                        $options: "i"
+                    }
+                }, {
+                    username: {
+                        $regex: searchTerm,
+                        $options: "i"
+                    }
+                }
+            ],
+            $and: [
+                {
+                    _id: {
+                        $nin: community.members
+                    }
+                }, {
+                    _id: {
+                        $ne: community.owner
+                    }
+                }
+            ]
+        });
 
         return res
             .status(200)
@@ -125,7 +159,7 @@ const SearchUsersCommunities = async(req, res) => {
                         _id: 1,
                         name: 1,
                         username: 1,
-                        profileImage: 1,
+                        profile: 1,
                         type: "user"
                     }
                 }
@@ -143,7 +177,7 @@ const SearchUsersCommunities = async(req, res) => {
                         _id: 1,
                         name: 1,
                         privacy: 1,
-                        type: "community",
+                        type: "community"
                     }
                 }
             ])
@@ -151,7 +185,9 @@ const SearchUsersCommunities = async(req, res) => {
 
         const combinedResults = [...results]
 
-        res.status(200).json({ results: combinedResults });
+        res
+            .status(200)
+            .json({results: combinedResults});
     } catch (error) {
         res
             .status(500)
@@ -163,5 +199,6 @@ module.exports = {
     EditProfile,
     UserData,
     SearchUsers,
-    SearchUsersCommunities
+    SearchUsersCommunities,
+    GetFriends
 }

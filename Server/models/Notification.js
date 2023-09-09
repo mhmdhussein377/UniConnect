@@ -2,10 +2,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const notificationSchema = new Schema({
-    user: {
+    recipient: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
+    },
+    sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", 
+        required: true,
     },
     community: {
         type: mongoose.Schema.Types.ObjectId,

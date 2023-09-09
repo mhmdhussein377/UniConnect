@@ -1,16 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const { EditProfile, UserData, SearchUsers, SearchUsersCommunities } = require("../controllers/UserController");
+const { EditProfile, UserData, SearchUsers, SearchUsersCommunities, GetFriends } = require("../controllers/UserController");
 
+// done
 router.post("/edit-profile", EditProfile);
 
-// needs testing
+// needs to be completed
+router.get("/friends", GetFriends)
+
+// done
 router.get("/:id", UserData)
 
-// needs testing
-router.get("/:searchTerm/:communityId", SearchUsers)
+// done
+router.get("/search/:searchTerm", SearchUsersCommunities)
 
-// needs testing
-router.get("/:searchTerm", SearchUsersCommunities)
+// i only have to exclude the owner
+router.get("/search/:searchTerm/:communityId", SearchUsers)
 
 module.exports = router;

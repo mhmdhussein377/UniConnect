@@ -3,10 +3,10 @@ POST http://localhost:3000/api/register
 Content-Type : application/json
 
 {
-    "name" : "Rachid Al Mustafa",
-    "username" : "rachid377",
-    "email" : "rachid@gmail.com",
-    "password" : "rachid123"
+    "name" : "Carla",
+    "username" : "carla",
+    "email" : "carla@gmail.com",
+    "password" : "carla123"
 }
 
 ###
@@ -23,7 +23,7 @@ Content-Type : application/json
 // Edit user info
 POST http://localhost:3000/api/user/edit-profile
 Content-Type : application/json
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3YmFkMzJiMmRlZmNjZjk4ZiIsImlhdCI6MTY5NDI1MDM3NH0.yQdogXF76CGzZ-bc71ed_ffYrrs4UivdzNpckiQKI9Y
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJkOWI1NTI1MDU0ZDg5MDgzMCIsImlhdCI6MTY5NDI2NjA3OH0.g1ztUJTwF_Tz80fKNJ85dr3AYF6PyBdxpeO5SnZ1XYk
 
 {
     "profileImage" : "new-new-profile-image.jpg",
@@ -34,4 +34,84 @@ Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3
     "location" : "New Location",
     "bio" : "New Bio",
     "skills" : ["Skill 1", "Skill 2"]
+}
+
+
+// get a specific user data
+###
+GET http://localhost:3000/api/user/64ec7987bad32b2defccf98f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
+
+// search for users and communities
+###
+GET http://localhost:3000/api/user/search/car
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
+
+// search for users to invite 
+###
+GET http://localhost:3000/api/user/search/car/64fc501335e3102409bc028e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
+
+// get a specific user friends
+###
+GET http://localhost:3000/api/user/friends
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
+
+// create a community
+###
+POST http://localhost:3000/api/community/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
+
+{
+    "name" : "First Community",
+    "description" : "This is the first community",
+    "privacy" : "public"
+}
+
+// get a community
+###
+GET http://localhost:3000/api/community/64fc44206036e55f0754642b
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
+
+// delete a community
+###
+POST http://localhost:3000/api/community/delete/64fc4f9b35e3102409bc0285
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NTU2M30.KD6XMlPsIlCgJiUjcYz73WUnum8aGvMwKAc4OQsAA20
+
+// update a community
+###
+POST http://localhost:3000/api/community/update/64fc501335e3102409bc028e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
+
+{
+    "name" : "First community updated",
+    "description" : "First community description updated"
+}
+
+// add members to a community
+###
+POST http://localhost:3000/api/community/64fc501335e3102409bc028e/add-members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
+
+{
+    "userIds" : ["64fc602d9b5525054d890830", "64fc602d9b5525054d890830"]
+}
+
+// remove members from a community
+###
+POST http://localhost:3000/api/community/64fc501335e3102409bc028e/remove-members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1NzM1OX0.-J3gukVTyBcwN0yDSjXXEdY6hGN7StjB3mfgEpDrWBY
+
+{
+    "userIds" : ["64ec7987bad32b2defccf98f", "64fc602d9b5525054d890830"]
 }
