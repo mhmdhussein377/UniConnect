@@ -6,16 +6,17 @@ const GetCommunity = async(req, res) => {
     const {communityId} = req.params
 
     try {
-        const community = await Community.findById(communityId)
+        const community = await Community.findById(communityId).populate({path: "members", select: "name username _id profile.profileImage"}).populate({path: "creator", select: "name username _id profile.profileImage"})
 
-        if (!community) 
+        if (!community) {
             return res.status(404).json({message: "Community not found"})
+        } 
 
         return res
             .status(200)
             .json({community})
     } catch (error) {
-        res
+        return res
             .status(500)
             .json({error: "Internal server error"});
     }
@@ -24,10 +25,6 @@ const GetCommunity = async(req, res) => {
 const CreateCommunity = async(req, res) => {
     const {name, description, privacy} = req.body
     const creator = req.user.id
-
-    console.log(creator)
-    console.log(req.body)
-    console.log(name, description, privacy)
 
     try {
         // check if the creator exists

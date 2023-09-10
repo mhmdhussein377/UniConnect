@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {AiOutlinePlus} from "react-icons/ai";
 import {AiOutlineMinus} from "react-icons/ai";
+import { AuthContext } from "../../Context/AuthContext";
+import { Link } from "react-router-dom";
 
-const index = ({inModal, searched, isFollowed, onToggleIsFollowed}) => {
+const index = ({inModal, searched, member, creator}) => {
 
-    let [isInvited,
-        setIsInvited] = useState(false);
+    const {user} = useContext(AuthContext)
+
+    const {name, username, _id} = member
+
+    let [isFollowed, setIsFollowed] = useState(user.friends.includes(_id))
+
+    const actualUser = user._id === _id
 
     return (
-        <div className="flex items-center justify-between gap-2">
+        <Link to={!actualUser && `/profile/${username}`} className={`flex items-center justify-between gap-2 ${!actualUser ? "cursor-pointer" : "cursor-auto"}`}>
             <div className="flex items-center gap-2">
                 <div
                     className="rounded-full flex items-center justify-center overflow-hidden w-[45px] h-[45px]">
@@ -17,11 +24,11 @@ const index = ({inModal, searched, isFollowed, onToggleIsFollowed}) => {
                         alt="profile-picture"/>
                 </div>
                 <div className="flex flex-col gap-0">
-                    <div>Mohammad Hussein</div>
-                    <p className="text-sm">mhmd388</p>
+                    <div>{name} {user._id === _id && "(You)"} {creator && "(Creator)"}</div>
+                    <p className="text-sm">{username}</p>
                 </div>
             </div>
-            {inModal && (
+            {inModal ? (
                 <div>
                     {isInvited
                         ? (
@@ -41,13 +48,12 @@ const index = ({inModal, searched, isFollowed, onToggleIsFollowed}) => {
                             </button>
                         )}
                 </div>
-            )}
-            {searched && (
+            ) : null}
+            {(searched && !actualUser) && (
                 <div>
                     {isFollowed
                         ? (
                             <button
-                                onClick={onToggleIsFollowed}
                                 className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
                                 <AiOutlineMinus/>
                                 Remove friend
@@ -55,7 +61,6 @@ const index = ({inModal, searched, isFollowed, onToggleIsFollowed}) => {
                         )
                         : (
                             <button
-                                onClick={onToggleIsFollowed}
                                 className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
                                 <AiOutlinePlus/>
                                 Add friend
@@ -63,7 +68,7 @@ const index = ({inModal, searched, isFollowed, onToggleIsFollowed}) => {
                         )}
                 </div>
             )}
-        </div>
+        </Link>
     );
 };
 

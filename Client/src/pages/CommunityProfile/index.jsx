@@ -1,31 +1,32 @@
 import {BiHash} from "react-icons/bi";
+import {AiTwotoneLock} from "react-icons/ai"
 import Header from "./../../components/Header";
 import Member from "./../../components/Member"
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {HiPencil} from "react-icons/hi"
+import {useParams} from "react-router-dom";
+import {getRequest} from "./../../utils/requests"
+import About from "./../../components/About"
+import {AuthContext} from "./../../Context/AuthContext"
+import UpdateCommunityModal from "./../../components/UpdateCommunityModal"
 
 const index = () => {
 
-    const [isFollowedStates,
-        setIsFollowedStates] = useState([
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-    ]);
+    const {id} = useParams()
+    const {user} = useContext(AuthContext)
 
-    const toggleIsFollowed = (index) => {
-        const updatedStates = [...isFollowedStates]
-        updatedStates[index] = !updatedStates[index]
-        setIsFollowedStates(updatedStates)
-    }
+    let [community,setCommunity] = useState({})
+    let [showUpdateCommunityModal, setShowUpdateCommunityModal] = useState(false)
+
+    let {name, privacy, description, _id} = community
+
+    useEffect(() => {
+        const getCommunity = async() => {
+            const response = await getRequest(`/community/${id}`)
+            response && setCommunity(response.community)
+        }
+        getCommunity()
+    }, [id])
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -37,12 +38,28 @@ const index = () => {
                         <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col">
                             <div className="flex items-center gap-2 w-full">
                                 <div>
-                                    <BiHash size={80}/>
+                                    {community.privacy === "public"
+                                        ? (<BiHash size={80}/>)
+                                        : (<AiTwotoneLock size={80}/>)}
                                 </div>
-                                <div className="flex flex-col w-full">
-                                    <div className="text-2xl font-medium">Community Name</div>
-                                    <div className="w-full flex items-center justify-between">
-                                        <div>1 Member</div>
+                                <div className="flex items-center w-full gap-3">
+                                    <div className="flex justify-between flex-1 flex-col gap-2">
+                                        <div className="text-2xl font-medium">
+                                            {community.name}
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <span>{community
+                                                    ?.members
+                                                        ?.length + 1}</span>
+                                            Member{community
+                                                ?.members
+                                                    ?.length > 0 && "s"}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col justify-between gap-2.5">
+                                        <div className={`w-fit ml-auto ${community?.creator?._id === user?._id ? "visible" : "invisible"}`}>
+                                            <HiPencil onClick={() => setShowUpdateCommunityModal(true)} className="cursor-pointer" size={30}/>
+                                        </div>
                                         <div>
                                             <button className="bg-primary text-white px-2 py-1.5 rounded-md">
                                                 Request to join
@@ -52,25 +69,31 @@ const index = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-2">
-                            <div className="text-xl font-semibold">About</div>
-                            <p className="text-[15px]">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias ducimus ab
-                                cum obcaecati deleniti numquam est mollitia consequatur animi, dolor quasi.
-                                Incidunt dolorum perspiciatis omnis ex exercitationem reprehenderit facere.
-                                Temporibus?
-                            </p>
-                        </div>
+                        <About data={community.description}/>
                     </div>
                     <div
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
                         <div className="font-medium text-lg">Members</div>
                         <div className="flex flex-col gap-2">
-                            {isFollowedStates.map((isFollowed, index) => (<Member key={index} searched={true} isFollowed={isFollowed} onToggleIsFollowed={() => toggleIsFollowed(index)} />))}
+                            {community.creator
+                                ? (<Member
+                                    creator={true}
+                                    searched={true}
+                                    member={community
+                                    ?.creator}/>)
+                                : null}
+                            {community
+                                ?.members
+                                    ?.length > 0
+                                        ? community
+                                            .members
+                                            .map((member, index) => (<Member key={index} member={member} searched={true}/>))
+                                        : null}
                         </div>
                     </div>
                 </div>
             </div>
+            {showUpdateCommunityModal && <UpdateCommunityModal setCommunity={setCommunity} _id={_id} name={name} description={description} privacy={privacy} setShowUpdateCommunityModal={setShowUpdateCommunityModal} />}
         </div>
     );
 };

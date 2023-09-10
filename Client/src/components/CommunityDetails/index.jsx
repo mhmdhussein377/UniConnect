@@ -71,6 +71,7 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
                 {isMembersListOpened && (
                     <div
                         className="flex flex-col gap-2 w-full max-h-[300px] overflow-scroll scrollbar-hide">
+                        {/* <Member/>
                         <Member/>
                         <Member/>
                         <Member/>
@@ -78,8 +79,7 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
                         <Member/>
                         <Member/>
                         <Member/>
-                        <Member/>
-                        <Member/>
+                        <Member/> */}
                     </div>
                 )}
             </div>
