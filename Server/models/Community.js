@@ -21,9 +21,21 @@ const communitySchema = new Schema({
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
+        required: true
     },
     members: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    invitedUsers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    requestedUsers: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"

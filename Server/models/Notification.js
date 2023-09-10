@@ -9,8 +9,8 @@ const notificationSchema = new Schema({
     },
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", 
-        required: true,
+        ref: "User",
+        required: true
     },
     community: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +19,14 @@ const notificationSchema = new Schema({
     type: {
         type: String,
         required: true,
-        enum: ["friend request", "community join request", "community invite request", "community join accepted", "friend request accepted"]
+        enum: [
+            "friend request",
+            "community join request",
+            "community invite request",
+            "community join accepted",
+            "community invite request",
+            "friend request accepted"
+        ]
     },
     content: {
         type: String,
@@ -28,6 +35,13 @@ const notificationSchema = new Schema({
     isRead: {
         type: Boolean,
         default: false
+    },
+    status: {
+        type: String,
+        enum: [
+            "pending", "accepted", "rejected"
+        ],
+        default: "pending"
     }
 }, {timestamps: true});
 
