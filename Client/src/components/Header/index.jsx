@@ -5,12 +5,15 @@ import {AiFillBell} from "react-icons/ai";
 import {AiFillHome} from "react-icons/ai";
 import {Link} from "react-router-dom";
 import Notifications from "./../Notifications"
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = ({profile}) => {
 
-    const [showNotifications,
-        setShowNotifications] = useState(false);
+    const {user} = useContext(AuthContext)
+    const {username} = user
+
+    const [showNotifications,setShowNotifications] = useState(false);
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
 
@@ -65,12 +68,12 @@ const index = ({profile}) => {
                             </div>
                         )}
                     </div>
-                    <div className="w-[40px] h-[40px] rounded-full overflow-hidden">
+                    <Link to={`/profile/${username}`} className="w-[40px] h-[40px] rounded-full overflow-hidden">
                         <img
                             className="w-full h-full object-cover"
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                             alt=""/>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>

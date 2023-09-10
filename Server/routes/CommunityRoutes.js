@@ -7,7 +7,8 @@ const {
     UpdateCommunity,
     AddMembers,
     SendCommunityJoinRequest,
-    RemoveMembers
+    RemoveMembers,
+    SendCommunityInviteRequest
 } = require("./../controllers/CommunityController");
 
 // done
@@ -30,5 +31,8 @@ router.post("/:communityId/remove-members", RemoveMembers);
 
 // send community join request
 router.post('/send-community-join-request/:communityId', SendCommunityJoinRequest)
+
+// send community invite request
+router.post("/send-community-invite-request/:communityId/:recipientUserId", SendCommunityInviteRequest);
 
 module.exports = router;

@@ -94,10 +94,10 @@ const index = ({type, setType, setShowCommunityModal}) => {
                             alt="profile-picture"/>
                     </Link>
                     <div className="flex flex-col">
-                        <Link to={`/profile/${username}`}>
-                            <div className="text-lg font-semibold">{name}</div>
+                        <div>
+                            <Link to={`/profile/${username}`} className="text-lg font-semibold">{name}</Link>
                             <p className="text-[#737373] font-medium">{username}</p>
-                        </Link>
+                        </div>
                     </div>
                 </div>
                 <BsThreeDots className="cursor-pointer" size={30}/>

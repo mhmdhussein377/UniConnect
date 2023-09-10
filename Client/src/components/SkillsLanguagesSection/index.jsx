@@ -1,10 +1,8 @@
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {HiPencil} from "react-icons/hi";
-import { useParams } from "react-router-dom";
-import { AuthContext } from "../../Context/AuthContext";
 
-const index = ({data, maxDataToShow, text, emptyHeadline, setShowModal}) => {
+const index = ({data, maxDataToShow, text, emptyHeadline, setShowModal, currentUser}) => {
 
     let [showAllData,
         setShowAllData] = useState(false);
@@ -13,7 +11,7 @@ const index = ({data, maxDataToShow, text, emptyHeadline, setShowModal}) => {
         <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="text-xl font-semibold flex items-center justify-between">
                 <div>{text}</div>
-                <HiPencil onClick={() => setShowModal(true)} className="cursor-pointer" size={30}/>
+                {currentUser && <HiPencil onClick={() => setShowModal(true)} className="cursor-pointer" size={30}/>}
             </div>
             <div className="flex flex-col gap-4">
                 {data?.length > 0

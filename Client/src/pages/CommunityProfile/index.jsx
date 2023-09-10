@@ -9,14 +9,20 @@ import {getRequest} from "./../../utils/requests"
 import About from "./../../components/About"
 import {AuthContext} from "./../../Context/AuthContext"
 import UpdateCommunityModal from "./../../components/UpdateCommunityModal"
+import AddMembersModal from "./../../components/AddMembersModal"
 
 const index = () => {
 
     const {id} = useParams()
     const {user} = useContext(AuthContext)
 
-    let [community,setCommunity] = useState({})
-    let [showUpdateCommunityModal, setShowUpdateCommunityModal] = useState(false)
+    let [community,
+        setCommunity] = useState({})
+    let [showUpdateCommunityModal,
+        setShowUpdateCommunityModal] = useState(false)
+    let [showAddMembersModal,
+        setShowAddMembersModal] = useState(false)
+    let [isMember, setIsMember] = useState(null)
 
     let {name, privacy, description, _id} = community
 
@@ -24,9 +30,20 @@ const index = () => {
         const getCommunity = async() => {
             const response = await getRequest(`/community/${id}`)
             response && setCommunity(response.community)
+            // check if the user is a member 
+            response && response.community?.members?.map(member => {
+                if(member._id === user._id) {
+                    setIsMember(true)
+                    return
+                }
+            })
         }
         getCommunity()
-    }, [id])
+    }, [id, user._id])
+
+    const handleJoinLeaveCommunity = () => {
+        
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -48,22 +65,42 @@ const index = () => {
                                             {community.name}
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <span>{community
+                                            {community?.members ? <span>{community
                                                     ?.members
-                                                        ?.length + 1}</span>
+                                                        ?.length + 1}</span> : null}
                                             Member{community
                                                 ?.members
                                                     ?.length > 0 && "s"}
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-between gap-2.5">
-                                        <div className={`w-fit ml-auto ${community?.creator?._id === user?._id ? "visible" : "invisible"}`}>
-                                            <HiPencil onClick={() => setShowUpdateCommunityModal(true)} className="cursor-pointer" size={30}/>
+                                        <div
+                                            className={`w-fit ml-auto ${community
+                                            ?.creator
+                                                ?._id === user
+                                                    ?._id
+                                                        ? "visible"
+                                                        : "invisible"}`}>
+                                            <HiPencil
+                                                onClick={() => setShowUpdateCommunityModal(true)}
+                                                className="cursor-pointer"
+                                                size={30}/>
                                         </div>
                                         <div>
-                                            <button className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                Request to join
-                                            </button>
+                                            {community
+                                                ?.creator
+                                                    ?._id === user
+                                                        ?._id
+                                                            ? (
+                                                                <button onClick={() => setShowAddMembersModal(true)} className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                                    Add members
+                                                                </button>
+                                                            )
+                                                            : (
+                                                                <button onClick={handleJoinLeaveCommunity} className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                                    {isMember ? "Leave community" : "Request to join"}
+                                                                </button>
+                                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +130,14 @@ const index = () => {
                     </div>
                 </div>
             </div>
-            {showUpdateCommunityModal && <UpdateCommunityModal setCommunity={setCommunity} _id={_id} name={name} description={description} privacy={privacy} setShowUpdateCommunityModal={setShowUpdateCommunityModal} />}
+            {showUpdateCommunityModal && (<UpdateCommunityModal
+                setCommunity={setCommunity}
+                _id={_id}
+                name={name}
+                description={description}
+                privacy={privacy}
+                setShowUpdateCommunityModal={setShowUpdateCommunityModal}/>)}
+            {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}
         </div>
     );
 };

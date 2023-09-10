@@ -2,21 +2,20 @@ import {useContext} from "react";
 import {HiPencil} from "react-icons/hi";
 import {AuthContext} from "../../Context/AuthContext";
 
-const index = ({setShowEducationalInfoModal}) => {
+const index = ({setShowEducationalInfoModal, currentUser, university, major, emptyHeadline}) => {
+    console.log(university, major);
 
-    const {user} = useContext(AuthContext);
-    const {university, major} = user.profile;
+    console.log(emptyHeadline)
 
     return (
         <div
             className="flex-[3] bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between font-semibold text-lg">
-                    Educational Information
-                    <HiPencil
+                    Educational Information {currentUser && (<HiPencil
                         onClick={() => setShowEducationalInfoModal(true)}
                         className="cursor-pointer"
-                        size={30}/>
+                        size={30}/>)}
                 </div>
                 {major && university
                     ? (
@@ -36,13 +35,11 @@ const index = ({setShowEducationalInfoModal}) => {
                         </div>
                     )
                     : (
-                        <div className="text-center my-4">
-                            Share your university and major to showcase your academic background.
-                        </div>
+                        <div className="text-center my-4">{emptyHeadline}</div>
                     )}
             </div>
         </div>
     );
-}
+};
 
 export default index

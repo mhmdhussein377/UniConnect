@@ -8,7 +8,7 @@ router.post("/edit-profile", EditProfile);
 // needs to be completed
 router.get("/friends", GetFriends)
 
-// done ( i have to exclude the logged in user)
+// done
 router.get("/:username", UserData)
 
 // done

@@ -30,10 +30,11 @@ const index = ({setShowAddMembersModal}) => {
                         id="add-members"
                         type="text"
                         placeholder="Search for users to add"
-                        className="border-b-2 border-b-primary outline-none px-2 placeholder:text-lg"/>
+                        className="border-b-2 border-b-primary outline-none px-2 py-1.5 placeholder:text-lg"/>
                 </div>
                 <div
                     className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide">
+                    {/* <Member inModal={true}/>
                     <Member inModal={true}/>
                     <Member inModal={true}/>
                     <Member inModal={true}/>
@@ -41,8 +42,7 @@ const index = ({setShowAddMembersModal}) => {
                     <Member inModal={true}/>
                     <Member inModal={true}/>
                     <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
+                    <Member inModal={true}/> */}
                 </div>
             </div>
         </div>

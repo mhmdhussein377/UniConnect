@@ -1,12 +1,9 @@
-import {useContext, useRef} from "react";
+import {useRef} from "react";
 import {HiPencil} from "react-icons/hi";
-import { AuthContext } from "../../Context/AuthContext";
 
-const index = ({setShowEditUserModal}) => {
+const index = ({setShowEditUserModal, user, currentUser}) => {
 
-    const {user} = useContext(AuthContext);
-    const {name, friends} = user;
-    const {nickname, location} = user.profile;
+    console.log(user)
 
     const coverPicRef = useRef();
     const profilePicRef = useRef();
@@ -24,30 +21,30 @@ const index = ({setShowEditUserModal}) => {
                     src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                     alt="profile-picture"/>
                 <input ref={profilePicRef} type="file" className="hidden"/>
-                <div
+                {currentUser && <div
                     onClick={() => coverPicRef.current.click()}
                     className="absolute w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full top-2 right-2 cursor-pointer">
                     <HiPencil className="text-primary" size={25}/>
                     <input ref={coverPicRef} type="file" className="hidden"/>
-                </div>
+                </div>}
             </div>
             <div>
-                <div className={`flex justify-end`}>
+                <div className={`flex justify-end ${currentUser ? "visible" : "invisible"}`}>
                     <HiPencil
                         onClick={() => setShowEditUserModal(true)}
                         className="cursor-pointer"
                         size={30}/>
                 </div>
                 <div className="mt-8 flex flex-col gap-1.5">
-                    <div className="text-xl font-semibold">{name}</div>
-                    <div>{nickname}</div>
-                    <div>{location}</div>
-                    <div>{friends?.length > 0? friends?.length: "No"} Friends</div>
-                    <div className="mt-2">
+                    <div className="text-xl font-semibold">{user?.name}</div>
+                    {user?.profile?.nickname && <div>{user?.profile?.nickname}</div>}
+                    {user?.profile?.location ? <div>{user.profile.location}</div> : null}
+                    <div>{user.friends?.length > 0 ? user.friends?.length: "No"} Friends</div>
+                    {!currentUser && <div className="mt-2">
                         <button className="bg-primary text-white px-2 py-1 5 rounded-md">
                             Add friend
                         </button>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

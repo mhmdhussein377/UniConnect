@@ -10,10 +10,12 @@ import EducationalModal from './components/EducationalModal'
 import EditUserModal from './components/EditUserModal'
 import LanguagesModal from "./components/LanguagesModal"
 import SkillsModal from "./components/SkillsModal"
+import {useParams} from "react-router-dom"
 
 const index = () => {
 
     const {user} = useContext(AuthContext)
+    const {username} = useParams()
 
     let [showEducationalInfoModal,
         setShowEducationalInfoModal] = useState(false);
@@ -24,7 +26,7 @@ const index = () => {
     let [showSkillsModal,
         setShowSkillsModal] = useState(false);
 
-    let {skills, languages, bio} = user.profile
+    let {skills, languages, bio, university, major} = user.profile
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -33,22 +35,36 @@ const index = () => {
                 <div
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
                     <div className="flex-[7] flex flex-col gap-6">
-                        <UserDataSection setShowEditUserModal={setShowEditUserModal}/>
+                        {user && (<UserDataSection
+                            currentUser={user
+                            ?.usrname === username}
+                            user={user}
+                            setShowEditUserModal={setShowEditUserModal}/>)}
                         {bio && <About data={bio}/>}
                         <SkillsLanguagesSection
                             setShowModal={setShowSkillsModal}
                             text="Skills"
                             data={skills}
                             maxDataToShow={4}
+                            currentUser={user
+                            ?.usrname === username}
                             emptyHeadline="Your skills will shine here."/>
                         <SkillsLanguagesSection
                             setShowModal={setShowLanguagesModal}
                             text="Languages"
                             data={languages}
                             maxDataToShow={4}
+                            currentUser={user
+                            ?.usrname === username}
                             emptyHeadline="Your multilingual talengts await."/>
                     </div>
-                    <EducationalInfo setShowEducationalInfoModal={setShowEducationalInfoModal}/>
+                    <EducationalInfo
+                        currentUser={user
+                        ?.usrname === username}
+                        university={university}
+                        major={major}
+                        setShowEducationalInfoModal={setShowEducationalInfoModal}
+                        emptyHeadline="Share your university and major to showcase your academic background."/>
                 </div>
             </div>
             {showEducationalInfoModal && (<EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal}/>)}

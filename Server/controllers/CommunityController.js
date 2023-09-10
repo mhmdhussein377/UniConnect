@@ -6,11 +6,16 @@ const GetCommunity = async(req, res) => {
     const {communityId} = req.params
 
     try {
-        const community = await Community.findById(communityId).populate({path: "members", select: "name username _id profile.profileImage"}).populate({path: "creator", select: "name username _id profile.profileImage"})
+        const community = await Community
+            .findById(communityId)
+            .populate({path: "members", select: "name username _id profile.profileImage"})
+            .populate({path: "creator", select: "name username _id profile.profileImage"})
 
         if (!community) {
-            return res.status(404).json({message: "Community not found"})
-        } 
+            return res
+                .status(404)
+                .json({message: "Community not found"})
+        }
 
         return res
             .status(200)
@@ -116,11 +121,11 @@ const UpdateCommunity = async(req, res) => {
             community.privacy = privacy
         await community.save()
 
-        res
+        return res
             .status(200)
             .json({message: "Community updated successfully", community})
     } catch (error) {
-        res
+        return res
             .status(500)
             .json({error: "Internal Server Error"});
     }
@@ -166,7 +171,7 @@ const AddMembers = async(req, res) => {
             .status(200)
             .json({message: "Members added to the community successfully", community})
     } catch (error) {
-        res
+        return res
             .status(500)
             .json({error: "Internal Server Error"});
     }
@@ -203,14 +208,16 @@ const RemoveMembers = async(req, res) => {
             }
         }));
 
-        community.members = community.members.filter((member) => !removedMembers.includes(member.toString()));
+        community.members = community
+            .members
+            .filter((member) => !removedMembers.includes(member.toString()));
         await community.save();
 
         return res
             .status(200)
             .json({message: "Members removed from the community successfully", community});
     } catch (error) {
-        res
+        return res
             .status(500)
             .json({error: "Internal Server Error"});
     }
@@ -224,11 +231,17 @@ const SendCommunityJoinRequest = async(req, res) => {
         const user = await User.findById(userId)
         const community = await Community.findById(communityId);
 
-        if (!user) 
-            return res.status(404).json({message: "User not found"})
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
+        }
 
-        if (!community) 
-            return res.status(404).json({message: "Community not found"})
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"})
+        }
 
         if (community.members.includes(userId)) {
             return res
@@ -240,20 +253,63 @@ const SendCommunityJoinRequest = async(req, res) => {
             community
                 .members
                 .push(userId)
+            user
+                .joinedCommunities
+                .push(communityId)
             await community.save()
+            await user.save()
             return res
                 .status(200)
                 .json({message: "You have joined the public community"})
         }
 
-        const notification = new Notification({user: community.creator, community: community._id, type: "request to join a community", content: `${user.name} wants to join your community "${community.name}"`})
+        const notification = new Notification({recipient: community.creator, community: communityId, type: "community join request", content: `${user.name} wants to join your community "${community.name}"`})
         await notification.save()
 
-        res
+        return res
             .status(200)
             .json({message: "Community join request sent successfully"});
     } catch (error) {
         res
+            .status(500)
+            .json({message: "Internal server error"});
+    }
+}
+
+const SendCommunityInviteRequest = async(req, res) => {
+    const {communityId, recipientUserId} = req.params;
+    const ownerId = req.user.id;
+
+    try {
+        const community = await Community.findById(communityId)
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"});
+        }
+
+        if (community.creator.toString() !== ownerId) {
+            return res
+                .status(403)
+                .json({message: "You do not have permission to send invites for this community"});
+        }
+
+        const recipientUser = await User.findById(recipientUserId)
+        if (!recipientUser) {
+            return res
+                .status(404)
+                .json({message: "Recipient user not found"});
+        }
+
+        const notification = new Notification({recipient: recipientUserId, community: communityId, type: "community invite request", content: `You are invited to join the community "${community.name}"`});
+
+        await notification.save();
+
+        return res
+            .status(200)
+            .json({message: "Community invite request sent successfully"});
+    } catch (error) {
+        return res
             .status(500)
             .json({message: "Internal server error"});
     }
@@ -266,5 +322,6 @@ module.exports = {
     UpdateCommunity,
     AddMembers,
     SendCommunityJoinRequest,
-    RemoveMembers
+    RemoveMembers,
+    SendCommunityInviteRequest
 };

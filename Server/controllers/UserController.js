@@ -55,8 +55,9 @@ const UserData = async(req, res) => {
     try {
         const user = await User.findOne({username})
 
-        if (!user) 
-            res.status(404).json({message: "User not found"});
+        if (!user) {
+            return res.status(404).json({message: "User not found"});
+        } 
         
         const {
             password,
@@ -67,7 +68,7 @@ const UserData = async(req, res) => {
             .status(200)
             .json({user: others});
     } catch (error) {
-        res
+        return res
             .status(500)
             .json({error: "Internal server error"});
     }
