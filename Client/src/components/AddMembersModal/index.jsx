@@ -1,13 +1,52 @@
 import {MdOutlineClose} from "react-icons/md";
 import Member from "./../Member"
 import {handleCloseModal} from "./../../utils/closeModal"
-import { useRef } from "react";
+import {useContext, useEffect, useRef, useState} from "react";
+import {AuthContext} from "../../Context/AuthContext";
+import {getRequest} from "../../utils/requests"
+import {useDebounce} from "use-debounce"
 
 const index = ({setShowAddMembersModal}) => {
 
+    const {user} = useContext(AuthContext)
+
+    const communityId = "64fe547a14637f6200500d2a";
+
+    let [friends,
+        setFriends] = useState([])
+    let [searchedUsers,
+        setSearchedUsers] = useState([])
+    let [searchTerm,
+        setSearchTerm] = useState("")
+    let [debouncedValue] = useDebounce(searchTerm, 500)
     const boxRef = useRef()
 
+    useEffect(() => {
+        const getUserFriends = async() => {
+            const response = await getRequest(`/user/friends/${communityId}`);
+            response && setFriends(response.friends)
+        }
+        getUserFriends()
+    }, [])
+
+    useEffect(() => {
+        const searchUsers = async() => {
+            const response = await getRequest(`/user/search/${debouncedValue}/${communityId}`)
+            response && setSearchedUsers(response.users)
+        }
+        if (debouncedValue !== "") {
+            searchUsers()
+        }
+    }, [debouncedValue])
+
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowAddMembersModal);
+
+    const handleInputChange = (e) => {
+        if (e.target.value === "") {
+            setSearchedUsers([])
+        }
+        setSearchTerm(e.target.value)
+    }
 
     return (
         <div
@@ -28,22 +67,44 @@ const index = ({setShowAddMembersModal}) => {
                     </div>
                     <input
                         id="add-members"
+                        value={searchTerm}
+                        onChange={handleInputChange}
                         type="text"
                         placeholder="Search for users to add"
                         className="border-b-2 border-b-primary outline-none px-2 py-1.5 placeholder:text-lg"/>
                 </div>
                 <div
-                    className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide">
-                    {/* <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/>
-                    <Member inModal={true}/> */}
+                    className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide mb-5">
+                    {/* {selectedUsers.map((user, index) => (<Member
+                        setSearchedUsers={setSearchedUsers}
+                        withCheckbox={true}
+                        key={index}
+                        member={user}
+                        selectedUsers={selectedUsers}/>))} */}
+                    {searchedUsers.length > 0
+                        ? searchedUsers.map((user, index) => (<Member
+                            setSearchedUsers={setSearchedUsers}
+                            key={index}
+                            invite={true}
+                            member={user}
+                            inModal={true}/>))
+                        : friends.map((friend, index) => {
+                            return (<Member
+                                setSearchedUsers={setSearchedUsers}
+                                key={index}
+                                invite={true}
+                                member={friend}
+                                inModal={true}/>);
+
+                        })}
                 </div>
+                {/* {selectedUsers.length > 0 && (
+                    <div className=" mt-auto">
+                        <button className="bg-primary text-white px-4 py-2 rounded-md">
+                            Invite Users
+                        </button>
+                    </div>
+                )} */}
             </div>
         </div>
     );

@@ -76,7 +76,6 @@ const UserData = async(req, res) => {
     }
 };
 
-// needs to be completed
 const GetFriends = async(req, res) => {
     const userId = req?.user?.id
     const {communityId} = req.params
@@ -117,6 +116,10 @@ const SearchUsers = async(req, res) => {
     try {
         const community = await Community.findById(communityId)
 
+        if(!community) {
+            return res.status(404).json({message: "Community not found"})
+        }
+
         const users = await User.find({
             $or: [
                 {
@@ -134,11 +137,13 @@ const SearchUsers = async(req, res) => {
             $and: [
                 {
                     _id: {
-                        $nin: community.members
+                        $nin: community.members,
+                        $nin: community.invitedUsers,
+                        $nin: community.requestedUsers
                     }
                 }, {
                     _id: {
-                        $ne: community.owner
+                        $ne: community.creator
                     }
                 }
             ]

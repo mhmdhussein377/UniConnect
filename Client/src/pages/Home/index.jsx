@@ -19,7 +19,7 @@ const index = () => {
         setShowUserDetails] = useState(false);
     let [showCommunityModal,
         setShowCommunityModal] = useState(false);
-    let [showAddMembersModal, setShowAddMembersModal] = useState(false)
+    let [showAddMembersModal, setShowAddMembersModal] = useState(true)
 
     return (
         <div className="h-screen max-h-screen">

@@ -12,6 +12,11 @@ const friendshipSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
+    requester: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     status: {
         type: String,
         enum: statusEnum,

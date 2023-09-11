@@ -4,7 +4,9 @@ const Notification = require("./../models/Notification")
 
 const SendFriendRequest = async(req, res) => {
     const {recipientUserId} = req.params;
-    const senderUserId = req?.user?.id
+    const senderUserId = req
+        ?.user
+            ?.id
 
     try {
         const sender = await User.findById(senderUserId)
@@ -38,7 +40,7 @@ const SendFriendRequest = async(req, res) => {
         }
         // return res.status(400).json({message: "Friendship request already exists"});
 
-        const newFriendship = new Friendship({userOne: senderUserId, userTwo: recipientUserId})
+        const newFriendship = new Friendship({userOne: senderUserId, userTwo: recipientUserId, requester: senderUserId})
         await newFriendship.save()
 
         const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
@@ -55,29 +57,37 @@ const SendFriendRequest = async(req, res) => {
 }
 
 const AcceptFriendRequest = async(req, res) => {
-    const currentUser = req?.user?.id
+    const currentUser = req
+        ?.user
+            ?.id
     const {recipientUserId} = req.params
 
     try {
         const sender = await User.findById(currentUser)
         const recipient = await User.findById(recipientUserId)
 
-        if(!sender) {
-            return res.status(400).json("Sender not found")
+        if (!sender) {
+            return res
+                .status(400)
+                .json("Sender not found")
         }
 
-        if(!recipient) {
-            return res.status(400).json("Recipient not found")
+        if (!recipient) {
+            return res
+                .status(400)
+                .json("Recipient not found")
         }
 
         const existingFriendship = await Friendship.findOne({
             $or: [
                 {
                     userOne: currentUser,
-                    userTwo: recipientUserId
+                    userTwo: recipientUserId,
+                    requester: recipientUserId
                 }, {
                     userOne: recipientUserId,
-                    userTwo: currentUser
+                    userTwo: currentUser,
+                    requester: currentUser
                 }
             ]
         });
@@ -96,10 +106,14 @@ const AcceptFriendRequest = async(req, res) => {
         existingNotification.isRead = true
         await existingNotification.save()
 
-        sender.friends.push(recipientUserId)
+        sender
+            .friends
+            .push(recipientUserId)
         await sender.save()
 
-        recipient.friends.push(currentUser)
+        recipient
+            .friends
+            .push(currentUser)
         await recipient.save()
 
         const acceptanceNotification = new Notification({recipient: recipientUserId, sender: currentUser, type: "friend request accepted", content: `You are now friends with ${sender.name}`});
@@ -116,7 +130,9 @@ const AcceptFriendRequest = async(req, res) => {
 }
 
 const RejectFriendRequest = async(req, res) => {
-    const currentUser = req?.user?.id;
+    const currentUser = req
+        ?.user
+            ?.id;
     const {recipientUserId} = req.params;
 
     try {
@@ -124,10 +140,12 @@ const RejectFriendRequest = async(req, res) => {
             $or: [
                 {
                     userOne: currentUser,
-                    userTwo: recipientUserId
+                    userTwo: recipientUserId,
+                    requester: recipientUserId
                 }, {
                     userOne: recipientUserId,
-                    userTwo: currentUser
+                    userTwo: currentUser,
+                    requester: currentUser
                 }
             ]
         });
@@ -156,8 +174,117 @@ const RejectFriendRequest = async(req, res) => {
     }
 }
 
+const CancelFriendRequest = async(req, res) => {
+    const currentUser = req
+        ?.user
+            ?.id;
+    const {recipientUserId} = req.params;
+
+    try {
+        const existingFriendship = await Friendship.findOne({
+            $or: [
+                {
+                    userOne: currentUser,
+                    userTwo: recipientUserId,
+                    requester: currentUser
+                }, {
+                    userOne: recipientUserId,
+                    userTwo: currentUser,
+                    requester: recipientUserId
+                }
+            ]
+        });
+
+        if (!existingFriendship) {
+            return res
+                .status(400)
+                .json({message: "Friendship doesn't exist"});
+        }
+
+        if (existingFriendship.status !== "pending") {
+            return res
+                .status(400)
+                .json({message: "Friendship request has already been accepted or rejected"});
+        }
+
+        await existingFriendship.remove();
+
+        await Notification.findOneAndDelete({recipient: recipientUserId, sender: currentUser, type: "friend request"});
+
+        res
+            .status(200)
+            .json({message: "Friendship request canceled successfully"});
+    } catch (error) {
+        res
+            .status(500)
+            .json({message: "Internal server error"});
+    }
+};
+
+const Unfriend = async(req, res) => {
+    const currentUser = req
+        ?.user
+            ?.id
+    const {friendUserId} = req.params
+
+    try {
+        const existingFriendship = await Friendship.findOne({
+            $or: [
+                {
+                    userOne: currentUser,
+                    userTwo: friendUserId,
+                    status: "accepted"
+                }, {
+                    userOne: friendUserId,
+                    userTwo: currentUser,
+                    status: "accepted"
+                }
+            ]
+        });
+
+        if (!existingFriendship) {
+            return res
+                .status(400)
+                .json({message: "Friendship not found"});
+        }
+
+        const currentUserObj = await User.findById(currentUser);
+        const friendUserObj = await User.findById(friendUserId);
+
+        if (!currentUserObj || !friendUserObj) {
+            return res
+                .status(400)
+                .json({message: "User not found"});
+        }
+
+        await existingFriendship.remove()
+
+        currentUserObj.friends = currentUserObj
+            .friends
+            .filter((friend) => friend.toString() !== friendUserId);
+
+        friendUserObj.friends = friendUserObj
+            .friends
+            .filter((friend) => friend.toString() !== currentUser);
+
+        await currentUserObj.save();
+        await friendUserObj.save();
+
+        res
+            .status(200)
+            .json({message: "Friend removed successfully"});
+
+    } catch (error) {
+        res
+            .status(500)
+            .json({message: "Internal server error"});
+    }
+}
+
 module.exports = {
     SendFriendRequest,
     AcceptFriendRequest,
-    RejectFriendRequest
+    RejectFriendRequest,
+    CancelFriendRequest,
+    Unfriend
 }

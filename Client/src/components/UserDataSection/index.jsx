@@ -3,8 +3,6 @@ import {HiPencil} from "react-icons/hi";
 
 const index = ({setShowEditUserModal, user, currentUser}) => {
 
-    console.log(user)
-
     const coverPicRef = useRef();
     const profilePicRef = useRef();
 

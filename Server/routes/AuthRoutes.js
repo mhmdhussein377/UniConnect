@@ -11,8 +11,10 @@ router.post("/register", Register);
 // done
 router.post("/register/google", GoogleLogin);
 
+// done
 router.post("/forgot-password", ForgotPassword);
 
+// done
 router.post("/reset-password/:userId/:token", ResetPassword);
 
 module.exports = router;
