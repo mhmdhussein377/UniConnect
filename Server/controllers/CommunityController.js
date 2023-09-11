@@ -264,7 +264,7 @@ const SendCommunityJoinRequest = async(req, res) => {
                 .json({message: "You have joined the public community"})
         }
 
-        if (community.requestedUsers.includes(recipientUserId) || community.invitedUsers.includes(recipientUserId)) {
+        if (community.requestedUsers.includes(userId) || community.invitedUsers.includes(userId)) {
             return res
                 .status(400)
                 .json({message: "The recipient has a pending join request or invitation for this community"});
@@ -275,7 +275,7 @@ const SendCommunityJoinRequest = async(req, res) => {
             .push(userId)
         await community.save()
 
-        const notification = new Notification({recipient: community.creator, community: communityId, type: "community join request", content: `${user.name} wants to join your community "${community.name}"`})
+        const notification = new Notification({recipient: community.creator, sender: userId, community: communityId, type: "community join request", content: `${user.name} wants to join your community "${community.name}"`});
         await notification.save()
 
         return res
@@ -344,8 +344,8 @@ const SendCommunityInviteRequest = async(req, res) => {
 }
 
 const AcceptCommunityJoinRequest = async(req, res) => {
-    const {communityId, requesterUserId} = req.params;
-    const ownerId = req.user.id;
+    const {communityId, requesterUserId} = req.params;  // tsee
+    const ownerId = req.user.id; // akram
 
     try {
         const community = await Community.findById(communityId);
@@ -389,21 +389,28 @@ const AcceptCommunityJoinRequest = async(req, res) => {
         }
         await community.save();
 
+        requestedUser
+            .joinedCommunities
+            .push(communityId)
+        await requestedUser.save()
+
         await Notification.findOneAndUpdate({
-            recipient: requesterUserId,
+            recipient: ownerId,
+            sender: requesterUserId,
             community: communityId,
             type: "community join request"
         }, {
             $set: {
                 status: "accepted",
+                isRead: true,
                 content: `Your join request for the community "${community.name}" has been accepted`
             }
         });
 
-        // const notification = new Notification({recipient: requesterUserId, community:
-        // communityId, type: "community join accepted", content: `Your join request
-        // for the community "${community.name}" has been accepted`}); await
-        // notification.save();
+        const notification = new Notification({recipient: requesterUserId, sender: ownerId, community:
+        communityId, type: "community join accepted", content: `Your join request
+        for the community "${community.name}" has been accepted`, status: "accepted"}); await
+        notification.save();
 
         return res
             .status(200)
@@ -416,6 +423,80 @@ const AcceptCommunityJoinRequest = async(req, res) => {
     }
 };
 
+const AcceptCommunityInviteRequest = async(req, res) => {
+    const {communityId} = req.params;
+    const userId = req.user.id;
+
+    try {
+        const user = await User.findById(userId);
+        const community = await Community.findById(communityId);
+
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"});
+        }
+
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"});
+        }
+
+        if (community.members.includes(userId)) {
+            return res
+                .status(400)
+                .json({message: "You are already a member of this community"});
+        }
+
+        // if (community.requestedUsers.includes(userId)) {     return
+        // res.status(400).json({ message: "You have a pending join request for this
+        // community" }); }
+
+        if (!community.invitedUsers.includes(userId)) {
+            return res
+                .status(400)
+                .json({message: "You have not been invited to this community"});
+        }
+
+        community
+            .members
+            .push(userId);
+        await community.save();
+
+        const inviteIndex = community
+            .invitedUsers
+            .indexOf(userId);
+        if (inviteIndex !== -1) {
+            community
+                .invitedUsers
+                .splice(inviteIndex, 1);
+        }
+
+        await Notification.findByIdAndUpdate({
+            recipient: community.creator,
+            community: communityId,
+            type: "community invite request"
+        }, {
+            $set: {
+                content: `${user.name} have accepted an invitation to join the community "${community.name}"`,
+                status: "accepted"
+            }
+        });
+
+        user
+            .joinedCommunities
+            .push(communityId);
+        await user.save();
+
+        return res
+            .status(200)
+            .json({message: "Community invite request accepted successfully"});
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 module.exports = {
     GetCommunity,
     CreateCommunity,
@@ -425,5 +506,6 @@ module.exports = {
     SendCommunityJoinRequest,
     RemoveMembers,
     SendCommunityInviteRequest,
-    AcceptCommunityJoinRequest
+    AcceptCommunityJoinRequest,
+    AcceptCommunityInviteRequest
 };

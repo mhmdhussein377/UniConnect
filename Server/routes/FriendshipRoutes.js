@@ -5,6 +5,7 @@ const {SendFriendRequest, AcceptFriendRequest, RejectFriendRequest} = require('.
 // done
 router.post("/send-friend-request/:recipientUserId", SendFriendRequest)
 
+// done
 router.post("/accept-friend-request/:recipientUserId", AcceptFriendRequest)
 
 // done

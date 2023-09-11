@@ -15,7 +15,7 @@ const EditProfile = async(req, res) => {
             location,
             university,
             profileImage,
-            coverImage,
+            coverImage
         } = req.body
 
         const updatedFields = {
@@ -27,8 +27,8 @@ const EditProfile = async(req, res) => {
             "profile.languages": languages,
             "profile.location": location,
             "profile.university": university,
-            "profile.profileImage" : profileImage,
-            "profile.coverImage" : coverImage
+            "profile.profileImage": profileImage,
+            "profile.coverImage": coverImage
         };
 
         const user = await User.findByIdAndUpdate(userId, {
@@ -56,9 +56,11 @@ const UserData = async(req, res) => {
         const user = await User.findOne({username})
 
         if (!user) {
-            return res.status(404).json({message: "User not found"});
-        } 
-        
+            return res
+                .status(404)
+                .json({message: "User not found"});
+        }
+
         const {
             password,
             ...others
@@ -136,15 +138,24 @@ const SearchUsers = async(req, res) => {
 
 const SearchUsersCommunities = async(req, res) => {
     const {searchTerm} = req.params
+    const userId = req
+        ?.user
+            ?.id
 
     try {
-        if (!searchTerm) 
-            return res.status(400).json({message: "Missing searchTerm"})
+        if (!searchTerm) {
+            return res
+                .status(400)
+                .json({message: "Missing searchTerm"})
+        }
 
         const results = await Promise.all([
             User.aggregate([
                 {
                     $match: {
+                        _id: {
+                            $ne: userId
+                        },
                         $or: [
                             {
                                 name: {
@@ -177,11 +188,12 @@ const SearchUsersCommunities = async(req, res) => {
                             $options: "i"
                         }
                     }
-                }, {
+                },  {
                     $project: {
                         _id: 1,
                         name: 1,
                         privacy: 1,
+                        creator: 1,
                         type: "community"
                     }
                 }
@@ -190,11 +202,11 @@ const SearchUsersCommunities = async(req, res) => {
 
         const combinedResults = [...results]
 
-        res
+        return res
             .status(200)
             .json({results: combinedResults});
     } catch (error) {
-        res
+        return res
             .status(500)
             .json({error: "Internval server error"});
     }

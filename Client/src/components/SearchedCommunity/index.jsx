@@ -1,24 +1,21 @@
 import {BiHash} from "react-icons/bi";
 import {FiLock} from "react-icons/fi";
-import {AiOutlinePlus} from "react-icons/ai";
-import {AiOutlineMinus} from "react-icons/ai";
-import {useState} from "react";
+import { Link } from "react-router-dom";
 
-const index = () => {
+const index = ({community}) => {
 
-    let [isJoined,
-        setIsJoined] = useState(false);
+    const {name, privacy, _id} = community
 
     return (
-        <div className="flex items-center justify-between gap-2">
+        <Link to={`/community/${_id}`} className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
                 <div
                     className="w-[45px] h-[45px] rounded-full flex items-center justify-center overflow-hidden bg-gray-200">
-                    <BiHash size={25}/>
+                    {privacy === "public" ? <BiHash size={25}/> : <FiLock size={25} />}
                 </div>
-                <div>First Community</div>
+                <div>{name}</div>
             </div>
-            <div>
+            {/* <div>
                 {isJoined
                     ? (
                         <button
@@ -36,8 +33,8 @@ const index = () => {
                             Join community
                         </button>
                     )}
-            </div>
-        </div>
+            </div> */}
+        </Link>
     );
 };
 

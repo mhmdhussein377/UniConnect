@@ -3,10 +3,10 @@ POST http://localhost:3000/api/register
 Content-Type : application/json
 
 {
-    "name" : "Wow",
-    "username" : "wow",
-    "email" : "wow@gmail.com",
-    "password" : "wow"
+    "name" : "tsee",
+    "username" : "tsee",
+    "email" : "tsee@gmail.com",
+    "password" : "tsee"
 }
 
 ###
@@ -15,8 +15,8 @@ POST http://localhost:3000/api/login
 Content-Type : application/json
 
 {
-    "email" : "wow@gmail.com",
-    "password" : "wow"
+    "email" : "akram@gmail.com",
+    "password" : "akram"
 }
 
 ###
@@ -45,9 +45,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 
 // search for users and communities
 ###
-GET http://localhost:3000/api/user/search/wow
+GET http://localhost:3000/api/user/search/akram
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmNkOWJhMzg4MTcxYjcyNjM3ZDYyZCIsImlhdCI6MTY5NDI5Njk1NSwiZXhwIjoxNjk0MzAwNTU1fQ.SfbETe8hMv7rDb68lOVsLGkCw6URdO6JcRzSEoDi2-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDQyOTc2OCwiZXhwIjoxNjk0NDMzMzY4fQ.DkH4qdUJBWwydxpa8hJ6W9HcPw3A4wzou5auLP9E-SA
 
 // search for users to invite 
 ###
@@ -65,12 +65,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 ###
 POST http://localhost:3000/api/community/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM4ODg1MCwiZXhwIjoxNjk0MzkyNDUwfQ.O5Mjfo35tJ9ewVtNG1xJhrFrL7eoPnqbwazxwEP2xsA
 
 {
-    "name" : "First Community",
-    "description" : "This is the first community",
-    "privacy" : "public"
+    "name" : "Akram's Community",
+    "description" : "This is akram's community",
+    "privacy" : "private"
 }
 
 // get a community
@@ -122,21 +122,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 
 // send a friend request
 ###
-POST http://localhost:3000/api/friendship/send-friend-request/64fc602d9b5525054d890830
+POST http://localhost:3000/api/friendship/send-friend-request/64fe44232d04c0c8d719db8e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3YmFkMzJiMmRlZmNjZjk4ZiIsImlhdCI6MTY5NDI3MjQ2NX0.nUNS5JCvmc9O-WB50kWOc2KjAFoyRCpMuQS-L2y4wwM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM4Nzg5MywiZXhwIjoxNjk0MzkxNDkzfQ.vjE-IlFZp47JxKnS7rDT2S7hDiX8Xtsk3c6T-bBWf_Q
 
 // reject a friend request
 ###
-POST http://localhost:3000/api/friendship/reject-friend-request/64ec7987bad32b2defccf98f
+POST http://localhost:3000/api/friendship/reject-friend-request/64fe44232d04c0c8d719db8e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJkOWI1NTI1MDU0ZDg5MDgzMCIsImlhdCI6MTY5NDI3NjEwN30.rVXzj3-X84POhTFzbqLQahJ7XZCDt3TqDY6j-IB2-UE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM4NjY1NiwiZXhwIjoxNjk0MzkwMjU2fQ.6-quFd9kM2COt5q43a7eplb2ZplLdEl_2Ot2r4J5u0U
+
 
 // accept a friend request
 ###
-POST http://localhost:3000/api/friendship/accept-friend-request/64ec7987bad32b2defccf98f
+POST http://localhost:3000/api/friendship/accept-friend-request/64fe44232d04c0c8d719db8e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmM2MDJkOWI1NTI1MDU0ZDg5MDgzMCIsImlhdCI6MTY5NDI3NjEwN30.rVXzj3-X84POhTFzbqLQahJ7XZCDt3TqDY6j-IB2-UE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM4NjY1NiwiZXhwIjoxNjk0MzkwMjU2fQ.6-quFd9kM2COt5q43a7eplb2ZplLdEl_2Ot2r4J5u0U
 
 
 // Private chat
@@ -151,3 +152,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWM3OTg3Y
     "userOne" : "64fc602d9b5525054d890830",
     "userTwo" : "64ec7987bad32b2defccf98f"
 }
+
+
+// send community join request
+###
+POST http://localhost:3000/api/community/send-community-join-request/64fe547a14637f6200500d2a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDIzMmQwNGMwYzhkNzE5ZGI4ZSIsImlhdCI6MTY5NDM4ODk1NiwiZXhwIjoxNjk0MzkyNTU2fQ.HNYohMrE-65rxrZuMC5NXZ757C-iofLsnXlFnWT61Wo
+
+// accept community join request
+###
+POST http://localhost:3000/api/community/accept-community-join-request/64fe547a14637f6200500d2a/64fe44232d04c0c8d719db8e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM5MDQzMCwiZXhwIjoxNjk0Mzk0MDMwfQ._0N8SBI4hkdR_Ot5mgh3Ql0hZkjSL0ZmZ1x3N0Joy2I

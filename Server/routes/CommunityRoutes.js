@@ -9,7 +9,8 @@ const {
     SendCommunityJoinRequest,
     RemoveMembers,
     SendCommunityInviteRequest,
-    AcceptCommunityJoinRequest
+    AcceptCommunityJoinRequest,
+    AcceptCommunityInviteRequest
 } = require("./../controllers/CommunityController");
 
 // done
@@ -30,12 +31,12 @@ router.post("/:communityId/add-members", AddMembers);
 // done
 router.post("/:communityId/remove-members", RemoveMembers);
 
-// send community join request
 router.post('/send-community-join-request/:communityId', SendCommunityJoinRequest)
 
-// send community invite request
 router.post("/send-community-invite-request/:communityId/:recipientUserId", SendCommunityInviteRequest);
 
 router.post("/accept-community-join-request/:communityId/:requesterUserId", AcceptCommunityJoinRequest)
+
+router.post("/accept-community-invite-request/:communityId/:requesterUserId", AcceptCommunityInviteRequest);
 
 module.exports = router;

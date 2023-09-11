@@ -21,11 +21,11 @@ const notificationSchema = new Schema({
         required: true,
         enum: [
             "friend request",
+            "friend request accepted",
             "community join request",
-            "community invite request",
             "community join accepted",
             "community invite request",
-            "friend request accepted"
+            "community invite accepted",
         ]
     },
     content: {
