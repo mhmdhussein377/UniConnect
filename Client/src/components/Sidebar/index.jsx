@@ -1,11 +1,11 @@
 import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
-import { AiOutlinePlus, AiOutlineUser, AiFillHome } from "react-icons/ai";
-import { BiLogOut } from "react-icons/bi"
+import {AiOutlinePlus, AiOutlineUser, AiFillHome} from "react-icons/ai";
+import {BiLogOut} from "react-icons/bi"
 import {RiCommunityFill} from "react-icons/ri";
 import {FaUserPlus} from "react-icons/fa"
 import {Link, useNavigate} from "react-router-dom";
-import {Fragment, useContext, useState} from "react";
+import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import Friend from "./../Friend"
 import Community from "./../Community"
 import {AuthContext} from "../../Context/AuthContext";
@@ -15,8 +15,11 @@ const index = ({type, setType, setShowCommunityModal}) => {
     const {user} = useContext(AuthContext);
     const {name, username} = user
 
-    let [showSettings, setShowSettings] = useState(false)
+    let [showSettings,
+        setShowSettings] = useState(false)
     const navigate = useNavigate()
+    const dotsRef = useRef()
+    const settingsRef = useRef()
 
     const handleLogout = () => {
         localStorage.removeItem("authToken")
@@ -24,6 +27,25 @@ const index = ({type, setType, setShowCommunityModal}) => {
 
         navigate("/")
     }
+
+    const toggleNotifications = () => {
+        setShowSettings((prev) => !prev);
+    };
+
+    const handleClickOutside = (e) => {
+        if (settingsRef.current && !settingsRef.current.contains(e.target) && dotsRef.current && !dotsRef.current.contains(e.target)) {
+            setShowSettings(false);
+        }
+    };
+
+    const handleDotsClick = (event) => {
+        event.stopPropagation();
+        toggleNotifications();
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+    }, []);
 
     let [friends,
         setFriends] = useState([ < Friend highlight = {
@@ -105,17 +127,39 @@ const index = ({type, setType, setShowCommunityModal}) => {
                     </Link>
                     <div className="flex flex-col">
                         <div>
-                            <Link to={`/profile/${username}`} className="text-lg font-semibold">{name}</Link>
+                            <Link to={`/profile/${username}`} className="text-lg font-semibold">
+                                {name}
+                            </Link>
                             <p className="text-[#737373] font-medium">{username}</p>
                         </div>
                     </div>
                 </div>
                 <div className="relative">
-                    <BsThreeDots onClick={() => setShowSettings(!showSettings)} className="cursor-pointer select-none" size={30}/>
-                    {showSettings ? <div className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
-                        <Link to={`/profile/${username}`} className="pb-2 border-b-2 flex gap-2 items-center"><AiOutlineUser size={25} /> Profile</Link>
-                        <div onClick={handleLogout} className="pt-2 flex items-center gap-2 cursor-pointer"><BiLogOut size={25} /> Logout</div>
-                    </div> : null}
+                    <div ref={dotsRef} onClick={handleDotsClick}>
+                        <BsThreeDots
+                            className="cursor-pointer select-none"
+                            size={30}/>
+                    </div>
+                    {showSettings
+                        ? (
+                            <div
+                                ref={settingsRef}
+                                className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
+                                <Link
+                                    to={`/profile/${username}`}
+                                    className="pb-2 border-b-2 flex gap-2 items-center">
+                                    <AiOutlineUser size={25}/>
+                                    Profile
+                                </Link>
+                                <div
+                                    onClick={handleLogout}
+                                    className="pt-2 flex items-center gap-2 cursor-pointer">
+                                    <BiLogOut size={25}/>
+                                    Logout
+                                </div>
+                            </div>
+                        )
+                        : null}
                 </div>
             </div>
         </div>

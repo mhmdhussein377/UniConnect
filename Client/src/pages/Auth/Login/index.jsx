@@ -33,6 +33,7 @@ const index = () => {
     };
 
     const handleLoginError = (error) => {
+        console.log(error)
         if (error.response.data.error.status === 401) {
             setError({isError: true, type: "Wrong credentials", message: "Wrong credentials"})
             setTimeout(() => {

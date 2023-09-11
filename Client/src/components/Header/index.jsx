@@ -25,7 +25,7 @@ const index = ({profile}) => {
         if (notificationsRef.current && !notificationsRef.current.contains(e.target) && bellIconRef.current && !bellIconRef.current.contains(e.target)) {
             setShowNotifications(false)
         }
-    }
+    }  
 
     const handleBellClick = (event) => {
         event.stopPropagation()

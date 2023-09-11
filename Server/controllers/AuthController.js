@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const dotenv = require("dotenv")
 const {createError} = require("./../utils/error")
+const nodemailer = require("nodemailer");
 dotenv.config()
 
 const Register = async(req, res, next) => {
@@ -61,9 +62,7 @@ const Login = async(req, res, next) => {
                 token
             });
     } catch (error) {
-        return res
-            .status(500)
-            .json(error);
+        return next(createError(500, "Internal Server Error"));
     }
 };
 
@@ -125,8 +124,10 @@ const ForgotPassword = async(req, res) => {
     try {
         const user = await User.findOne({email});
 
+        console.log(user)
+
         if (!user) 
-            return res.json({status: "User doesn't exist"});
+            return res.status(404).json({status: "User doesn't exist"});
         
         const token = jwt.sign({
             id: user._id
@@ -142,7 +143,7 @@ const ForgotPassword = async(req, res) => {
 
         var mailOptions = {
             from: "mohammad.hussein377@gmail.com",
-            to: "mhmdmohd377@gmail.com",
+            to: email,
             subject: "Reset your password",
             text: `http://localhost:5174/reset-password/${user._id}/${token}`
         };
@@ -151,7 +152,7 @@ const ForgotPassword = async(req, res) => {
             if (error) {
                 console.log(error);
             } else {
-                return res.json({status: "Success"});
+                return res.status(200).json({status: "Success"});
             }
         });
     } catch (error) {
