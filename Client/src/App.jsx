@@ -1,5 +1,5 @@
 import './App.css'
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Auth/Login"
 import Register from "./pages/Auth/Register"
 import Home from "./pages/Home"
@@ -17,10 +17,10 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/home" element={<Home />} />
-      <Route path={`/profile/${user?.username}`} element={<Profile />} />
-      <Route path="/profile/:username" element={<OtherUsersProfile />} />
-      <Route path="/community/:id" element={<CommunityProfile />} />
+      <Route path="/home" element={user ? <Home /> : <Navigate to={"/"} />} />
+      <Route path={`/profile/${user?.username}`} element={user ? <Profile /> : <Navigate to={"/"} />} />
+      <Route path="/profile/:username" element={user ? <OtherUsersProfile /> : <Navigate to={"/"} />} />
+      <Route path="/community/:id" element={user ? <CommunityProfile /> : <Navigate to={"/"} />} />
     </Routes>
   );
 }

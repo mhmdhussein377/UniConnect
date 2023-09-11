@@ -1,10 +1,10 @@
-import {AiFillHome} from "react-icons/ai";
 import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
-import {AiOutlinePlus} from "react-icons/ai"
+import { AiOutlinePlus, AiOutlineUser, AiFillHome } from "react-icons/ai";
+import { BiLogOut } from "react-icons/bi"
 import {RiCommunityFill} from "react-icons/ri";
 import {FaUserPlus} from "react-icons/fa"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Fragment, useContext, useState} from "react";
 import Friend from "./../Friend"
 import Community from "./../Community"
@@ -14,6 +14,16 @@ const index = ({type, setType, setShowCommunityModal}) => {
 
     const {user} = useContext(AuthContext);
     const {name, username} = user
+
+    let [showSettings, setShowSettings] = useState(false)
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        localStorage.removeItem("authToken")
+        localStorage.removeItem("user")
+
+        navigate("/")
+    }
 
     let [friends,
         setFriends] = useState([ < Friend highlight = {
@@ -100,7 +110,13 @@ const index = ({type, setType, setShowCommunityModal}) => {
                         </div>
                     </div>
                 </div>
-                <BsThreeDots className="cursor-pointer" size={30}/>
+                <div className="relative">
+                    <BsThreeDots onClick={() => setShowSettings(!showSettings)} className="cursor-pointer select-none" size={30}/>
+                    {showSettings ? <div className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
+                        <Link to={`/profile/${username}`} className="pb-2 border-b-2 flex gap-2 items-center"><AiOutlineUser size={25} /> Profile</Link>
+                        <div onClick={handleLogout} className="pt-2 flex items-center gap-2 cursor-pointer"><BiLogOut size={25} /> Logout</div>
+                    </div> : null}
+                </div>
             </div>
         </div>
     );

@@ -188,12 +188,20 @@ const SearchUsersCommunities = async(req, res) => {
                             $options: "i"
                         }
                     }
-                },  {
+                }, {
+                    $lookup: {
+                        from: "users",
+                        localField: "creator",
+                        foreignField: "_id",
+                        as: "creatorInfo"
+                    }
+                },
+                {$unwind: "$creatorInfo"},{
                     $project: {
                         _id: 1,
                         name: 1,
                         privacy: 1,
-                        creator: 1,
+                        creatorUsername: "$creatorInfo.username",
                         type: "community"
                     }
                 }
