@@ -10,7 +10,7 @@ import Friend from "./../Friend"
 import Community from "./../Community"
 import {AuthContext} from "../../Context/AuthContext";
 
-const index = ({type, setType, setShowCommunityModal}) => {
+const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
 
     const {user} = useContext(AuthContext);
     const {name, username} = user
@@ -59,7 +59,7 @@ const index = ({type, setType, setShowCommunityModal}) => {
 
     return (
         <div
-            className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20]`}>
+            className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar ${openSidebar && "left-[0%]"} transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20]`}>
             <div
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
@@ -136,9 +136,7 @@ const index = ({type, setType, setShowCommunityModal}) => {
                 </div>
                 <div className="relative">
                     <div ref={dotsRef} onClick={handleDotsClick}>
-                        <BsThreeDots
-                            className="cursor-pointer select-none"
-                            size={30}/>
+                        <BsThreeDots className="cursor-pointer select-none" size={30}/>
                     </div>
                     {showSettings
                         ? (

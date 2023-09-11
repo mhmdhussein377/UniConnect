@@ -4,7 +4,8 @@ import {BsFillSendFill} from "react-icons/bs";
 import {CgSidebarOpen} from "react-icons/cg";
 import Message from "./../Message"
 
-const index = ({setShowUserDetails}) => {
+const index = ({setShowUserDetails, setOpenSidebar}) => {
+
     return (
         <div className="flex-[8.8] flex flex-col">
             <div
@@ -27,7 +28,10 @@ const index = ({setShowUserDetails}) => {
                         <p>mhmd_hussein</p>
                     </div>
                 </div>
-                <CgSidebarOpen className="lg:hidden" size={30}/>
+                <CgSidebarOpen
+                    onClick={() => setOpenSidebar(prev => !prev)}
+                    className="lg:hidden"
+                    size={30}/>
             </div>
             <div
                 className="flex-1 flex flex-col px-6 bg-[#F4F3FC] overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">

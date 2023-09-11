@@ -5,8 +5,8 @@ const { EditProfile, UserData, SearchUsers, SearchUsersCommunities, GetFriends }
 // done
 router.post("/edit-profile", EditProfile);
 
-// needs to be completed
-router.get("/friends", GetFriends)
+// get all the user's friends who are not memebrs in a community
+router.get("/friends/:communityId", GetFriends)
 
 // done
 router.get("/:username", UserData)
@@ -14,7 +14,7 @@ router.get("/:username", UserData)
 // done
 router.get("/search/:searchTerm", SearchUsersCommunities)
 
-// i only have to exclude the owner
+// needs test
 router.get("/search/:searchTerm/:communityId", SearchUsers)
 
 module.exports = router;

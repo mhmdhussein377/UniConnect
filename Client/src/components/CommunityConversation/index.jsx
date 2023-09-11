@@ -4,7 +4,7 @@ import {CgSidebarOpen} from "react-icons/cg";
 import {FiUserPlus} from "react-icons/fi";
 import Message from "./../Message"
 
-const index = ({setOpenCommunityDetails}) => {
+const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar}) => {
 
     const newCommunity = false;
 
@@ -31,7 +31,7 @@ const index = ({setOpenCommunityDetails}) => {
                         <span className="text-[#007D76] font-medium">1 online</span>
                     </div>
                 </div>
-                <CgSidebarOpen className="lg:hidden" size={30}/>
+                <CgSidebarOpen onClick={() => setOpenSidebar(prev => !prev)} className="lg:hidden" size={30}/>
             </div>
             {newCommunity && (
                 <div
@@ -45,6 +45,7 @@ const index = ({setOpenCommunityDetails}) => {
                         </p>
                     </div>
                     <div
+                        onClick={() => setShowAddMembersModal(true)}
                         className="py-3 px-4 text-2xl border-2 border-[#CECECE] rounded-md flex items-center gap-4 text-center">
                         <div className="border-2 p-2 rounded-md bg-primary">
                             <FiUserPlus className="text-white" size={25}/>

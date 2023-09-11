@@ -57,9 +57,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 
 // get a specific user friends
 ###
-GET http://localhost:3000/api/user/friends
+GET http://localhost:3000/api/user/friends/64fe547a14637f6200500d2a
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmOGM3M2IwNWRmMTM2NTU1OSIsImlhdCI6MTY5NDI1Mzg2OH0.WFrUU8W7Xju1NAlnXE3H0vua4JQ8AxAYLiBeKSvXubU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDQ0NzYwNSwiZXhwIjoxNjk0NDUxMjA1fQ.ypksY5Qo6Y6L-Cn3QEyHydax4ANJYX77cRnNzSz5krg
 
 // create a community
 ###
@@ -124,7 +124,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 ###
 POST http://localhost:3000/api/friendship/send-friend-request/64fe44232d04c0c8d719db8e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM4Nzg5MywiZXhwIjoxNjk0MzkxNDkzfQ.vjE-IlFZp47JxKnS7rDT2S7hDiX8Xtsk3c6T-bBWf_Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDQ0NzA1MSwiZXhwIjoxNjk0NDUwNjUxfQ.vygv4nWbmObhrHHHX2qUOUd0cTHGqpGwvsgCi0KUD8k
 
 // reject a friend request
 ###
@@ -135,9 +135,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1M
 
 // accept a friend request
 ###
-POST http://localhost:3000/api/friendship/accept-friend-request/64fe44232d04c0c8d719db8e
+POST http://localhost:3000/api/friendship/accept-friend-request/64fe44152d04c0c8d719db8a
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDM4NjY1NiwiZXhwIjoxNjk0MzkwMjU2fQ.6-quFd9kM2COt5q43a7eplb2ZplLdEl_2Ot2r4J5u0U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDIzMmQwNGMwYzhkNzE5ZGI4ZSIsImlhdCI6MTY5NDQ0NzE3MCwiZXhwIjoxNjk0NDUwNzcwfQ.mH5zYvxt00lx_Os4tutrxmJgeZ1E7DOjYxVMBYT34UA
 
 
 // Private chat

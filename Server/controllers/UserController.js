@@ -76,14 +76,32 @@ const UserData = async(req, res) => {
     }
 };
 
-// needs to be complete
+// needs to be completed
 const GetFriends = async(req, res) => {
-    const userId = req.user.id
+    const userId = req?.user?.id
+    const {communityId} = req.params
 
     try {
-        const userFriends = await User
-            .findById(userId)
-            .populate("friends")
+
+        const user = await User.findById(userId)
+        const community = await Community.findById(communityId)
+
+        if(!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+
+        if(!community) {
+            return res.status(404).json({message: "Community not found"})
+        }
+
+        const friends = await User.find({
+            _id: {
+                $in: user.friends,
+                $nin: community.members,
+            }
+        })
+
+        return res.status(200).json({friends})
 
     } catch (error) {
         res

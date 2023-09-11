@@ -4,7 +4,7 @@ const Notification = require("./../models/Notification")
 
 const SendFriendRequest = async(req, res) => {
     const {recipientUserId} = req.params;
-    const senderUserId = req.user.id
+    const senderUserId = req?.user?.id
 
     try {
         const sender = await User.findById(senderUserId)
@@ -55,7 +55,7 @@ const SendFriendRequest = async(req, res) => {
 }
 
 const AcceptFriendRequest = async(req, res) => {
-    const currentUser = req.user.id
+    const currentUser = req?.user?.id
     const {recipientUserId} = req.params
 
     try {
@@ -116,7 +116,7 @@ const AcceptFriendRequest = async(req, res) => {
 }
 
 const RejectFriendRequest = async(req, res) => {
-    const currentUser = req.user.id;
+    const currentUser = req?.user?.id;
     const {recipientUserId} = req.params;
 
     try {

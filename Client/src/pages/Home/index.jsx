@@ -12,6 +12,7 @@ const index = () => {
 
     let [type,
         setType] = useState("community");
+    let [openSidebar, setOpenSidebar] = useState(false)
     let [openCommunityDetails,
         setOpenCommunityDetails] = useState(false);
     let [showUserDetails,
@@ -24,9 +25,9 @@ const index = () => {
         <div className="h-screen max-h-screen">
             <Header/>
             <div className="flex relative home-bottom">
-                <Sidebar setType={setType} type={type} setShowCommunityModal={setShowCommunityModal}/> 
-                {type === "community" && (<CommunityConversation setOpenCommunityDetails={setOpenCommunityDetails}/>)}
-                {type === "inbox" && (<PrivateConversation setShowUserDetails={setShowUserDetails}/>)}
+                <Sidebar setType={setType} type={type} openSidebar={openSidebar} setShowCommunityModal={setShowCommunityModal}/> 
+                {type === "community" && (<CommunityConversation setOpenCommunityDetails={setOpenCommunityDetails} setShowAddMembersModal={setShowAddMembersModal} setOpenSidebar={setOpenSidebar} />)}
+                {type === "inbox" && (<PrivateConversation setOpenSidebar={setOpenSidebar} setShowUserDetails={setShowUserDetails}/>)}
             </div>
             {/* Sidebar to show details about the community */}
             <CommunityDetails

@@ -7,17 +7,20 @@ import {Link} from "react-router-dom";
 import UserDetail from "./../UserDetail"
 
 const index = ({showUserDetails, setShowUserDetails}) => {
+
     return (
         <div
             className={`absolute top-0 bg-white community-details h-screen w-[80%] xs:w-[70%] sm:w-[55%] smd:w-[48%] md:w-[42%] lg:w-[35%] xl:w-[27%] z-50 transition-all duration-300 ease-linear border-l-[2px] ${showUserDetails
             ? "right-0"
             : "-left-full"}`}>
             <div className="pb-4 border-b-2 border-grayHard">
-                <div className="flex items-center justify-end pr-4 py-4 pb-1">
-                    <MdOutlineClose
-                        onClick={() => setShowUserDetails((prev) => !prev)}
-                        className="cursor-pointer"
-                        size={30}/>
+                <div className="flex items-center justify-end pr-4 py-4 pb-1 ">
+                    <div>
+                        <MdOutlineClose
+                            onClick={() => setShowUserDetails((prev) => !prev)}
+                            className="cursor-pointer"
+                            size={30}/>
+                    </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     <Link

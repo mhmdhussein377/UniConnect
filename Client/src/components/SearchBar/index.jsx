@@ -1,43 +1,29 @@
-import {Fragment, useState} from "react";
+import {Fragment, useContext, useState} from "react";
 import {AiOutlineSearch} from "react-icons/ai";
 import {IoIosCloseCircleOutline} from "react-icons/io";
 import Member from "../Member"
 import SearchedCommunity from "./../SearchedCommunity"
 import {getRequest} from "./../../utils/requests"
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = () => {
+
+    const {user: currentUser} = useContext(AuthContext)
+
     let [showSearchList,
         setShowSearchList] = useState(false);
     let [searchTerm,
         setSearchTerm] = useState("");
     let [result, setResult] = useState([])
 
-    const [isFollowedStates,
-        setIsFollowedStates] = useState([
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false
-    ]);
-
-    const toggleIsFollowed = (index) => {
-        const updatedStates = [...isFollowedStates];
-        updatedStates[index] = !updatedStates[index];
-        setIsFollowedStates(updatedStates);
-    };
-
     const handleSearch = async(e) => {
         e.preventDefault();
 
         if(searchTerm !== "") {
             const response = await getRequest(`/user/search/${searchTerm}`)
-            console.log(response)
             let users, communities = []
             if(response) {
-                users = response.results[0]
+                users = response.results[0].filter(user => user._id !== currentUser._id)
                 communities = response.results[1]
             }
             
