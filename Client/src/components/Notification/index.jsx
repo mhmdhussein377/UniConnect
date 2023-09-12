@@ -1,4 +1,7 @@
-const index = () => {
+const index = ({notification}) => {
+
+    const {content} = notification
+
     return (
         <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -9,8 +12,9 @@ const index = () => {
                         alt="profile-picture"/>
                 </div>
                 <div className="flex flex-row items-center gap-2 flex-wrap">
-                    <span className="font-medium text-[18px]">Mohammad Hussein</span>
-                    sent you a friend request
+                    {/* <span className="font-medium text-[18px]">Mohammad Hussein</span>
+                    sent you a friend request */}
+                    {content}
                 </div>
             </div>
             <div className="flex items-center gap-4">

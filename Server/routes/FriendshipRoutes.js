@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {SendFriendRequest, AcceptFriendRequest, RejectFriendRequest, CancelFriendRequest, Unfriend} = require('./../controllers/FriendshipController')
+const {SendFriendRequest, AcceptFriendRequest, RejectFriendRequest, CancelFriendRequest, Unfriend, GetFriendship} = require('./../controllers/FriendshipController')
+
+router.get("/", GetFriendship)
 
 // done
 router.post("/send-friend-request/:recipientUserId", SendFriendRequest)

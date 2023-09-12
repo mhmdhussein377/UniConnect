@@ -77,7 +77,9 @@ const UserData = async(req, res) => {
 };
 
 const GetFriends = async(req, res) => {
-    const userId = req?.user?.id
+    const userId = req
+        ?.user
+            ?.id
     const {communityId} = req.params
 
     try {
@@ -85,22 +87,43 @@ const GetFriends = async(req, res) => {
         const user = await User.findById(userId)
         const community = await Community.findById(communityId)
 
-        if(!user) {
-            return res.status(404).json({message: "User not found"})
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
         }
 
-        if(!community) {
-            return res.status(404).json({message: "Community not found"})
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"})
         }
 
         const friends = await User.find({
-            _id: {
-                $in: user.friends,
-                $nin: community.members,
-            }
-        })
+            $and: [
+                {
+                    _id: {
+                        $in: user.friends
+                    }
+                }, {
+                    _id: {
+                        $nin: community.members
+                    }
+                }, {
+                    _id: {
+                        $nin: community.invitedUsers
+                    }
+                }, {
+                    _id: {
+                        $nin: community.requestedUsers
+                    }
+                }
+            ]
+        });
 
-        return res.status(200).json({friends})
+        return res
+            .status(200)
+            .json({friends})
 
     } catch (error) {
         res
@@ -116,8 +139,10 @@ const SearchUsers = async(req, res) => {
     try {
         const community = await Community.findById(communityId)
 
-        if(!community) {
-            return res.status(404).json({message: "Community not found"})
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"})
         }
 
         const users = await User.find({
@@ -134,11 +159,16 @@ const SearchUsers = async(req, res) => {
                     }
                 }
             ],
-            $and: [
-                {
+            $and: [{
                     _id: {
-                        $nin: community.members,
-                        $nin: community.invitedUsers,
+                        $nin: community.members
+                    }
+                }, {
+                    _id: {
+                        $nin: community.invitedUsers
+                    }
+                }, {
+                    _id: {
                         $nin: community.requestedUsers
                     }
                 }, {
@@ -218,8 +248,9 @@ const SearchUsersCommunities = async(req, res) => {
                         foreignField: "_id",
                         as: "creatorInfo"
                     }
-                },
-                {$unwind: "$creatorInfo"},{
+                }, {
+                    $unwind: "$creatorInfo"
+                }, {
                     $project: {
                         _id: 1,
                         name: 1,

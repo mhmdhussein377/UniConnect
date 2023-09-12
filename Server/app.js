@@ -21,6 +21,7 @@ const UserRoutes = require("./routes/UserRoutes")
 const CommunityRoutes = require("./routes/CommunityRoutes");
 const FriendshipRoutes = require("./routes/FriendshipRoutes")
 const PrivateChatRoutes = require("./routes/PrivateChat")
+const NotificationRoutes = require("./routes/NotificationRoutes")
 
 app.use('/api', AuthRoutes)
 
@@ -31,6 +32,8 @@ app.use("/api/user", UserRoutes)
 app.use("/api/friendship", FriendshipRoutes)
 
 app.use("/api/community", CommunityRoutes);
+
+app.use("/api/notifications", NotificationRoutes)
 
 app.use("/api/privateChat", PrivateChatRoutes)
 

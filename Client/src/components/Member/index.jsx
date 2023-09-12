@@ -3,8 +3,9 @@ import {AiOutlinePlus} from "react-icons/ai";
 import {AiOutlineMinus} from "react-icons/ai";
 import {AuthContext} from "../../Context/AuthContext";
 import {Link} from "react-router-dom";
+import { postRequest } from "../../utils/requests";
 
-const index = ({searched, member, creator, invite}) => {
+const index = ({searched, member, creator, invite, communityId}) => {
 
     const {user} = useContext(AuthContext)
     let [isInvited,
@@ -17,13 +18,15 @@ const index = ({searched, member, creator, invite}) => {
 
     const actualUser = user._id === _id
 
-    const handleInvite = () => {
+    const handleInvite = async() => {
         setIsInvited(!isInvited)
 
         if(isInvited) {
-            console.log("invited")
+            const response = await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`)
+            console.log(response)
         }else {
-            console.log("not invited")
+            const response = await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`)
+            console.log(response)
         }
     }
 

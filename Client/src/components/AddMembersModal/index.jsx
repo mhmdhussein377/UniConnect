@@ -10,7 +10,7 @@ const index = ({setShowAddMembersModal}) => {
 
     const {user} = useContext(AuthContext)
 
-    const communityId = "64fe547a14637f6200500d2a";
+    const communityId = "6500335fde9949be1480c711";
 
     let [friends,
         setFriends] = useState([])
@@ -75,22 +75,16 @@ const index = ({setShowAddMembersModal}) => {
                 </div>
                 <div
                     className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide mb-5">
-                    {/* {selectedUsers.map((user, index) => (<Member
-                        setSearchedUsers={setSearchedUsers}
-                        withCheckbox={true}
-                        key={index}
-                        member={user}
-                        selectedUsers={selectedUsers}/>))} */}
                     {searchedUsers.length > 0
                         ? searchedUsers.map((user, index) => (<Member
-                            setSearchedUsers={setSearchedUsers}
+                            communityId={communityId}
                             key={index}
                             invite={true}
                             member={user}
                             inModal={true}/>))
                         : friends.map((friend, index) => {
                             return (<Member
-                                setSearchedUsers={setSearchedUsers}
+                                communityId={communityId}
                                 key={index}
                                 invite={true}
                                 member={friend}
