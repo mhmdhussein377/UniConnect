@@ -13,33 +13,14 @@ const index = () => {
     const {username} = useParams()
     const {user: currentUser} = useContext(AuthContext)
     let [user, setUser] = useState({})
-    let [friendship, setFriendship] = useState({})
-    let [friendshipStatus, setFriendshipStatus] = useState("")
-
+    
     useEffect(() => {
         const getUser = async() => {
             const response = await getRequest(`/user/${username}`)
             response && setUser(response.user)
         }
         getUser()
-
-        const getFrienship = async() => {
-            const response = await getRequest(`/friendship/${username}`)
-            console.log(response)
-            let friendship = response.friendship[0]
-            setFriendship(friendship)
-
-            if(friendship) {
-                setFriendshipStatus(friendship.status)
-            }else {
-                setFriendshipStatus("no friendship")
-            }
-        }
-        getFrienship()
     }, [username, user._id])
-
-    console.log(user)
-    console.log(friendshipStatus)
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -49,7 +30,7 @@ const index = () => {
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
                     <div className="flex-[7] flex flex-col gap-6">
                         {user && (<UserDataSection
-                            currentUser={user.username === currentUser.username}
+                            isCurrentUser={user.username === currentUser.username}
                             user={user}/>)}
                         {user?.profile?.bio && <About data={user?.profile?.bio}/>}
                         {user?.profile?.skills.length > 0 && <SkillsLanguagesSection

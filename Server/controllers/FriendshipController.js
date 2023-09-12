@@ -4,13 +4,17 @@ const Notification = require("./../models/Notification")
 
 const GetFriendship = async(req, res) => {
     const {username} = req.params
-    const currentUserId = req?.user?.id
+    const currentUserId = req
+        ?.user
+            ?.id
 
     try {
         const currentUser = await User.findById(currentUserId)
         const user = await User.findOne({username})
-        if(!currentUser || !user) {
-            return res.statsu(404).json({message: 'User not found'})
+        if (!currentUser || !user) {
+            return res
+                .statsu(404)
+                .json({message: 'User not found'})
         }
 
         console.log(user, currentUserId)
@@ -20,17 +24,20 @@ const GetFriendship = async(req, res) => {
                 {
                     userOne: user._id,
                     userTwo: currentUserId
-                },
-                {
+                }, {
                     userOne: currentUserId,
                     userTwo: user._id
                 }
             ]
         })
-        
-        return res.status(200).json({friendship})
+
+        return res
+            .status(200)
+            .json({friendship})
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        res
+            .status(500)
+            .json({message: "Internal server error"});
     }
 }
 
@@ -175,11 +182,11 @@ const RejectFriendRequest = async(req, res) => {
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    requester: recipientUserId
+                    // requester: recipientUserId
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    requester: currentUser
+                    // requester: currentUser
                 }
             ]
         });
@@ -220,11 +227,11 @@ const CancelFriendRequest = async(req, res) => {
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    requester: currentUser
+                    // requester: currentUser
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    requester: recipientUserId
+                    // requester: recipientUserId
                 }
             ]
         });
@@ -291,7 +298,7 @@ const Unfriend = async(req, res) => {
                 .json({message: "User not found"});
         }
 
-        await existingFriendship.remove()
+        await Friendship.findByIdAndDelete(existingFriendship._id)
 
         currentUserObj.friends = currentUserObj
             .friends

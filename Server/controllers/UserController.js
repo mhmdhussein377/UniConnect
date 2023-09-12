@@ -54,7 +54,9 @@ const UserData = async(req, res) => {
     const {username} = req.params;
 
     try {
-        const user = await User.findOne({username}).populate({path: "createdCommunities", select: "_id name privacy "})
+        // const user = await User.findOne({username}).populate({path: "createdCommunities", select: "_id name privacy "})
+
+        const user = await User.findOne({ username });
 
         if (!user) {
             return res
