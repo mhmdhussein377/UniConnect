@@ -54,9 +54,27 @@ const UserData = async(req, res) => {
     const {username} = req.params;
 
     try {
-        // const user = await User.findOne({username}).populate({path: "createdCommunities", select: "_id name privacy "})
+        const user = await User
+            .findOne({username})
+            .populate({
+                path: "joinedCommunities",
+                select: "_id name privacy",
+                populate: {
+                    path: "creator",
+                    select: "username"
+                }
+            })
+            .populate({
+                path: "createdCommunities",
+                select: "_id name privacy",
+                populate: {
+                    path: "creator",
+                    select: "username"
+                }
+            })
+            .populate({path: "friends", select: "_id name username profile.profileImage"})
 
-        const user = await User.findOne({ username });
+        // const user = await User.findOne({ username });
 
         if (!user) {
             return res
@@ -162,7 +180,8 @@ const SearchUsers = async(req, res) => {
                     }
                 }
             ],
-            $and: [{
+            $and: [
+                {
                     _id: {
                         $nin: community.members
                     }

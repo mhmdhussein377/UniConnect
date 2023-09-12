@@ -1,15 +1,10 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import {HiPencil} from "react-icons/hi";
 import {getRequest, postRequest} from "../../utils/requests";
-import {useParams} from "react-router-dom";
 import {AuthContext} from "../../Context/AuthContext";
 
 const index = ({setShowEditUserModal, user, isCurrentUser}) => {
 
-    console.log(user, "user")
-
-    // const {username} = useParams()
-    // console.log("username", username)
     const {user: currentUser} = useContext(AuthContext)
 
     let [friendship,
@@ -37,8 +32,6 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
         };
         getFrienship();
     }, [user])
-
-    console.log(friendshipStatus)
 
     useEffect(() => {
         if(friendshipStatus?.status === "no friendship") {
@@ -86,11 +79,11 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                     src="https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-2148215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be9518049b4ce73ba01a29d7839bc73212e6627c7fe2bd3"
                     alt="cover-picture"/>
                 <img
-                    onClick={() => profilePicRef.current.click()}
-                    className="absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white cursor-pointer"
+                    onClick={() => isCurrentUser && profilePicRef.current.click()}
+                    className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
                     src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                     alt="profile-picture"/>
-                <input ref={profilePicRef} type="file" className="hidden"/> {currentUser && <div
+                <input ref={profilePicRef} type="file" className="hidden"/> {isCurrentUser && <div
                     onClick={() => coverPicRef.current.click()}
                     className="absolute w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full top-2 right-2 cursor-pointer">
                     <HiPencil className="text-primary" size={25}/>
@@ -99,7 +92,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             </div>
             <div>
                 <div
-                    className={`flex justify-end ${currentUser
+                    className={`flex justify-end ${isCurrentUser
                     ? "visible"
                     : "invisible"}`}>
                     <HiPencil
@@ -124,9 +117,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                             ?.length > 0
                                 ? user.friends
                                     ?.length
-                                    : "No"}
-                        Friends</div>
-                    {!isCurrentUser && <div className="mt-2">
+                                    : "No"} Friends</div>
+                    {!isCurrentUser && buttonText !== "" && <div className="mt-2">
                         <button onClick={handleAddRemoveFriend} className="bg-primary text-white px-2 py-1 5 rounded-md">
                             {buttonText}
                         </button>

@@ -5,6 +5,8 @@ import About from "./../../components/About"
 import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection"
 import {useContext, useState} from "react"
 import {AuthContext} from "./../../Context/AuthContext"
+import ShowCommunities from "./../../components/ShowCommunites"
+import ShowFriends from "./../../components/ShowFriends"
 // MODALS
 import EducationalModal from './components/EducationalModal'
 import EditUserModal from './components/EditUserModal'
@@ -26,6 +28,7 @@ const index = () => {
     let [showSkillsModal,
         setShowSkillsModal] = useState(false);
 
+    let {joinedCommunities, createdCommunities, friends} = user
     let {skills, languages, bio, university, major} = user.profile
 
     console.log(user)
@@ -35,10 +38,10 @@ const index = () => {
             <Header profile={true}/>
             <div className="bg-gray-100 py-6 h-full flex-1">
                 <div
-                    className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
-                    <div className="flex-[7] flex flex-col gap-6">
+                    className="w-full max-w-[1200px] mx-auto px-8 flex flex-col lg:flex-row gap-4">
+                    <div className="lg:flex-[4] xl:flex-[8] flex flex-col gap-6">
                         {user && (<UserDataSection
-                        isCurrentUser={user
+                            isCurrentUser={user
                             ?.usrname === username}
                             user={user}
                             setShowEditUserModal={setShowEditUserModal}/>)}
@@ -58,20 +61,35 @@ const index = () => {
                             maxDataToShow={4}
                             currentUser={user
                             ?.usrname === username}
-                            emptyHeadline="Your multilingual talengts await."/>
+                            emptyHeadline="Your multilingual talengts await."/>{" "} {createdCommunities
+                            ?.length > 0 && (<ShowCommunities
+                                withoutUsername={true}
+                                text={"Created communities"}
+                                maxDataToShow={4}
+                                data={createdCommunities}/>)}
+                        {joinedCommunities
+                            ?.length > 0 && (<ShowCommunities
+                                text={"Joined communities"}
+                                maxDataToShow={4}
+                                data={joinedCommunities}/>)}
                     </div>
-                    <EducationalInfo
-                        currentUser={user
-                        ?.usrname === username}
-                        university={university}
-                        major={major}
-                        setShowEducationalInfoModal={setShowEducationalInfoModal}
-                        emptyHeadline="Share your university and major to showcase your academic background."/>
+                    <div className="lg:flex-[3] xl:flex-[4.5] flex flex-col gap-6">
+                        <EducationalInfo
+                            currentUser={user
+                            ?.usrname === username}
+                            university={university}
+                            major={major}
+                            setShowEducationalInfoModal={setShowEducationalInfoModal}
+                            emptyHeadline="Share your university and major to showcase your academic background."/>
+                        <ShowFriends friends={friends} />
+                    </div>
                 </div>
             </div>
             {showEducationalInfoModal && (<EducationalModal setShowEducationalInfoModal={setShowEducationalInfoModal}/>)}
             {showEditUserModal && (<EditUserModal setShowEditUserModal={setShowEditUserModal}/>)}
-            {showLanguagesModal && (<LanguagesModal languages={languages} setShowLanguagesModal={setShowLanguagesModal}/>)}
+            {showLanguagesModal && (<LanguagesModal
+                languages={languages}
+                setShowLanguagesModal={setShowLanguagesModal}/>)}
             {showSkillsModal && (<SkillsModal skills={skills} setShowSkillsModal={setShowSkillsModal}/>)}
         </div>
     );

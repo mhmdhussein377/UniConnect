@@ -18,7 +18,7 @@ const index = ({data, maxDataToShow, text, emptyHeadline, setShowModal, currentU
                     ? (data.slice(0, showAllData
                         ? data?.length
                         : maxDataToShow).map((item, index) => (
-                        <div key={index} className="border-b border-b-3 border-b-gray-300">
+                        <div key={index} className="pb-2 border-b border-b-3 border-b-gray-300">
                             {item}
                         </div>
                     )))

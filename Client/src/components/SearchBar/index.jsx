@@ -39,7 +39,7 @@ const index = () => {
         }
         if (searchTerm !== "") {
             searchUsers()
-        }else {
+        } else {
             setResult([])
         }
     }, [debouncedValue])
@@ -66,9 +66,22 @@ const index = () => {
                     : "invisible"}`}>
                     {result.map((item, index) => {
                         if (item.type === "user") {
-                            return <Member member={item} key={index}/>
+                            return (
+                                <div key={index} onClick={() => {setResult([]); setSearchTerm("")}}>
+                                    <Member member={item}/>
+                                </div>
+                            );
                         } else if (item.type === "community") {
-                            return <SearchedCommunity community={item} key={index}/>
+                            const {name, privacy, _id, creatorUsername} = item
+                            return (
+                                <div key={index} onClick={() => {setResult([]); setSearchTerm("")}}>
+                                    <SearchedCommunity
+                                        name={name}
+                                        privacy={privacy}
+                                        id={_id}
+                                        creatorUsername={creatorUsername}/>
+                                </div>
+                            );
                         }
                     })}
                 </div>

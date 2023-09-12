@@ -3,13 +3,10 @@ import {HiPencil} from "react-icons/hi";
 import {AuthContext} from "../../Context/AuthContext";
 
 const index = ({setShowEducationalInfoModal, currentUser, university, major, emptyHeadline}) => {
-    console.log(university, major);
-
-    console.log(emptyHeadline)
 
     return (
         <div
-            className="flex-[3] bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
+            className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between font-semibold text-lg">
                     Educational Information {currentUser && (<HiPencil

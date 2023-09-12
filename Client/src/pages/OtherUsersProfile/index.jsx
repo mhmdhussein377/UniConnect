@@ -7,13 +7,14 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "./../../Context/AuthContext";
 import {useParams} from "react-router-dom";
 import {getRequest} from "./../../utils/requests"
+import ShowCommunities from "./../../components/ShowCommunites"
 
 const index = () => {
 
     const {username} = useParams()
     const {user: currentUser} = useContext(AuthContext)
-    let [user, setUser] = useState({})
-    
+    let [user,setUser] = useState({})
+
     useEffect(() => {
         const getUser = async() => {
             const response = await getRequest(`/user/${username}`)
@@ -21,6 +22,8 @@ const index = () => {
         }
         getUser()
     }, [username, user._id])
+
+    const {createdCommunities, joinedCommunities} = user
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -32,26 +35,43 @@ const index = () => {
                         {user && (<UserDataSection
                             isCurrentUser={user.username === currentUser.username}
                             user={user}/>)}
-                        {user?.profile?.bio && <About data={user?.profile?.bio}/>}
-                        {user?.profile?.skills.length > 0 && <SkillsLanguagesSection
-                            text="Skills"
-                            data={user?.profile?.skills}
-                            maxDataToShow={4}
-                            currentUser={user.username === currentUser.username}
-                            emptyHeadline="Your skills will shine here."/>}
-                        {user?.profile?.languages.length > 0 && <SkillsLanguagesSection
-                            text="Languages"
-                            data={user
+                        {user
                             ?.profile
-                                ?.languages}
-                            maxDataToShow={4}
-                            currentUser={user.username === currentUser.username}
-                            emptyHeadline="Your multilingual talengts await."/>}
+                                ?.bio && <About
+                                    data={user
+                                    ?.profile
+                                        ?.bio}/>}
+                        {user
+                            ?.profile
+                                ?.skills.length > 0 && <SkillsLanguagesSection
+                                    text="Skills"
+                                    data={user
+                                    ?.profile
+                                        ?.skills}
+                                    maxDataToShow={4}
+                                    currentUser={user.username === currentUser.username}
+                                    emptyHeadline="Your skills will shine here."/>}
+                        {user
+                            ?.profile
+                                ?.languages.length > 0 && <SkillsLanguagesSection
+                                    text="Languages"
+                                    data={user
+                                    ?.profile
+                                        ?.languages}
+                                    maxDataToShow={4}
+                                    currentUser={user.username === currentUser.username}
+                                    emptyHeadline="Your multilingual talengts await."/>}
+                        {createdCommunities?.length > 0 && <ShowCommunities withoutUsername={true} text={"Created communities"} maxDataToShow={4} data={createdCommunities}/>}
+                        {joinedCommunities?.length > 0 && <ShowCommunities text={"Joined communities"} maxDataToShow={4} data={joinedCommunities}/>}
                     </div>
                     <EducationalInfo
                         currentUser={user.username === currentUser.username}
-                        universtiy={user?.profile?.universtiy}
-                        major={user?.profile?.major}
+                        universtiy={user
+                        ?.profile
+                            ?.universtiy}
+                        major={user
+                        ?.profile
+                            ?.major}
                         emptyHeadline="No educational background available"/>
                 </div>
             </div>

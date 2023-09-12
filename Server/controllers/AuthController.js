@@ -38,7 +38,25 @@ const Login = async(req, res, next) => {
     const {email, password} = req.body;
 
     try {
-        const user = await User.findOne({email});
+        const user = await User
+            .findOne({email})
+            .populate({
+                path: "joinedCommunities",
+                select: "_id name privacy",
+                populate: {
+                    path: "creator",
+                    select: "username"
+                }
+            })
+            .populate({
+                path: "createdCommunities",
+                select: "_id name privacy",
+                populate: {
+                    path: "creator",
+                    select: "username"
+                }
+            })
+            .populate({path: "friends", select: "_id name username profile.profileImage"});
         if (!user) 
             return next(createError(401, "Wrong credentials"));
         
@@ -152,11 +170,15 @@ const ForgotPassword = async(req, res) => {
             if (error) {
                 console.log(error);
             } else {
-                return res.status(200).json({status: "Success"});
+                return res
+                    .status(200)
+                    .json({status: "Success"});
             }
         });
     } catch (error) {
-        return res.status(500).json({ error: "Internal server error" });
+        return res
+            .status(500)
+            .json({error: "Internal server error"});
     }
 }
 
@@ -166,21 +188,25 @@ const ResetPassword = async(req, res) => {
 
     try {
         jwt.verify(token, process.env.SECRET_KEY, async(err, decoded) => {
-            if(err)
+            if (err) 
                 return res.json({message: "Token not valid"})
 
             const salt = bcrypt.genSaltSync(10)
             const hashedPassword = bcrypt.hashSync(password, salt)
 
             const user = await User.findById(userId)
-            if(!user)
+            if (!user) 
                 return res.status(404).json("User not found")
 
             await user.updateOne({password: hashedPassword})
-            return res.status(200).json("Password updated successfully")
+            return res
+                .status(200)
+                .json("Password updated successfully")
         })
     } catch (error) {
-        return res.status(500).json({ error: "Internal server error" });
+        return res
+            .status(500)
+            .json({error: "Internal server error"});
     }
 }
 

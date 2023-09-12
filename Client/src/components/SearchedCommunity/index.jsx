@@ -2,13 +2,11 @@ import {BiHash} from "react-icons/bi";
 import {FiLock} from "react-icons/fi";
 import {Link} from "react-router-dom";
 
-const index = ({community}) => {
-
-    const {name, privacy, _id, creatorUsername} = community
+const index = ({name, privacy, id, creatorUsername, withoutUsername}) => {
 
     return (
         <Link
-            to={`/community/${_id}`}
+            to={`/community/${id}`}
             className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
                 <div
@@ -19,7 +17,7 @@ const index = ({community}) => {
                 </div>
                 <div>
                     <div className="font-medium">{name}</div>
-                    <div className="text-sm">Created by {creatorUsername}</div>
+                    {!withoutUsername && <div className="text-sm">Created by {creatorUsername}</div>}
                 </div>
             </div>
             {/* <div>
