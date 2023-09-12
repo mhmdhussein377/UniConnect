@@ -7,7 +7,7 @@ const index = ({friends}) => {
             <div className="flex flex-col gap-3">
                 <div className="font-semibold text-lg">Friends</div>
                 <div className="flex flex-col gap-4">
-                    {friends.map((friend, index) => (<Member key={index} member={friend} />))}
+                    {friends.length > 0 && friends.map((friend, index) => (<Member key={index} member={friend} />))}
                 </div>
             </div>
         </div>

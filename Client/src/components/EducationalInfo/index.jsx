@@ -20,14 +20,14 @@ const index = ({setShowEducationalInfoModal, currentUser, university, major, emp
                             <div className="flex">
                                 <div className="w-[100px] font-medium">University</div>
                                 <span
-                                    title="mohammad.hussein377@gmail.commohammad.hussein377@gmail.com"
+                                    title={university.length > 30 && university}
                                     className="text-gray-500 max-w-[270px] overflow-hidden text-ellipsis whitespace-nowrap">
                                     {university}
                                 </span>
                             </div>
                             <div className="flex">
                                 <div className="w-[100px] font-medium">Major</div>
-                                <span className="text-gray-500">{major}</span>
+                                <span className="text-gray-500" title={major.length > 30 && major}>{major}</span>
                             </div>
                         </div>
                     )

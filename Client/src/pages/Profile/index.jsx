@@ -61,7 +61,8 @@ const index = () => {
                             maxDataToShow={4}
                             currentUser={user
                             ?.usrname === username}
-                            emptyHeadline="Your multilingual talengts await."/>{" "} {createdCommunities
+                            emptyHeadline="Your multilingual talengts await."/>
+                        {createdCommunities
                             ?.length > 0 && (<ShowCommunities
                                 withoutUsername={true}
                                 text={"Created communities"}
