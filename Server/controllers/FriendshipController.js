@@ -2,6 +2,38 @@ const User = require('../models/User')
 const Friendship = require('./../models/Friendship')
 const Notification = require("./../models/Notification")
 
+const GetFriendship = async(req, res) => {
+    const {username} = req.params
+    const currentUserId = req?.user?.id
+
+    try {
+        const currentUser = await User.findById(currentUserId)
+        const user = await User.findOne({username})
+        if(!currentUser || !user) {
+            return res.statsu(404).json({message: 'User not found'})
+        }
+
+        console.log(user, currentUserId)
+
+        const friendship = await Friendship.find({
+            $or: [
+                {
+                    userOne: user._id,
+                    userTwo: currentUserId
+                },
+                {
+                    userOne: currentUserId,
+                    userTwo: user._id
+                }
+            ]
+        })
+        
+        return res.status(200).json({friendship})
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 const SendFriendRequest = async(req, res) => {
     const {recipientUserId} = req.params;
     const senderUserId = req
@@ -78,16 +110,18 @@ const AcceptFriendRequest = async(req, res) => {
                 .json("Recipient not found")
         }
 
+        console.log(currentUser, recipientUserId)
+
         const existingFriendship = await Friendship.findOne({
             $or: [
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    requester: recipientUserId
+                    // requester: recipientUserId
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    requester: currentUser
+                    // requester: currentUser
                 }
             ]
         });
@@ -286,5 +320,6 @@ module.exports = {
     AcceptFriendRequest,
     RejectFriendRequest,
     CancelFriendRequest,
-    Unfriend
+    Unfriend,
+    GetFriendship
 }

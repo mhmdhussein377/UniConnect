@@ -6,7 +6,7 @@ import {AuthContext} from "../../Context/AuthContext";
 import {getRequest} from "../../utils/requests"
 import {useDebounce} from "use-debounce"
 
-const index = ({setShowAddMembersModal}) => {
+const index = ({setShowAddMembersModal}) => { 
 
     const {user} = useContext(AuthContext)
 

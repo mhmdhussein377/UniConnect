@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {SendFriendRequest, AcceptFriendRequest, RejectFriendRequest, CancelFriendRequest, Unfriend, GetFriendship} = require('./../controllers/FriendshipController')
 
-router.get("/", GetFriendship)
+router.get("/:username", GetFriendship)
 
 // done
 router.post("/send-friend-request/:recipientUserId", SendFriendRequest)

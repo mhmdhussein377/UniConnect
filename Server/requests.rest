@@ -15,8 +15,8 @@ POST http://localhost:3000/api/login
 Content-Type : application/json
 
 {
-    "email" : "akram@gmail.com",
-    "password" : "akram"
+    "email" : "tsee@gmail.com",
+    "password" : "tsee"
 }
 
 ###
@@ -120,11 +120,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Zjc2NTZmO
 
 // Friend Requests
 
+// get a friendship
+###
+GET http://localhost:3000/api/friendship/tsee
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDUyNDg2NywiZXhwIjoxNjk0NTI4NDY3fQ.13j67Vm05ARvetYEe3w9E1XV1TYPS4CH5Oy6XC7F2LI
+
 // send a friend request
 ###
 POST http://localhost:3000/api/friendship/send-friend-request/64fe44232d04c0c8d719db8e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDQ0NzA1MSwiZXhwIjoxNjk0NDUwNjUxfQ.vygv4nWbmObhrHHHX2qUOUd0cTHGqpGwvsgCi0KUD8k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDUyNTUxOCwiZXhwIjoxNjk0NTI5MTE4fQ.PKQF4wzlsUQIdhpzW6bD1SKu0Gwf9zJJ1-nqIt8MD7M
 
 // reject a friend request
 ###
@@ -137,7 +143,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1M
 ###
 POST http://localhost:3000/api/friendship/accept-friend-request/64fe44152d04c0c8d719db8a
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDIzMmQwNGMwYzhkNzE5ZGI4ZSIsImlhdCI6MTY5NDQ0NzE3MCwiZXhwIjoxNjk0NDUwNzcwfQ.mH5zYvxt00lx_Os4tutrxmJgeZ1E7DOjYxVMBYT34UA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDIzMmQwNGMwYzhkNzE5ZGI4ZSIsImlhdCI6MTY5NDUyNTU2MSwiZXhwIjoxNjk0NTI5MTYxfQ.NJgPPRGxTCn-0uDaYSTzO4m42fM47iiyh0L_hcEgjTM
 
 
 // Private chat

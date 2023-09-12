@@ -49,11 +49,12 @@ const EditProfile = async(req, res) => {
     }
 }
 
+// needs modification
 const UserData = async(req, res) => {
     const {username} = req.params;
 
     try {
-        const user = await User.findOne({username})
+        const user = await User.findOne({username}).populate({path: "createdCommunities", select: "_id name privacy "})
 
         if (!user) {
             return res

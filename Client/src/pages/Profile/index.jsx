@@ -28,6 +28,8 @@ const index = () => {
 
     let {skills, languages, bio, university, major} = user.profile
 
+    console.log(user)
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>
