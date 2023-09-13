@@ -3,10 +3,10 @@ POST http://localhost:3000/api/register
 Content-Type : application/json
 
 {
-    "name" : "tsee",
-    "username" : "tsee",
-    "email" : "tsee@gmail.com",
-    "password" : "tsee"
+    "name" : "abo laban",
+    "username" : "abo laban",
+    "email" : "abolaban@gmail.com",
+    "password" : "abolaban"
 }
 
 ###
@@ -15,8 +15,17 @@ POST http://localhost:3000/api/login
 Content-Type : application/json
 
 {
-    "email" : "akram@gmail.com",
-    "password" : "akram"
+    "email" : "abolaban@gmail.com",
+    "password" : "abolaban"
+}
+
+###
+// logout
+POST http://localhost:3000/api/logout
+Content-Type: application/json
+
+{
+    "userId" : "6501ade2df9642bad1367736"
 }
 
 ###

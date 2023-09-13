@@ -60,6 +60,9 @@ const Login = async(req, res, next) => {
         if (!user) 
             return next(createError(401, "Wrong credentials"));
         
+        user.online = true
+        await user.save()
+
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) 
             return next(createError(401, "Wrong credentials"));
@@ -210,10 +213,36 @@ const ResetPassword = async(req, res) => {
     }
 }
 
+const Logout = async(req, res) => {
+    const {userId} = req.body
+
+    try {
+        const user = await User.findByIdAndUpdate(userId, {
+            $set: {
+                online: false
+            }
+        })
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
+        }
+
+        return res
+            .status(200)
+            .json({message: "User logged out successfully"})
+    } catch (error) {
+        return res
+            .status(500)
+            .json({error: "Internal server error"});
+    }
+}
+
 module.exports = {
     Login,
     Register,
     GoogleLogin,
     ForgotPassword,
-    ResetPassword
+    ResetPassword,
+    Logout
 };

@@ -22,7 +22,7 @@ const friendshipSchema = new Schema({
         enum: statusEnum,
         default: "pending",
         required: [true, "Status is required"]
-    }
+    },
 });
 
 const Friendship = mongoose.model("Friendship", friendshipSchema);

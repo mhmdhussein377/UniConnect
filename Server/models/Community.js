@@ -40,6 +40,17 @@ const communitySchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
+    ],
+    chat: [
+        {
+            sender: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+                required: true
+            },
+            content: String,
+            fileURL: String
+        }
     ]
 }, {timestamps: true});
 

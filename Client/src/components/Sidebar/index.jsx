@@ -9,6 +9,7 @@ import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import Friend from "./../Friend"
 import Community from "./../Community"
 import {AuthContext} from "../../Context/AuthContext";
+import { postRequest } from "../../utils/requests";
 
 const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
 
@@ -21,9 +22,11 @@ const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
     const dotsRef = useRef()
     const settingsRef = useRef()
 
-    const handleLogout = () => {
+    const handleLogout = async() => {
+        const response = await postRequest("/logout")
         localStorage.removeItem("authToken")
         localStorage.removeItem("user")
+        console.log(response)
 
         navigate("/")
     }

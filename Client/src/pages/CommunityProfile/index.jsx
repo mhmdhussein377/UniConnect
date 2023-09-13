@@ -45,6 +45,10 @@ const index = () => {
         getCommunity()
     }, [id, user._id])
 
+    console.log(isMember, "isMembeeeeer")
+
+    console.log(isCreator, "isCreattttoooooor")
+
     const handleJoinLeaveCommunity = () => {}
 
     return (
@@ -121,7 +125,7 @@ const index = () => {
                     </div>
                     <div
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
-                        <div className="flex flex-col gap-4">
+                        {isCreator && <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-4">
                                 <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Invite users</button>
                                 <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Requested users</button>
@@ -130,7 +134,7 @@ const index = () => {
                                 <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick users</button>
                                 <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Delete community</button>
                             </div>
-                        </div>
+                        </div>}
                         <div className="font-medium text-lg">Members</div>
                         <div className="flex flex-col gap-2">
                             {community.creator
