@@ -24,6 +24,7 @@ const index = () => {
         setShowAddMembersModal] = useState(false)
     let [isMember,
         setIsMember] = useState(null)
+    let [isCreator, setIsCreator] = useState(null)
 
     let {name, privacy, description, _id} = community
 
@@ -32,14 +33,14 @@ const index = () => {
             const response = await getRequest(`/community/${id}`)
             response && setCommunity(response.community)
             // check if the user is a member
-            response && response.community
-                ?.members
-                    ?.map(member => {
+            response && response.community?.members?.map(member => {
                         if (member._id === user._id) {
                             setIsMember(true)
                             return
                         }
                     })
+            // check if the user is the creator
+            response && (response.community?.creator === user._id ? setIsCreator(true) : setIsCreator(false))
         }
         getCommunity()
     }, [id, user._id])
