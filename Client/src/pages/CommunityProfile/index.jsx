@@ -22,7 +22,8 @@ const index = () => {
         setShowUpdateCommunityModal] = useState(false)
     let [showAddMembersModal,
         setShowAddMembersModal] = useState(false)
-    let [isMember, setIsMember] = useState(null)
+    let [isMember,
+        setIsMember] = useState(null)
 
     let {name, privacy, description, _id} = community
 
@@ -30,20 +31,20 @@ const index = () => {
         const getCommunity = async() => {
             const response = await getRequest(`/community/${id}`)
             response && setCommunity(response.community)
-            // check if the user is a member 
-            response && response.community?.members?.map(member => {
-                if(member._id === user._id) {
-                    setIsMember(true)
-                    return
-                }
-            })
+            // check if the user is a member
+            response && response.community
+                ?.members
+                    ?.map(member => {
+                        if (member._id === user._id) {
+                            setIsMember(true)
+                            return
+                        }
+                    })
         }
         getCommunity()
     }, [id, user._id])
 
-    const handleJoinLeaveCommunity = () => {
-        
-    }
+    const handleJoinLeaveCommunity = () => {}
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -65,9 +66,12 @@ const index = () => {
                                             {community.name}
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            {community?.members ? <span>{community
-                                                    ?.members
-                                                        ?.length + 1}</span> : null}
+                                            {community
+                                                ?.members
+                                                    ? <span>{community
+                                                                ?.members
+                                                                    ?.length + 1}</span>
+                                                    : null}
                                             Member{community
                                                 ?.members
                                                     ?.length > 0 && "s"}
@@ -92,13 +96,19 @@ const index = () => {
                                                     ?._id === user
                                                         ?._id
                                                             ? (
-                                                                <button onClick={() => setShowAddMembersModal(true)} className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                                <button
+                                                                    onClick={() => setShowAddMembersModal(true)}
+                                                                    className="bg-primary text-white px-2 py-1.5 rounded-md">
                                                                     Add members
                                                                 </button>
                                                             )
                                                             : (
-                                                                <button onClick={handleJoinLeaveCommunity} className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                                    {isMember ? "Leave community" : "Request to join"}
+                                                                <button
+                                                                    onClick={handleJoinLeaveCommunity}
+                                                                    className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                                    {isMember
+                                                                        ? "Leave community"
+                                                                        : "Request to join"}
                                                                 </button>
                                                             )}
                                         </div>
@@ -110,6 +120,16 @@ const index = () => {
                     </div>
                     <div
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-4">
+                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Invite users</button>
+                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Requested users</button>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick users</button>
+                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Delete community</button>
+                            </div>
+                        </div>
                         <div className="font-medium text-lg">Members</div>
                         <div className="flex flex-col gap-2">
                             {community.creator
