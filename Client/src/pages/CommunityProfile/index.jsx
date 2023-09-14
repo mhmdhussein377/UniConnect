@@ -51,42 +51,64 @@ const index = () => {
     useEffect(() => {
         const getCommunity = async() => {
             const response = await getRequest(`/community/${id}`)
-            response && setCommunity(response.community)
-            // check if the user is a member
-            response && response.community
-                ?.members
-                    ?.map(member => {
-                        if (member._id === user._id) {
-                            setUserStatus(prev => ({...prev, isMember: true}))
-                            return
-                        }
-                    })
-            // check if the user is the creator
-            response && (response.community
-                ?.creator._id === user._id && setUserStatus(prev => ({...prev, isCreator: true})))
+            if (!response) 
+                return;
+            
+            const community = response.community;
 
-            response && (response.community?.invitedUsers?.map(user => {
-                if(user === user._id) {
-                    setUserStatus(prev => ({...prev, isInvited: true}))
-                }
-            }))
+            setCommunity(community);
 
-            response && (response.community?.requestedUsers?.map(user => {
-                if(user._id === user._id) {
-                    setUserStatus(prev => ({...prev, isRequested: true}))
-                }
-            }))
-
-            response && response.community?.privacy === 'public' ? setUserStatus(prev => ({...prev, privacy: 'public'})) : setUserStatus(prev => ({...prev, privacy: 'private'}))
+            // setUserStatus(prev => ({
+            //     ...prev,
+            //     isMember: 
+            // }))
         }
         getCommunity()
-    }, [id, user._id])
+    }, [id, user])
 
-    console.log(community)
+    const isMember = (community, user) => community.members.some(member => member._id === user._id)
 
-    useEffect(() => {
-        
-    }, [userStatus])
+    const checkCreatorStatus = (community, user) => {
+        const isCreator = community.creator._id === user._id;
+        setUserStatus((prev) => ({
+            ...prev,
+            isCreator
+        }));
+    };
+
+    const checkInvitedStatus = (community, user) => {
+        const isInvited = community
+            .invitedUsers
+            .some((invitedUser) => invitedUser === user._id);
+        setUserStatus((prev) => ({
+            ...prev,
+            isInvited
+        }));
+    };
+
+    const checkRequestedStatus = (community, user) => {
+        const isRequested = community
+            .requestedUsers
+            .some((requestedUser) => requestedUser._id === user._id);
+        setUserStatus((prev) => ({
+            ...prev,
+            isRequested
+        }));
+    };
+
+    const setPrivacyStatus = (community) => {
+        const privacy = community.privacy === "public"
+            ? "public"
+            : "private";
+        setUserStatus((prev) => ({
+            ...prev,
+            privacy
+        }));
+    };
+
+    console.log(userStatus)
+
+    useEffect(() => {}, [userStatus])
 
     // console.log(buttonText, privacy, isMember)
 
