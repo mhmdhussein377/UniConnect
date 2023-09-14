@@ -104,62 +104,6 @@ router.post("/privateConversationsMessages", async(req, res) => {
     }
 });
 
-router.get("/privateConversationsDetails", async(req, res) => {
-    try {
-        const conversations = await PrivateConversation
-            .find({
-            Members: {
-                $in: [req.user.id]
-            }
-        })
-            .populate({path: "messages.sender", model: "User"})
-            .populate({path: "Members", model: "User"});
 
-        if (!conversations || conversations.length === 0) {
-            return res
-                .status(404)
-                .json({message: "Conversations not found"});
-        }
-
-        const details = conversations.map((item) => {
-            const conversationDetails = {
-                member: null,
-                lastMessage: null,
-                unreadMessages: 0
-            };
-
-            item
-                .Members
-                .forEach((member) => {
-                    if (member._id.toString() !== req.user.id) {
-                        conversationDetails.member = member;
-                    }
-                });
-
-            if (item.messages.length > 0) {
-                const lastMessage = item.messages[item.messages.length - 1];
-                conversationDetails.lastMessage = lastMessage.content;
-
-                item
-                    .messages
-                    .forEach((message) => {
-                        if (!message.isRead && message.sender !== req.user.id) {
-                            conversationDetails.unreadMessages += 1;
-                        }
-                    });
-            }
-
-            return conversationDetails;
-        });
-
-        res
-            .status(200)
-            .json(details);
-    } catch (error) {
-        res
-            .status(500)
-            .json(error);
-    }
-});
 
 module.exports = router;

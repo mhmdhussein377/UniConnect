@@ -105,9 +105,9 @@ const index = () => {
         }
     }, [userStatus])
 
-    // console.log(buttonText, privacy, isMember)
-
-    const handleJoinLeaveCommunity = () => {}
+    const handleJoinLeaveCommunity = () => {
+        
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
