@@ -43,7 +43,7 @@ router.post("/cancel-community-join-request/:communityId", CancelCommunityJoinRe
 
 router.post("/accept-community-join-request/:communityId/:requesterUserId", AcceptCommunityJoinRequest)
 
-router.post("/accept-community-join-request/:communityId", AcceptCommunityJoinRequests)
+router.post("/accept-community-join-requests/:communityId", AcceptCommunityJoinRequests)
 
 // done
 router.post("/send-community-invite-request/:communityId/:recipientUserId", SendCommunityInviteRequest);

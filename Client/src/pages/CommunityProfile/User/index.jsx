@@ -1,21 +1,8 @@
 import {Link} from "react-router-dom";
 
-const index = ({member, selectedMembers, setSelectedMembers}) => {
+const index = ({member, handleChange}) => {
 
     const {name, username, _id} = member;
-
-    const handleChange = () => {
-        const isSelected = selectedMembers.some((selectedMember) => selectedMember === _id);
-
-        if (isSelected) {
-            setSelectedMembers((prevSelectedMembers) => prevSelectedMembers.filter((selectedMember) => selectedMember !== _id));
-        } else {
-            setSelectedMembers((prevSelectedMembers) => [
-                ...prevSelectedMembers,
-                _id
-            ]);
-        }
-    };
 
     return (
         <div className="flex items-center justify-center gap-2 cursor-pointer">

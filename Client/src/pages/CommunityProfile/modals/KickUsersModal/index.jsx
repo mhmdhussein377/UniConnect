@@ -20,11 +20,30 @@ const index = ({setShowKickUsersModal, members, communityId, setCommunity}) => {
     }, [selectedMembers])
 
     const handleKickUsers = async() => {
-        setCommunity((prev) => ({...prev, members: prev.members.filter((member) => !selectedMembers.includes(member._id))}));
+        setCommunity((prev) => ({
+            ...prev,
+            members: prev
+                .members
+                .filter((member) => !selectedMembers.includes(member._id))
+        }));
         setShowKickUsersModal(false)
-        const response = await postRequest(`/community/${communityId}/remove-members`, {usersIds:selectedMembers})
+        const response = await postRequest(`/community/${communityId}/remove-members`, {usersIds: selectedMembers})
     };
+    
+    const handleChange = (member) => {
+        const {_id} = member
+        const isSelected = selectedMembers.some((selectedMember) => selectedMember === _id);
 
+        if (isSelected) {
+            setSelectedMembers((prevSelectedMembers) => prevSelectedMembers.filter((selectedMember) => selectedMember !== _id));
+        } else {
+            setSelectedMembers((prevSelectedMembers) => [
+                ...prevSelectedMembers,
+                _id
+            ]);
+        }
+    }
+    
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowKickUsersModal);
 
     return (
@@ -49,7 +68,7 @@ const index = ({setShowKickUsersModal, members, communityId, setCommunity}) => {
                         ?.map((member, index) => (<User
                             key={index}
                             member={member}
-                            setSelectedMembers={setSelectedMembers}
+                            handleChange={() => handleChange(member)}
                             selectedMembers={selectedMembers}/>))}
                 </div>
                 <div>

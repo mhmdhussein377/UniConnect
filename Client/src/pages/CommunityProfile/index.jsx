@@ -37,7 +37,7 @@ const index = () => {
     let [showKickUsersModal,
         setShowKickUsersModal] = useState(false)
     let [showRequestedUsersModal,
-        setShowRequestedUsersModal] = useState(true)
+        setShowRequestedUsersModal] = useState(false)
 
     let {
         name,

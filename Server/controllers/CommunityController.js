@@ -499,7 +499,7 @@ const AcceptCommunityJoinRequest = async(req, res) => {
 
 const AcceptCommunityJoinRequests = async(req, res) => {
     const {communityId} = req.params
-    const {requesterUserIds} = req.body;
+    const {requestedUsersIds} = req.body;
     const ownerId = req
         ?.user
             ?.id;
@@ -521,11 +521,11 @@ const AcceptCommunityJoinRequests = async(req, res) => {
 
         const requestedUsers = await User.find({
             _id: {
-                $in: requesterUserIds
+                $in: requestedUsersIds
             }
         });
 
-        if (requestedUsers.length !== requesterUserIds.length) {
+        if (requestedUsers.length !== requestedUsersIds.length) {
             return res
                 .status(400)
                 .json({message: "One or more requested users were not found"});
