@@ -10,7 +10,8 @@ import About from "./../../components/About"
 import {AuthContext} from "./../../Context/AuthContext"
 import UpdateCommunityModal from "./modals/UpdateCommunityModal"
 import AddMembersModal from "./../../components/AddMembersModal"
-import DeleteCommunity from "./modals/DeleteCommunity"
+import DeleteCommunity from "./modals/DeleteCommunityModal"
+import KickUsersModal from "./modals/KickUsersModal"
 
 const index = () => {
 
@@ -23,9 +24,10 @@ const index = () => {
 
     let [showUpdateCommunityModal,setShowUpdateCommunityModal] = useState(false)
     let [showAddMembersModal,setShowAddMembersModal] = useState(false)
-    let [showDeleteCommunityModal, setShowDeleteCommunityModal] = useState(true)
+    let [showDeleteCommunityModal, setShowDeleteCommunityModal] = useState(false)
+    let [showKickUsersModal, setShowKickUsersModal] = useState(false)
 
-    let {name, privacy, description, _id} = community
+    let {name, privacy, description, _id, members} = community
 
     useEffect(() => {
         const getCommunity = async() => {
@@ -48,10 +50,6 @@ const index = () => {
         }
         getCommunity()
     }, [id, user._id])
-
-    console.log(isMember, "isMembeeeeer")
-
-    console.log(isCreator, "isCreattttoooooor")
 
     const handleJoinLeaveCommunity = () => {}
 
@@ -131,7 +129,7 @@ const index = () => {
                             </div>
                             <div className="flex items-center gap-4">
                                 <button
-                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick users</button>
+                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick members</button>
                                 <button
                                     onClick={() => setShowDeleteCommunityModal(true)}
                                     className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Delete community</button>
@@ -166,6 +164,7 @@ const index = () => {
                 setShowUpdateCommunityModal={setShowUpdateCommunityModal}/>)}
             {showAddMembersModal && (<AddMembersModal communityId={community._id} setShowAddMembersModal={setShowAddMembersModal}/>)}
             {showDeleteCommunityModal && <DeleteCommunity communityName={community.name} communityId={community._id} setShowDeleteCommunityModal={setShowDeleteCommunityModal} />}
+            {showKickUsersModal && <KickUsersModal setCommunity={setCommunity} communityId={_id} members={members} setShowKickUsersModal={setShowKickUsersModal} />}
         </div>
     );
 };

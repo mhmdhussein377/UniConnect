@@ -48,7 +48,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
         <div
             onClick={closeModal}
             className={`flex items-center justify-center absolute top-0 left-0 w-full h-screen bg-black/60 z-[20] px-4`}>
-            <div
+            <div 
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] min-h-[400px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex flex-col gap-2">

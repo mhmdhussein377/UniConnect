@@ -12,21 +12,19 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
         setIsDisabled] = useState(true)
     const boxRef = useRef()
     const navigate = useNavigate()
-
-    const closeModal = (e) => handleCloseModal(e, boxRef, setShowDeleteCommunityModal);
-
+    
     const handleDeleteCommunity = async() => {
         if (input === communityName) {
             const response = await postRequest(`/community/delete/${communityId}`, {communityName});
             response && navigate('/home')
         }
     }
-
+    
     useEffect(() => {
         setIsDisabled(input !== communityName)
     }, [input, communityName])
-
-    console.log(isDisabled, "isDisableeleeed", input, communityName)
+    
+    const closeModal = (e) => handleCloseModal(e, boxRef, setShowDeleteCommunityModal);
 
     return (
         <div

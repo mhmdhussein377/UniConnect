@@ -184,7 +184,7 @@ const AddMembers = async(req, res) => {
 
 const RemoveMembers = async(req, res) => {
     const {communityId} = req.params;
-    const {userIds} = req.body;
+    const {usersIds} = req.body;
 
     try {
         const community = await Community.findById(communityId);
@@ -197,7 +197,7 @@ const RemoveMembers = async(req, res) => {
         
         const usersToRemove = await User.find({
             _id: {
-                $in: userIds
+                $in: usersIds
             }
         });
 

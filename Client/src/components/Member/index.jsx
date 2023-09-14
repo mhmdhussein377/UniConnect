@@ -13,9 +13,6 @@ const index = ({searched, member, creator, invite, communityId}) => {
 
     const {name, username, _id} = member
 
-    let [isFollowed,
-        setIsFollowed] = useState(user.friends.includes(_id))
-
     const actualUser = user._id === _id
 
     function debounce(func, delay) {
@@ -42,7 +39,7 @@ const index = ({searched, member, creator, invite, communityId}) => {
 
     return (
         <div
-            className={`flex items-center justify-between gap-2 ${ !actualUser
+            className={`flex items-center justify-between gap-2 ${!actualUser
             ? "cursor-pointer"
             : "cursor-auto"}`}>
             <Link
@@ -80,13 +77,6 @@ const index = ({searched, member, creator, invite, communityId}) => {
                         Invite
                     </button>
                 ))}
-            {/* {withCheckbox
-                ? (
-                    <div>
-                        <input checked={isChecked} onChange={handleAddUser} type="checkbox" className="w-[20px] h-[20px] cursor-pointer"/>
-                    </div>
-                )
-                : null} */}
             {searched && !actualUser && (
                 <div>
                     {isInvited
