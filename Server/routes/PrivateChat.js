@@ -29,4 +29,30 @@ router.post("/newPrivateMessage", async(req, res) => {
     }
 });
 
+router.post("/readPrivateMessage", async(req, res) => {
+    const {userOne, userTwo} = req.body;
+
+    try {
+        const data = await PrivateConversation.findOneAndUpdate({
+            Members: {
+                $in: [userOne, userTwo]
+            }
+        }, {
+            $set: {
+                "messages.$[].isRead": true
+            }
+        });
+
+        res
+            .status(200)
+            .json("message updated successfully");
+    } catch (error) {
+        res
+            .status(500)
+            .json(error);
+    }
+});
+
+
+
 module.exports = router;
