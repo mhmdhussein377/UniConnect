@@ -13,7 +13,8 @@ const {
     AcceptCommunityInviteRequest,
     LeaveCommunity,
     CancelCommunityJoinRequest,
-    CancelCommunityInviteRequest
+    CancelCommunityInviteRequest,
+    AcceptCommunityJoinRequests
 } = require("./../controllers/CommunityController");
 
 // done
@@ -36,13 +37,13 @@ router.post("/:communityId/remove-members", RemoveMembers);
 
 router.post("/leave/:communityId", LeaveCommunity)
 
-
-
 router.post('/send-community-join-request/:communityId', SendCommunityJoinRequest)
 
 router.post("/cancel-community-join-request/:communityId", CancelCommunityJoinRequest);
 
 router.post("/accept-community-join-request/:communityId/:requesterUserId", AcceptCommunityJoinRequest)
+
+router.post("/accept-community-join-request/:communityId", AcceptCommunityJoinRequests)
 
 // done
 router.post("/send-community-invite-request/:communityId/:recipientUserId", SendCommunityInviteRequest);

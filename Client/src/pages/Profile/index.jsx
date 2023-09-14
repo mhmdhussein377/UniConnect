@@ -31,8 +31,6 @@ const index = () => {
     let {joinedCommunities, createdCommunities, friends} = user
     let {skills, languages, bio, university, major} = user.profile
 
-    console.log(user)
-
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>

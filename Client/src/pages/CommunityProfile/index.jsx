@@ -8,10 +8,13 @@ import {useParams} from "react-router-dom";
 import {getRequest} from "./../../utils/requests"
 import About from "./../../components/About"
 import {AuthContext} from "./../../Context/AuthContext"
+
+// MODALS
 import UpdateCommunityModal from "./modals/UpdateCommunityModal"
 import AddMembersModal from "./../../components/AddMembersModal"
 import DeleteCommunity from "./modals/DeleteCommunityModal"
 import KickUsersModal from "./modals/KickUsersModal"
+import RequestedUsersModal from "./modals/RequestedUsersModal"
 
 const index = () => {
 
@@ -26,6 +29,7 @@ const index = () => {
     let [showAddMembersModal,setShowAddMembersModal] = useState(false)
     let [showDeleteCommunityModal, setShowDeleteCommunityModal] = useState(false)
     let [showKickUsersModal, setShowKickUsersModal] = useState(false)
+    let [showRequestedUsersModal, setShowRequestedUsersModal] = useState(true)
 
     let {name, privacy, description, _id, members} = community
 
@@ -165,6 +169,7 @@ const index = () => {
             {showAddMembersModal && (<AddMembersModal communityId={community._id} setShowAddMembersModal={setShowAddMembersModal}/>)}
             {showDeleteCommunityModal && <DeleteCommunity communityName={community.name} communityId={community._id} setShowDeleteCommunityModal={setShowDeleteCommunityModal} />}
             {showKickUsersModal && <KickUsersModal setCommunity={setCommunity} communityId={_id} members={members} setShowKickUsersModal={setShowKickUsersModal} />}
+            {showRequestedUsersModal && <RequestedUsersModal setShowRequestedUsersModal={setShowRequestedUsersModal} />}
         </div>
     );
 };

@@ -92,8 +92,10 @@ const DeleteCommunity = async(req, res) => {
             return res
                 .status(200)
                 .json({message: "Community deleted successfully"});
-        }else {
-            return res.status(400).json({message: "Community name error"})
+        } else {
+            return res
+                .status(400)
+                .json({message: "Community name error"})
         }
     } catch (error) {
         return res
@@ -407,8 +409,10 @@ const CancelCommunityJoinRequest = async(req, res) => {
 }
 
 const AcceptCommunityJoinRequest = async(req, res) => {
-    const {communityId, requesterUserId} = req.params; // tsee
-    const ownerId = req.user.id; // akram
+    const {communityId, requesterUserId} = req.params;
+    const ownerId = req
+        ?.user
+            ?.id;
 
     try {
         const community = await Community.findById(communityId);
@@ -491,6 +495,61 @@ const AcceptCommunityJoinRequest = async(req, res) => {
             .json({message: "Internal server error"});
     }
 };
+
+const AcceptCommunityJoinRequests = async(req, res) => {
+    const {communityId} = req.params
+    const {requesterUserIds} = req.body;
+    const ownerId = req
+        ?.user
+            ?.id;
+
+    try {
+        const community = await Community.findById(communityId);
+
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"});
+        }
+
+        if (community.creator.toString() !== ownerId) {
+            return res
+                .status(403)
+                .json({message: "You do not have permission to accept join requests for this community"});
+        }
+
+        const requestedUsers = await User.find({
+            _id: {
+                $in: requesterUserIds
+            }
+        });
+
+        if (requestedUsers.length !== requesterUserIds.length) {
+            return res
+                .status(400)
+                .json({message: "One or more requested users were not found"});
+        }
+
+        for(const requestedUser of requestedUsers) {
+            if(!community.requestedUsers.includes(requestedUser._id)) {
+                continue
+            }
+
+            community.members.push(requestedUser._id)
+            community.invitedUsers = community.invitedUsers.filter(user => user !== requestedUser._id)
+            await community.save()
+
+            requestedUser.joinedCommunities.push(communityId)
+            requestedUser.save()
+        }
+
+        return res.status(200).json({message: "Community join requests accepted successfully"})
+    } catch (error) {
+        return res
+            .status(500)
+            .json({message: "Internal server error"});
+    }
+}
 
 const SendCommunityInviteRequest = async(req, res) => {
     const {communityId, recipientUserId} = req.params;
@@ -696,5 +755,6 @@ module.exports = {
     AcceptCommunityInviteRequest,
     LeaveCommunity,
     CancelCommunityJoinRequest,
-    CancelCommunityInviteRequest
+    CancelCommunityInviteRequest,
+    AcceptCommunityJoinRequests
 };
