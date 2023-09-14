@@ -68,13 +68,7 @@ const index = () => {
 
     const isMember = (community, user) => community.members.some(member => member._id === user._id)
 
-    const checkCreatorStatus = (community, user) => {
-        const isCreator = community.creator._id === user._id;
-        setUserStatus((prev) => ({
-            ...prev,
-            isCreator
-        }));
-    };
+    const isCreator = (community, user) => community.crator._id === user._id
 
     const checkInvitedStatus = (community, user) => {
         const isInvited = community
