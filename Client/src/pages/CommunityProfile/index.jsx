@@ -58,31 +58,35 @@ const index = () => {
 
             setCommunity(community);
 
-            // setUserStatus(prev => ({
-            //     ...prev,
-            //     isMember: 
-            // }))
+            setUserStatus((prev) => ({
+                ...prev,
+                isMember: isMember(community, user),
+                isCreator: isCreator(community, user),
+                isInvited: isInvited(community, user),
+                isRequested: isRequested(community, user),
+                privacy: getPrivacyStatus(community)
+            }));
         }
         getCommunity()
     }, [id, user])
 
-    const isMember = (community, user) => community.members.some(member => member._id === user._id)
+    const isMember = (community, user) => community
+        .members
+        .some(member => member._id === user._id)
 
     const isCreator = (community, user) => community.crator._id === user._id
 
-    const isInvited = (community, user) => community.invitedUsers.includes(user._id)
+    const isInvited = (community, user) => community
+        .invitedUsers
+        .includes(user._id)
 
-    const isRequested = (community, user) => community.requestedUsers.some(requestedUser => requestedUser._id === user._id)
+    const isRequested = (community, user) => community
+        .requestedUsers
+        .some(requestedUser => requestedUser._id === user._id)
 
-    const setPrivacyStatus = (community) => {
-        const privacy = community.privacy === "public"
-            ? "public"
-            : "private";
-        setUserStatus((prev) => ({
-            ...prev,
-            privacy
-        }));
-    };
+    const getPrivacyStatus = (community) => community.privacy === "public"
+        ? "public"
+        : "private";
 
     console.log(userStatus)
 
