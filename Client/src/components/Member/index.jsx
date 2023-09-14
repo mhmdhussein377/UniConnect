@@ -3,7 +3,7 @@ import {AiOutlinePlus} from "react-icons/ai";
 import {AiOutlineMinus} from "react-icons/ai";
 import {AuthContext} from "../../Context/AuthContext";
 import {Link} from "react-router-dom";
-import { postRequest } from "../../utils/requests";
+import {postRequest} from "../../utils/requests";
 
 const index = ({searched, member, creator, invite, communityId}) => {
 
@@ -18,13 +18,23 @@ const index = ({searched, member, creator, invite, communityId}) => {
 
     const actualUser = user._id === _id
 
+    function debounce(func, delay) {
+        let timer = null;
+
+        return function () {
+            clearTimeout(timer);
+            timer = setTimeout(func, delay);
+        };
+    }
+
     const handleInvite = async() => {
+        debounce(handleInvite, 1000)
         setIsInvited(!isInvited)
 
-        if(isInvited) {
+        if (isInvited) {
             const response = await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`)
             console.log(response)
-        }else {
+        } else {
             const response = await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`)
             console.log(response)
         }

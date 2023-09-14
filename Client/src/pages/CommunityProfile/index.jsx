@@ -8,23 +8,22 @@ import {useParams} from "react-router-dom";
 import {getRequest} from "./../../utils/requests"
 import About from "./../../components/About"
 import {AuthContext} from "./../../Context/AuthContext"
-import UpdateCommunityModal from "./../../components/UpdateCommunityModal"
+import UpdateCommunityModal from "./modals/UpdateCommunityModal"
 import AddMembersModal from "./../../components/AddMembersModal"
+import DeleteCommunity from "./modals/DeleteCommunity"
 
 const index = () => {
 
     const {id} = useParams()
     const {user} = useContext(AuthContext)
 
-    let [community,
-        setCommunity] = useState({})
-    let [showUpdateCommunityModal,
-        setShowUpdateCommunityModal] = useState(false)
-    let [showAddMembersModal,
-        setShowAddMembersModal] = useState(false)
-    let [isMember,
-        setIsMember] = useState(null)
-    let [isCreator, setIsCreator] = useState(null)
+    let [community,setCommunity] = useState({})
+    let [isMember,setIsMember] = useState(null)
+    let [isCreator,setIsCreator] = useState(null)
+
+    let [showUpdateCommunityModal,setShowUpdateCommunityModal] = useState(false)
+    let [showAddMembersModal,setShowAddMembersModal] = useState(false)
+    let [showDeleteCommunityModal, setShowDeleteCommunityModal] = useState(true)
 
     let {name, privacy, description, _id} = community
 
@@ -33,14 +32,19 @@ const index = () => {
             const response = await getRequest(`/community/${id}`)
             response && setCommunity(response.community)
             // check if the user is a member
-            response && response.community?.members?.map(member => {
+            response && response.community
+                ?.members
+                    ?.map(member => {
                         if (member._id === user._id) {
                             setIsMember(true)
                             return
                         }
                     })
             // check if the user is the creator
-            response && (response.community?.creator === user._id ? setIsCreator(true) : setIsCreator(false))
+            response && (response.community
+                ?.creator._id === user._id
+                    ? setIsCreator(true)
+                    : setIsCreator(false))
         }
         getCommunity()
     }, [id, user._id])
@@ -98,24 +102,16 @@ const index = () => {
                                         <div>
                                             {community
                                                 ?.creator
-                                                    ?._id === user
-                                                        ?._id
-                                                            ? (
-                                                                <button
-                                                                    onClick={() => setShowAddMembersModal(true)}
-                                                                    className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                                    Add members
-                                                                </button>
-                                                            )
-                                                            : (
-                                                                <button
-                                                                    onClick={handleJoinLeaveCommunity}
-                                                                    className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                                    {isMember
-                                                                        ? "Leave community"
-                                                                        : "Request to join"}
-                                                                </button>
-                                                            )}
+                                                    ?._id !== user
+                                                        ?._id && (
+                                                            <button
+                                                                onClick={handleJoinLeaveCommunity}
+                                                                className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                                {isMember
+                                                                    ? "Leave community"
+                                                                    : "Request to join"}
+                                                            </button>
+                                                        )}
                                         </div>
                                     </div>
                                 </div>
@@ -127,12 +123,18 @@ const index = () => {
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
                         {isCreator && <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-4">
-                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Invite users</button>
-                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Requested users</button>
+                                <button
+                                    onClick={() => setShowAddMembersModal(true)}
+                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Invite users</button>
+                                <button
+                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Requested users</button>
                             </div>
                             <div className="flex items-center gap-4">
-                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick users</button>
-                                <button className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Delete community</button>
+                                <button
+                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick users</button>
+                                <button
+                                    onClick={() => setShowDeleteCommunityModal(true)}
+                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Delete community</button>
                             </div>
                         </div>}
                         <div className="font-medium text-lg">Members</div>
@@ -162,7 +164,8 @@ const index = () => {
                 description={description}
                 privacy={privacy}
                 setShowUpdateCommunityModal={setShowUpdateCommunityModal}/>)}
-            {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}
+            {showAddMembersModal && (<AddMembersModal communityId={community._id} setShowAddMembersModal={setShowAddMembersModal}/>)}
+            {showDeleteCommunityModal && <DeleteCommunity communityName={community.name} setShowDeleteCommunityModal={setShowDeleteCommunityModal} />}
         </div>
     );
 };

@@ -23,7 +23,7 @@ const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
     const settingsRef = useRef()
 
     const handleLogout = async() => {
-        const response = await postRequest("/logout")
+        const response = await postRequest("/logout", {userId: user._id})
         localStorage.removeItem("authToken")
         localStorage.removeItem("user")
         console.log(response)

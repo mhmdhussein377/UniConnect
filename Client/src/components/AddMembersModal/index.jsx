@@ -6,11 +6,7 @@ import {AuthContext} from "../../Context/AuthContext";
 import {getRequest} from "../../utils/requests"
 import {useDebounce} from "use-debounce"
 
-const index = ({setShowAddMembersModal}) => { 
-
-    const {user} = useContext(AuthContext)
-
-    const communityId = "6500335fde9949be1480c711";
+const index = ({setShowAddMembersModal, communityId}) => {
 
     let [friends,
         setFriends] = useState([])
@@ -27,7 +23,7 @@ const index = ({setShowAddMembersModal}) => {
             response && setFriends(response.friends)
         }
         getUserFriends()
-    }, [])
+    }, [communityId])
 
     useEffect(() => {
         const searchUsers = async() => {
@@ -37,7 +33,7 @@ const index = ({setShowAddMembersModal}) => {
         if (debouncedValue !== "") {
             searchUsers()
         }
-    }, [debouncedValue])
+    }, [debouncedValue, communityId])
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowAddMembersModal);
 

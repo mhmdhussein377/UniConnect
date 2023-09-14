@@ -1,6 +1,12 @@
-const index = ({own, communitMessage}) => {
+import {useContext} from "react";
+import {AuthContext} from "./../../Context/AuthContext";
+
+const index = ({own, content, sender, communitMessage, date}) => {
+    const {user} = useContext(AuthContext);
+    const mine = user._id === own;
+
     return (
-        <div className={`flex gap-2 mt-4 ${own && "justify-start flex-row-reverse"}`}>
+        <div className={`flex gap-2 mt-4 ${mine && "justify-start flex-row-reverse"}`}>
             <div
                 className="w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center">
                 <img
@@ -9,19 +15,20 @@ const index = ({own, communitMessage}) => {
             </div>
             <div className="flex flex-col max-w-[60%]">
                 <div
-                    className={`w-full flex items-center justify-between ${own && "flex-row-reverse"}`}>
-                    {communitMessage && <div className="font-medium">Jasmine Smith</div>}
+                    className={`w-full flex items-center justify-between ${mine && "flex-row-reverse"}`}>
+                    {communitMessage && <div className="font-medium">{sender}</div>}
                     {!communitMessage && <div></div>}
-                    <div className={`text-[14px]`}>Today 5:54 AM</div>
+                    <div className={`text-[14px]`}>{date}</div>
                 </div>
-                <div className={`px-4 py-2 bg-primary text-white rounded-md ${own ? "rounded-tr-none" : "rounded-tl-none"}`}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, facere iste
-                    eaque nam nobis a dolor voluptates voluptatem, labore magni deserunt quis
-                    aspernatur soluta suscipit incidunt itaque qui ullam. Provident?
+                <div
+                    className={`px-4 py-2 bg-primary text-white rounded-md ${mine
+                    ? "rounded-tr-none"
+                    : "rounded-tl-none"}`}>
+                    {content}
                 </div>
             </div>
         </div>
     );
-}
+};
 
-export default index
+export default index;

@@ -1,8 +1,8 @@
 import {useRef, useState} from "react";
 import {MdOutlineClose} from "react-icons/md";
-import {handleCloseModal} from "../../utils/closeModal";
-import {handleChange} from "../../utils/handleChange";
-import {postRequest} from "../../utils/requests";
+import {handleCloseModal} from "./../../../../utils/closeModal";
+import {handleChange} from "./../../../../utils/handleChange";
+import {postRequest} from "./../../../../utils/requests";
 
 const index = ({setShowUpdateCommunityModal, setCommunity, name, description, privacy, _id}) => {
 

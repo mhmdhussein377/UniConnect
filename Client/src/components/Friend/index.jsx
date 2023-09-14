@@ -1,4 +1,16 @@
-const index = ({highlight}) => {
+import {AuthContext} from "./../../Context/AuthContext";
+import {useContext} from "react";
+
+const index = ({
+    highlight,
+    name,
+    lastMessage,
+    date,
+    messageNum,
+    sender
+}) => {
+    const {user} = useContext(AuthContext);
+
     return (
         <div
             className={`px-4 py-3 flex justify-between w-full cursor-pointer border-l-[3px] ${highlight && "bg-[#E4F0FA] border-l-primary"}`}>
@@ -10,18 +22,18 @@ const index = ({highlight}) => {
                         alt=""/>
                 </div>
                 <div className="flex flex-col justify-center h-full">
-                    <div className="font-medium text-[18px]">Mohammad Hussein</div>
-                    <p className="text-sm text-[#737373] font-medium">
-                        Thank you so much
-                    </p>
+                    <div className="font-medium text-[18px]">{name}</div>
+                    <p className="text-sm text-[#737373] font-medium">{lastMessage}</p>
                 </div>
             </div>
             <div className="flex flex-col items-end justify-center">
-                <p className="text-[14px] text-[#737373]">Just now</p>
-                <div
-                    className="w-[20px] h-[20px] bg-primary rounded-full flex items-center justify-center text-white text-sm">
-                    5
-                </div>
+                <p className="text-[14px] text-[#737373]">{date}</p>
+                {messageNum > 0 && user._id !== sender && (
+                    <div
+                        className="w-[20px] h-[20px] bg-primary rounded-full flex items-center justify-center text-white text-sm">
+                        {messageNum}
+                    </div>
+                )}
             </div>
         </div>
     );
