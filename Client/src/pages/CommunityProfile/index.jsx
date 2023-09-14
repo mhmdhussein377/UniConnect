@@ -74,7 +74,7 @@ const index = () => {
         .members
         .some(member => member._id === user._id)
 
-    const isCreator = (community, user) => community.crator._id === user._id
+    const isCreator = (community, user) => community.creator._id === user._id
 
     const isInvited = (community, user) => community
         .invitedUsers
@@ -90,7 +90,20 @@ const index = () => {
 
     console.log(userStatus)
 
-    useEffect(() => {}, [userStatus])
+    useEffect(() => {
+        const {isMember, isInvited, isRequested, privacy} = userStatus
+        if (privacy === "public" && !isMember) {
+            setButtonText("Join community")
+        } else if (privacy === "private" && !isMember) {
+            setButtonText("Request to join")
+        } else if (isMember) {
+            setButtonText("Leave community")
+        }else if(isRequested) {
+            setButtonText("Cancel request")
+        }else if(isInvited) {
+            setButtonText("Accept invite request")
+        }
+    }, [userStatus])
 
     // console.log(buttonText, privacy, isMember)
 
@@ -142,15 +155,15 @@ const index = () => {
                                                 className="cursor-pointer"
                                                 size={30}/>
                                         </div>
-                                        {community
-                                            ?.creator
-                                                ?._id && <div>
-                                                    <button
-                                                        onClick={handleJoinLeaveCommunity}
-                                                        className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                        {buttonText}
-                                                    </button>
-                                                </div>}
+                                        {<div> {
+                                            !userStatus.isCreator && (
+                                                <button
+                                                    onClick={handleJoinLeaveCommunity}
+                                                    className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                    {buttonText}
+                                                </button>
+                                            )
+                                        } </div>}
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +174,7 @@ const index = () => {
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
                         {userStatus.isCreator && (
                             <div className="flex flex-col gap-4">
-                                <div className="flex items-center gap-4">
+                                {privacy === "private" && <div className="flex items-center gap-4">
                                     <button
                                         onClick={() => setShowAddMembersModal(true)}
                                         className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
@@ -172,7 +185,7 @@ const index = () => {
                                         className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
                                         Requested users
                                     </button>
-                                </div>
+                                </div>}
                                 <div className="flex items-center gap-4">
                                     <button
                                         onClick={() => setShowKickUsersModal(true)}
