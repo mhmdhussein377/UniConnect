@@ -70,15 +70,7 @@ const index = () => {
 
     const isCreator = (community, user) => community.crator._id === user._id
 
-    const checkInvitedStatus = (community, user) => {
-        const isInvited = community
-            .invitedUsers
-            .some((invitedUser) => invitedUser === user._id);
-        setUserStatus((prev) => ({
-            ...prev,
-            isInvited
-        }));
-    };
+    const isInvited = (community, user) => community.invitedUsers.includes(user._id)
 
     const checkRequestedStatus = (community, user) => {
         const isRequested = community
