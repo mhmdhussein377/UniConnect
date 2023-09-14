@@ -23,10 +23,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             setFriendship(friendship);
 
             if (friendship) {
-                console.log("up")
                 setFriendshipStatus({requester: friendship.requester, status: friendship.status});
             } else {
-                console.log("down")
                 setFriendshipStatus({requester: "", status: "no friendship"});
             }
         };

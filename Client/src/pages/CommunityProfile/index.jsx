@@ -23,10 +23,10 @@ const index = () => {
 
     let [community,
         setCommunity] = useState({})
-    let [isMember,
-        setIsMember] = useState(null)
-    let [isCreator,
-        setIsCreator] = useState(null)
+    let [userStatus,
+        setUserStatus] = useState({isCreator: false, isMember: false, isInvited: false, isRequested: false, privacy: ""})
+    let [buttonText,
+        setButtonText] = useState("")
 
     let [showUpdateCommunityModal,
         setShowUpdateCommunityModal] = useState(false)
@@ -57,22 +57,32 @@ const index = () => {
                 ?.members
                     ?.map(member => {
                         if (member._id === user._id) {
-                            setIsMember(true)
+                            setUserStatus(prev => ({...prev, isMember: true}))
                             return
                         }
                     })
             // check if the user is the creator
             response && (response.community
-                ?.creator._id === user._id
-                    ? setIsCreator(true)
-                    : setIsCreator(false))
+                ?.creator._id === user._id && setUserStatus(prev => ({...prev, isCreator: true})))
+
+            response && (response.community?.invitedUsers?.map(user => {
+                if(user === user._id) {
+                    setUserStatus(prev => ({...prev, isInvited: true}))
+                }
+            }))
         }
         getCommunity()
     }, [id, user._id])
 
-    const handleJoinLeaveCommunity = () => {}
-
     console.log(community)
+
+    useEffect(() => {
+        
+    }, [userStatus])
+
+    // console.log(buttonText, privacy, isMember)
+
+    const handleJoinLeaveCommunity = () => {}
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -120,20 +130,15 @@ const index = () => {
                                                 className="cursor-pointer"
                                                 size={30}/>
                                         </div>
-                                        <div>
-                                            {community
-                                                ?.creator
-                                                    ?._id !== user
-                                                        ?._id && (
-                                                            <button
-                                                                onClick={handleJoinLeaveCommunity}
-                                                                className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                                {isMember
-                                                                    ? "Leave community"
-                                                                    : "Request to join"}
-                                                            </button>
-                                                        )}
-                                        </div>
+                                        {community
+                                            ?.creator
+                                                ?._id && <div>
+                                                    <button
+                                                        onClick={handleJoinLeaveCommunity}
+                                                        className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                        {buttonText}
+                                                    </button>
+                                                </div>}
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +147,7 @@ const index = () => {
                     </div>
                     <div
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
-                        {isCreator && (
+                        {userStatus.isCreator && (
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-4">
                                     <button
