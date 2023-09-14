@@ -21,17 +21,32 @@ const index = () => {
     const {id} = useParams()
     const {user} = useContext(AuthContext)
 
-    let [community,setCommunity] = useState({})
-    let [isMember,setIsMember] = useState(null)
-    let [isCreator,setIsCreator] = useState(null)
+    let [community,
+        setCommunity] = useState({})
+    let [isMember,
+        setIsMember] = useState(null)
+    let [isCreator,
+        setIsCreator] = useState(null)
 
-    let [showUpdateCommunityModal,setShowUpdateCommunityModal] = useState(false)
-    let [showAddMembersModal,setShowAddMembersModal] = useState(false)
-    let [showDeleteCommunityModal, setShowDeleteCommunityModal] = useState(false)
-    let [showKickUsersModal, setShowKickUsersModal] = useState(false)
-    let [showRequestedUsersModal, setShowRequestedUsersModal] = useState(true)
+    let [showUpdateCommunityModal,
+        setShowUpdateCommunityModal] = useState(false)
+    let [showAddMembersModal,
+        setShowAddMembersModal] = useState(false)
+    let [showDeleteCommunityModal,
+        setShowDeleteCommunityModal] = useState(false)
+    let [showKickUsersModal,
+        setShowKickUsersModal] = useState(false)
+    let [showRequestedUsersModal,
+        setShowRequestedUsersModal] = useState(true)
 
-    let {name, privacy, description, _id, members} = community
+    let {
+        name,
+        privacy,
+        description,
+        _id,
+        members,
+        requestedUsers
+    } = community
 
     useEffect(() => {
         const getCommunity = async() => {
@@ -57,6 +72,8 @@ const index = () => {
 
     const handleJoinLeaveCommunity = () => {}
 
+    console.log(community)
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>
@@ -79,9 +96,11 @@ const index = () => {
                                         <div className="flex items-center gap-1">
                                             {community
                                                 ?.members
-                                                    ? <span>{community
+                                                    ? (
+                                                        <span>{community
                                                                 ?.members
                                                                     ?.length + 1}</span>
+                                                    )
                                                     : null}
                                             Member{community
                                                 ?.members
@@ -123,22 +142,34 @@ const index = () => {
                     </div>
                     <div
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
-                        {isCreator && <div className="flex flex-col gap-4">
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => setShowAddMembersModal(true)}
-                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Invite users</button>
-                                <button
-                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Requested users</button>
+                        {isCreator && (
+                            <div className="flex flex-col gap-4">
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={() => setShowAddMembersModal(true)}
+                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
+                                        Invite users
+                                    </button>
+                                    <button
+                                        onClick={() => setShowRequestedUsersModal(true)}
+                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
+                                        Requested users
+                                    </button>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={() => setShowKickUsersModal(true)}
+                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
+                                        Kick members
+                                    </button>
+                                    <button
+                                        onClick={() => setShowDeleteCommunityModal(true)}
+                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
+                                        Delete community
+                                    </button>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <button
-                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Kick members</button>
-                                <button
-                                    onClick={() => setShowDeleteCommunityModal(true)}
-                                    className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">Delete community</button>
-                            </div>
-                        </div>}
+                        )}
                         <div className="font-medium text-lg">Members</div>
                         <div className="flex flex-col gap-2">
                             {community.creator
@@ -166,10 +197,23 @@ const index = () => {
                 description={description}
                 privacy={privacy}
                 setShowUpdateCommunityModal={setShowUpdateCommunityModal}/>)}
-            {showAddMembersModal && (<AddMembersModal communityId={community._id} setShowAddMembersModal={setShowAddMembersModal}/>)}
-            {showDeleteCommunityModal && <DeleteCommunity communityName={community.name} communityId={community._id} setShowDeleteCommunityModal={setShowDeleteCommunityModal} />}
-            {showKickUsersModal && <KickUsersModal setCommunity={setCommunity} communityId={_id} members={members} setShowKickUsersModal={setShowKickUsersModal} />}
-            {showRequestedUsersModal && <RequestedUsersModal setShowRequestedUsersModal={setShowRequestedUsersModal} />}
+            {showAddMembersModal && (<AddMembersModal
+                communityId={community._id}
+                setShowAddMembersModal={setShowAddMembersModal}/>)}
+            {showDeleteCommunityModal && (<DeleteCommunity
+                communityName={community.name}
+                communityId={community._id}
+                setShowDeleteCommunityModal={setShowDeleteCommunityModal}/>)}
+            {showKickUsersModal && (<KickUsersModal
+                setCommunity={setCommunity}
+                communityId={_id}
+                members={members}
+                setShowKickUsersModal={setShowKickUsersModal}/>)}
+            {showRequestedUsersModal && (<RequestedUsersModal
+                setShowRequestedUsersModal={setShowRequestedUsersModal}
+                setCommunity={setCommunity}
+                communityId={_id}
+                users={requestedUsers}/>)}
         </div>
     );
 };

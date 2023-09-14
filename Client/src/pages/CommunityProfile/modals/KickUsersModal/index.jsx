@@ -27,8 +27,6 @@ const index = ({setShowKickUsersModal, members, communityId, setCommunity}) => {
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowKickUsersModal);
 
-    console.log(selectedMembers)
-
     return (
         <div
             onClick={closeModal}

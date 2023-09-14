@@ -9,6 +9,7 @@ const GetCommunity = async(req, res) => {
         const community = await Community
             .findById(communityId)
             .populate({path: "members", select: "name username _id profile.profileImage"})
+            .populate({path: "requestedUsers", select: "name username _id profile.profileImage"})
             .populate({path: "creator", select: "name username _id profile.profileImage"})
 
         if (!community) {
