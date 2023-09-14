@@ -76,6 +76,8 @@ const index = () => {
                     setUserStatus(prev => ({...prev, isRequested: true}))
                 }
             }))
+
+            response && response.community?.privacy === 'public' ? setUserStatus(prev => ({...prev, privacy: 'public'})) : setUserStatus(prev => ({...prev, privacy: 'private'}))
         }
         getCommunity()
     }, [id, user._id])
