@@ -70,6 +70,12 @@ const index = () => {
                     setUserStatus(prev => ({...prev, isInvited: true}))
                 }
             }))
+
+            response && (response.community?.requestedUsers?.map(user => {
+                if(user._id === user._id) {
+                    setUserStatus(prev => ({...prev, isRequested: true}))
+                }
+            }))
         }
         getCommunity()
     }, [id, user._id])
