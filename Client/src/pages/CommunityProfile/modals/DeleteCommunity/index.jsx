@@ -1,13 +1,32 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {handleCloseModal} from "../../../../utils/closeModal";
 import {MdOutlineClose} from "react-icons/md";
+import {postRequest} from "../../../../utils/requests";
+import { useNavigate } from "react-router-dom";
 
-const index = ({setShowDeleteCommunityModal, communityName}) => {
+const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
 
-    let [input, setInput] = useState("")
+    let [input,
+        setInput] = useState("")
+    let [isDisabled,
+        setIsDisabled] = useState(true)
     const boxRef = useRef()
+    const navigate = useNavigate()
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowDeleteCommunityModal);
+
+    const handleDeleteCommunity = async() => {
+        if (input === communityName) {
+            const response = await postRequest(`/community/delete/${communityId}`, {communityName});
+            response && navigate('/home')
+        }
+    }
+
+    useEffect(() => {
+        setIsDisabled(input !== communityName)
+    }, [input, communityName])
+
+    console.log(isDisabled, "isDisableeleeed", input, communityName)
 
     return (
         <div
@@ -33,7 +52,17 @@ const index = ({setShowDeleteCommunityModal, communityName}) => {
                     <input
                         className="border-b-2 border-b-primary outline-none px-2 py-1.5 placeholder:text-lg"
                         type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
                         placeholder="Community name"/>
+                    <div>
+                        <button
+                            disabled={isDisabled}
+                            onClick={handleDeleteCommunity}
+                            className="py-2 px-12 rounded-md bg-primary text-white font-medium">
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -165,7 +165,7 @@ const index = () => {
                 privacy={privacy}
                 setShowUpdateCommunityModal={setShowUpdateCommunityModal}/>)}
             {showAddMembersModal && (<AddMembersModal communityId={community._id} setShowAddMembersModal={setShowAddMembersModal}/>)}
-            {showDeleteCommunityModal && <DeleteCommunity communityName={community.name} setShowDeleteCommunityModal={setShowDeleteCommunityModal} />}
+            {showDeleteCommunityModal && <DeleteCommunity communityName={community.name} communityId={community._id} setShowDeleteCommunityModal={setShowDeleteCommunityModal} />}
         </div>
     );
 };

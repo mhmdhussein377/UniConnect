@@ -60,36 +60,41 @@ const DeleteCommunity = async(req, res) => {
     const userId = req
         ?.user
             ?.id
+    const {communityName} = req.body
 
     try {
         const community = await Community.findById(communityId);
         if (!community) 
             return res.status(404).json({message: "Community not found"})
 
-        if (community.creator.toString() !== userId) 
-            return res.status(403).json({message: "Permission denied"})
-
-        const creator = await User.findById(community.creator)
-        if (creator) {
-            creator.createdCommunities = creator
-                .createdCommunities
-                .filter(community => community.toString() !== communityId)
-            await creator.save()
-        }
-
-        await User.updateMany({
-            joinedCommunities: communityId
-        }, {
-            $pull: {
-                joinedCommunities: communityId
+        if (communityName === community.name) {
+            if (community.creator.toString() !== userId) 
+                return res.status(403).json({message: "Permission denied"});
+            
+            const creator = await User.findById(community.creator);
+            if (creator) {
+                creator.createdCommunities = creator
+                    .createdCommunities
+                    .filter((community) => community.toString() !== communityId);
+                await creator.save();
             }
-        })
 
-        await Community.findByIdAndDelete(communityId)
+            await User.updateMany({
+                joinedCommunities: communityId
+            }, {
+                $pull: {
+                    joinedCommunities: communityId
+                }
+            });
 
-        return res
-            .status(200)
-            .json({message: "Community deleted successfully"});
+            await Community.findByIdAndDelete(communityId);
+
+            return res
+                .status(200)
+                .json({message: "Community deleted successfully"});
+        }else {
+            return res.status(400).json({message: "Community name error"})
+        }
     } catch (error) {
         return res
             .status(500)
@@ -584,8 +589,12 @@ const CancelCommunityInviteRequest = async(req, res) => {
                 .json({message: "The recipient does not have a pending invitation for this community"});
         }
 
-        const indexOfRecipient = community.invitedUsers.indexOf(recipientUserId);
-        community.invitedUsers.splice(indexOfRecipient, 1);
+        const indexOfRecipient = community
+            .invitedUsers
+            .indexOf(recipientUserId);
+        community
+            .invitedUsers
+            .splice(indexOfRecipient, 1);
         await community.save()
 
         await Notification.deleteOne({recipient: recipientUserId, community: communityId, type: "community invite request"});
