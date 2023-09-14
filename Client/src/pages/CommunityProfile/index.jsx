@@ -72,15 +72,7 @@ const index = () => {
 
     const isInvited = (community, user) => community.invitedUsers.includes(user._id)
 
-    const checkRequestedStatus = (community, user) => {
-        const isRequested = community
-            .requestedUsers
-            .some((requestedUser) => requestedUser._id === user._id);
-        setUserStatus((prev) => ({
-            ...prev,
-            isRequested
-        }));
-    };
+    const isRequested = (community, user) => community.requestedUsers.some(requestedUser => requestedUser._id === user._id)
 
     const setPrivacyStatus = (community) => {
         const privacy = community.privacy === "public"
