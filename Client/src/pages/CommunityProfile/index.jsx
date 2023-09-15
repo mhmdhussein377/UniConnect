@@ -91,21 +91,27 @@ const index = () => {
     console.log(userStatus)
 
     useEffect(() => {
-        const {isMember, isInvited, isRequested, privacy} = userStatus
+        const { isMember, isInvited, isRequested, privacy } = userStatus;
         if (privacy === "public" && !isMember) {
+            console.log("first")
             setButtonText("Join community")
-        } else if (privacy === "private" && !isMember) {
+        } else if (privacy === "private" && !isMember && !isRequested) {
+            console.log("second")
             setButtonText("Request to join")
         } else if (isMember) {
+            console.log("third")
             setButtonText("Leave community")
         } else if (isRequested) {
+            console.log("fourth")
             setButtonText("Cancel request")
         } else if (isInvited) {
+            console.log("fifth")
             setButtonText("Accept invite request")
         }
     }, [userStatus])
-
+    
     const handleJoinLeaveCommunity = async() => {
+        const {isMember, isInvited, isRequested, privacy} = userStatus
         if (!isMember && privacy === "public") {
             setUserStatus(prev => ({
                 ...prev,
@@ -113,8 +119,8 @@ const index = () => {
             }))
             const response = await postRequest(`/community/send-community-join-request/${id}`)
             console.log(response)
-        } else if (!isMember && privacy === "private") {
-            setUserStatus(prev => ({...prev,isRequested: true}))
+        } else if (!isMember && privacy === "private" && !isRequested) {
+            setUserStatus(prev => ({...prev, isRequested: true}))
             const response = await postRequest(`/community/send-community-join-request/${id}`);
             console.log(response)
         } else if (isMember) {
@@ -126,8 +132,16 @@ const index = () => {
             setUserStatus(prev => ({...prev,isMember: true}))
             const response = await postRequest(`/community/accept-community-invite-request/${id}`)
             console.log(response)
+        }else if(isRequested) {
+            setUserStatus(prev => ({...prev, isRequested: false}))
+            const response = await postRequest(`/community/cancel-community-join-request/${id}`)
+            console.log(response)
         }
     }
+
+    console.log(community)
+
+    console.log(userStatus)
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -183,7 +197,7 @@ const index = () => {
                                                     {buttonText}
                                                 </button>
                                             )
-                                        } < /div>}
+                                        } </div>}
                                     </div>
                                 </div>
                             </div>

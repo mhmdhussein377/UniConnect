@@ -382,20 +382,18 @@ const CancelCommunityJoinRequest = async(req, res) => {
                 .json({message: "You do not have a pending join request for this community"});
         }
 
-        community.requestedUsers = community
-            .requestedUsers
-            .filter(comm => comm._id !== community._id)
+        community.requestedUsers = community.requestedUsers.filter(user => user.toString() !== userId)
         await community.save()
 
         // i have to make sure about it
-        const userRequestIndex = user
-            .joinedCommunities
-            .indexOf(communityId);
-        if (userRequestIndex !== -1) {
-            user
-                .joinedCommunities
-                .splice(userRequestIndex, 1);
-        }
+        // const userRequestIndex = user
+        //     .joinedCommunities
+        //     .indexOf(communityId);
+        // if (userRequestIndex !== -1) {
+        //     user
+        //         .joinedCommunities
+        //         .splice(userRequestIndex, 1);
+        // }
 
         await user.save()
 
