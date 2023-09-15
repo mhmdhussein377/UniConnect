@@ -88,22 +88,16 @@ const index = () => {
 
     useEffect(() => {
         const {isMember, isInvited, isRequested, privacy} = userStatus;
-        if (privacy === "public" && !isMember) {
-            console.log("first")
-            setButtonText("Join community")
-        } else if (privacy === "private" && !isMember && !isRequested && !isInvited) {
-            console.log("second")
-            setButtonText("Request to join")
-        } else if (isMember) {
-            console.log("third")
-            setButtonText("Leave community")
-        } else if (isRequested) {
-            console.log("fourth")
-            setButtonText("Cancel request")
-        } else if (isInvited) {
-            console.log("fifth")
-            setButtonText("Accept invite request")
-        }
+
+        const determineButtonText = () => {
+            if (privacy === "public" && !isMember) return "Join community";
+            if (privacy === "private" && !isMember && !isRequested && !isInvited) return "Request to join";
+            if (isMember) return "Leave community";
+            if (isInvited) return "Accept invite request";
+            if (isRequested) return "Cancel request";
+            };
+
+            setButtonText(determineButtonText())
     }, [userStatus])
 
     const handleJoinLeaveCommunity = async() => {
@@ -111,43 +105,21 @@ const index = () => {
         const {isMember, isInvited, isRequested, privacy} = userStatus
         try {
             if (!isMember && privacy === "public") {
-                setUserStatus((prev) => ({
-                    ...prev,
-                    isMember: true
-                }));
-                const response = await postRequest(`/community/send-community-join-request/${id}`);
-                console.log(response);
+                setUserStatus((prev) => ({...prev, isMember: true}));
+                await postRequest(`/community/send-community-join-request/${id}`);
             } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
-                setUserStatus((prev) => ({
-                    ...prev,
-                    isRequested: true
-                }));
-                const response = await postRequest(`/community/send-community-join-request/${id}`);
-                console.log(response);
+                setUserStatus((prev) => ({...prev, isRequested: true}));
+                await postRequest(`/community/send-community-join-request/${id}`);
             } else if (isMember) {
-                setUserStatus((prev) => ({
-                    ...prev,
-                    isMember: false,
-                    isInvited: false,
-                    isRequested: false
-                }));
-                const response = await postRequest(`/community/leave/${id}`);
+                setUserStatus((prev) => ({...prev, isMember: false, isInvited: false, isRequested: false}))
+                await postRequest(`/community/leave/${id}`);
                 dispatch({type: 'EDIT_JOINED_COMMUNITIES', payload: id})
-                console.log(response);
             } else if (isInvited) {
-                setUserStatus((prev) => ({
-                    ...prev,
-                    isMember: true
-                }));
-                const response = await postRequest(`/community/accept-community-invite-request/${id}`);
-                console.log(response);
+                setUserStatus((prev) => ({...prev, isMember: true}));
+                await postRequest(`/community/accept-community-invite-request/${id}`);
             } else if (isRequested) {
-                setUserStatus((prev) => ({
-                    ...prev,
-                    isRequested: false
-                }));
-                const response = await postRequest(`/community/cancel-community-join-request/${id}`);
-                console.log(response);
+                setUserStatus((prev) => ({...prev, isRequested: false}));
+                await postRequest(`/community/cancel-community-join-request/${id}`);
             }
             setLoading(false)
         } catch (error) {
@@ -155,8 +127,6 @@ const index = () => {
             setLoading(false)
         }
     }
-
-    console.log(userStatus)
 
     return (
         <div className="flex flex-col min-h-screen">

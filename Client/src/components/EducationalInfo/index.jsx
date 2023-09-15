@@ -32,7 +32,7 @@ const index = ({setShowEducationalInfoModal, currentUser, university, major, emp
                         </div>
                     )
                     : (
-                        <div className="text-center my-4">{emptyHeadline}</div>
+                        <div className="text-center my-4 font-medium text-lg">{emptyHeadline}</div>
                     )}
             </div>
         </div>
