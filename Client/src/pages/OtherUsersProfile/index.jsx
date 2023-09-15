@@ -14,8 +14,7 @@ const index = () => {
 
     const {username} = useParams()
     const {user: currentUser} = useContext(AuthContext)
-    let [user,
-        setUser] = useState({})
+    let [user, setUser] = useState({})
 
     useEffect(() => {
         const getUser = async() => {

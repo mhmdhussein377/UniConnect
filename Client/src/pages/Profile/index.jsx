@@ -37,7 +37,6 @@ const index = () => {
     useEffect(() => {
         const getUser = async() => {
             const response = await getRequest(`/user/${user.username}`);
-            console.log(response.user.joinedCommunities)
             response && setJoinedCommunities(response.user.joinedCommunities);
         };
         getUser();

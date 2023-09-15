@@ -53,6 +53,17 @@ const AuthReducer = (state, action) => {
                     }
                 }
             };
+        case "SET_JOINED_COMMUNITIES":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    profile: {
+                        ...state.user.profile,
+                        joinedCommunities: action.payload
+                    }
+                }
+            }
         case "CREATE_COMMUNITY":
             console.log(action.payload)
             return {
