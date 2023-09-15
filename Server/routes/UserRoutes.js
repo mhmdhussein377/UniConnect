@@ -18,6 +18,6 @@ router.get("/search/:searchTerm", SearchUsersCommunities)
 // done
 router.get("/search/:searchTerm/:communityId", SearchUsers)
 
-router.post("/suggested-users", GetSuggestedUsers)
+router.get("/suggested-users", GetSuggestedUsers)
 
 module.exports = router;

@@ -298,13 +298,16 @@ const SearchUsersCommunities = async(req, res) => {
 }
 
 const GetSuggestedUsers = async(req, res) => {
+    console.log("CURREEEENT")
     const currentUser = req
         ?.user
             ?.id
 
     try {
         const user = await User.findById(currentUser)
+        console.log(user)
         if (!user) {
+            console.log("curreeetn")
             return res
                 .status(404)
                 .json({message: "User not found"})

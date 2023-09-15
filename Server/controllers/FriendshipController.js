@@ -17,8 +17,6 @@ const GetFriendship = async(req, res) => {
                 .json({message: 'User not found'})
         }
 
-        console.log(user, currentUserId)
-
         const friendship = await Friendship.find({
             $or: [
                 {

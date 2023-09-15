@@ -43,8 +43,6 @@ const index = () => {
         getUser();
     }, []);
 
-    console.log(joinedCommunities)
-
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>

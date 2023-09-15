@@ -26,6 +26,14 @@ const index = () => {
 
     const {createdCommunities, joinedCommunities, friends} = user
 
+    useEffect(() => {
+        const getSuggestedUsers = async() => {
+            const response = await getRequest(`/user/suggested-users`)
+            console.log(response)
+        }
+        getSuggestedUsers()
+    })
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>
@@ -85,7 +93,7 @@ const index = () => {
                                 ?.major}
                             emptyHeadline="No educational background available"/>
                         <ShowFriends friends={friends || []}/>
-                        
+
                     </div>
                 </div>
             </div>

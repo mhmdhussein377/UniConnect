@@ -23,7 +23,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             const response = await getRequest(`/friendship/${user.username}`);
             let friendship = response.friendship[0];
             setFriendship(friendship);
-            
+
             if (friendship) {
                 setFriendshipStatus({requester: friendship.requester, status: friendship.status});
             } else {
@@ -95,6 +95,29 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             setLoading(false)
         }
     }
+
+    const handleInput = (e) => {
+        if (e.target.files.length > 0) {
+            function getBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = (error) => reject(error);
+                });
+            }
+            // setInput(e.target.files[0]);
+            getBase64(e.target.files[0]).then((data) => {
+                imageRef.current.src = data;
+            });
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                console.log(reader.result);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    };
 
     return (
         <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
