@@ -25,7 +25,7 @@ const index = ({searched, member, creator, invite, communityId}) => {
     }
 
     const handleInvite = async() => {
-        debounce(handleInvite, 1000)
+        debounce(handleInvite, 3000)
         setIsInvited(!isInvited)
 
         if (isInvited) {

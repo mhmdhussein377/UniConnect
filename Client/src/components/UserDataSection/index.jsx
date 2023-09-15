@@ -11,14 +11,16 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
         setFriendship] = useState({});
     let [friendshipStatus,
         setFriendshipStatus] = useState({status: "", requester: ""});
-    let [buttonText, setButtonText] = useState("")
+    let [buttonText,
+        setButtonText] = useState("")
+    const [loading,
+        setLoading] = useState(false);
     const coverPicRef = useRef();
     const profilePicRef = useRef();
 
     useEffect(() => {
         const getFrienship = async() => {
             const response = await getRequest(`/friendship/${user.username}`);
-            console.log(response)
             let friendship = response.friendship[0];
             setFriendship(friendship);
 
@@ -32,40 +34,65 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
     }, [user])
 
     useEffect(() => {
-        if(friendshipStatus?.status === "no friendship") {
+        if (friendshipStatus
+            ?.status === "no friendship") {
             setButtonText("Add friend")
-        }else if(friendshipStatus?.status === "pending" && friendshipStatus?.requester === currentUser._id) {
+        } else if (friendshipStatus
+            ?.status === "pending" && friendshipStatus
+                ?.requester === currentUser._id) {
             setButtonText("Cancel friend request")
-        }else if(friendshipStatus?.status === "pending" && friendshipStatus?.requester !== currentUser._id) {
+        } else if (friendshipStatus
+            ?.status === "pending" && friendshipStatus
+                ?.requester !== currentUser._id) {
             setButtonText("Accept friend request")
-        }else if(friendshipStatus?.status === "accepted") {
+        } else if (friendshipStatus
+            ?.status === "accepted") {
             setButtonText("Remove friend")
-        }else if(friendshipStatus?.status === "rejected") {
+        } else if (friendshipStatus
+            ?.status === "rejected") {
             setButtonText("Add friend")
         }
-    }, [friendship?.status, currentUser._id, friendshipStatus.requester, friendshipStatus.status])
+    }, [
+        friendship
+            ?.status,
+        currentUser._id,
+        friendshipStatus.requester,
+        friendshipStatus.status
+    ])
 
     const handleAddRemoveFriend = async() => {
-        if(friendshipStatus.status === "no friendship") {
-            setFriendshipStatus({status: "pending", requester: currentUser._id})
-            const response = await postRequest(`/friendship/send-friend-request/${user?._id}`)
-            console.log(response)
-        }else if(friendshipStatus.status === "pending" && friendshipStatus.requester === currentUser._id) {
-            setFriendshipStatus({status: "no friendship", requester: ""})
-            const response = await postRequest(`/friendship/cancel-friend-request/${user?._id}`)
-            console.log(response)
-        }else if(friendshipStatus.status === "pending" && friendshipStatus.requester !== currentUser._id) {
-            setFriendshipStatus({status: "accepted", requester: ""})
-            const response = await postRequest(`/friendship/accept-friend-request/${user?._id}`)
-            console.log(response)
-        }else if(friendshipStatus.status === "accepted") {
-            setFriendshipStatus({status: "no friendship", requester: ""})
-            const response = await postRequest(`/friendship/unfriend/${user?._id}`)
-            console.log(response)
-        }else if(friendshipStatus.status === "rejected") {
-            setFriendshipStatus({status: "pending", requester: currentUser._id})
-            const response = await postRequest(`/friendship/send-friend-request/${user?._id}`)
-            console.log(response)
+        setLoading(true)
+        try {
+            if (friendshipStatus.status === "no friendship") {
+                setFriendshipStatus({status: "pending", requester: currentUser._id});
+                const response = await postRequest(`/friendship/send-friend-request/${user
+                    ?._id}`);
+                console.log(response);
+            } else if (friendshipStatus.status === "pending" && friendshipStatus.requester === currentUser._id) {
+                setFriendshipStatus({status: "no friendship", requester: ""});
+                const response = await postRequest(`/friendship/cancel-friend-request/${user
+                    ?._id}`);
+                console.log(response);
+            } else if (friendshipStatus.status === "pending" && friendshipStatus.requester !== currentUser._id) {
+                setFriendshipStatus({status: "accepted", requester: ""});
+                const response = await postRequest(`/friendship/accept-friend-request/${user
+                    ?._id}`);
+                console.log(response);
+            } else if (friendshipStatus.status === "accepted") {
+                setFriendshipStatus({status: "no friendship", requester: ""});
+                const response = await postRequest(`/friendship/unfriend/${user
+                    ?._id}`);
+                console.log(response);
+            } else if (friendshipStatus.status === "rejected") {
+                setFriendshipStatus({status: "pending", requester: currentUser._id});
+                const response = await postRequest(`/friendship/send-friend-request/${user
+                    ?._id}`);
+                console.log(response);
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
     }
 
@@ -115,9 +142,13 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                             ?.length > 0
                                 ? user.friends
                                     ?.length
-                                    : "No"} Friends</div>
+                                    : "No"}
+                        Friends</div>
                     {!isCurrentUser && buttonText !== "" && <div className="mt-2">
-                        <button onClick={handleAddRemoveFriend} className="bg-primary text-white px-2 py-1 5 rounded-md">
+                        <button
+                            disabled={loading}
+                            onClick={handleAddRemoveFriend}
+                            className="bg-primary text-white px-2 py-1 5 rounded-md">
                             {buttonText}
                         </button>
                     </div>}

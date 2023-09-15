@@ -20,7 +20,6 @@ const index = () => {
     useEffect(() => {
         const searchUsers = async() => {
             const response = await getRequest(`/user/search/${searchTerm}`);
-            console.log(response)
             let users,
                 communities = [];
             if (response) {

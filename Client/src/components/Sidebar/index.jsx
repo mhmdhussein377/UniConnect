@@ -26,7 +26,6 @@ const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
         const response = await postRequest("/logout", {userId: user._id})
         localStorage.removeItem("authToken")
         localStorage.removeItem("user")
-        console.log(response)
 
         navigate("/")
     }

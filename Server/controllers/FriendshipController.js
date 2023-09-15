@@ -248,7 +248,7 @@ const CancelFriendRequest = async(req, res) => {
                 .json({message: "Friendship request has already been accepted or rejected"});
         }
 
-        await existingFriendship.remove();
+        await Friendship.findByIdAndDelete(existingFriendship._id);
 
         await Notification.findOneAndDelete({recipient: recipientUserId, sender: currentUser, type: "friend request"});
 
