@@ -95,7 +95,7 @@ const index = () => {
         if (privacy === "public" && !isMember) {
             console.log("first")
             setButtonText("Join community")
-        } else if (privacy === "private" && !isMember && !isRequested) {
+        } else if (privacy === "private" && !isMember && !isRequested && !isInvited) {
             console.log("second")
             setButtonText("Request to join")
         } else if (isMember) {
@@ -119,12 +119,12 @@ const index = () => {
             }))
             const response = await postRequest(`/community/send-community-join-request/${id}`)
             console.log(response)
-        } else if (!isMember && privacy === "private" && !isRequested) {
+        } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
             setUserStatus(prev => ({...prev, isRequested: true}))
             const response = await postRequest(`/community/send-community-join-request/${id}`);
             console.log(response)
         } else if (isMember) {
-            setUserStatus(prev => ({...prev,isMember: false
+            setUserStatus(prev => ({...prev,isMember: false, isInvited: false, isRequested: false
             }))
             const response = await postRequest(`/community/leave/${id}`)
             console.log(response)

@@ -382,18 +382,14 @@ const CancelCommunityJoinRequest = async(req, res) => {
                 .json({message: "You do not have a pending join request for this community"});
         }
 
-        community.requestedUsers = community.requestedUsers.filter(user => user.toString() !== userId)
+        community.requestedUsers = community
+            .requestedUsers
+            .filter(user => user.toString() !== userId)
         await community.save()
 
-        // i have to make sure about it
-        // const userRequestIndex = user
-        //     .joinedCommunities
-        //     .indexOf(communityId);
-        // if (userRequestIndex !== -1) {
-        //     user
-        //         .joinedCommunities
-        //         .splice(userRequestIndex, 1);
-        // }
+        // i have to make sure about it const userRequestIndex = user
+        // .joinedCommunities     .indexOf(communityId); if (userRequestIndex !== -1) {
+        //    user         .joinedCommunities         .splice(userRequestIndex, 1); }
 
         await user.save()
 
@@ -529,20 +525,28 @@ const AcceptCommunityJoinRequests = async(req, res) => {
                 .json({message: "One or more requested users were not found"});
         }
 
-        for(const requestedUser of requestedUsers) {
-            if(!community.requestedUsers.includes(requestedUser._id)) {
+        for (const requestedUser of requestedUsers) {
+            if (!community.requestedUsers.includes(requestedUser._id)) {
                 continue
             }
 
-            community.members.push(requestedUser._id)
-            community.invitedUsers = community.invitedUsers.filter(user => user !== requestedUser._id)
+            community
+                .members
+                .push(requestedUser._id)
+            community.invitedUsers = community
+                .invitedUsers
+                .filter(user => user !== requestedUser._id)
             await community.save()
 
-            requestedUser.joinedCommunities.push(communityId)
+            requestedUser
+                .joinedCommunities
+                .push(communityId)
             requestedUser.save()
         }
 
-        return res.status(200).json({message: "Community join requests accepted successfully"})
+        return res
+            .status(200)
+            .json({message: "Community join requests accepted successfully"})
     } catch (error) {
         return res
             .status(500)
@@ -706,7 +710,6 @@ const AcceptCommunityInviteRequest = async(req, res) => {
         community
             .members
             .push(userId);
-        await community.save();
 
         const inviteIndex = community
             .invitedUsers
@@ -716,6 +719,7 @@ const AcceptCommunityInviteRequest = async(req, res) => {
                 .invitedUsers
                 .splice(inviteIndex, 1);
         }
+        await community.save();
 
         await Notification.findOneAndUpdate({
             recipient: userId,
