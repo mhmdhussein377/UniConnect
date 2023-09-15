@@ -48,7 +48,7 @@ const CreateCommunity = async(req, res) => {
 
         return res
             .status(201)
-            .json(savedCommunity)
+            .json(await savedCommunity.populate("creator"))
     } catch (error) {
         return res
             .status(500)

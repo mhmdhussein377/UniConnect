@@ -9,7 +9,7 @@ import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import Friend from "./../Friend"
 import Community from "./../Community"
 import {AuthContext} from "../../Context/AuthContext";
-import { postRequest } from "../../utils/requests";
+import {getRequest, postRequest} from "../../utils/requests";
 
 const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
 
@@ -50,14 +50,18 @@ const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
     }, []);
 
     let [friends,
-        setFriends] = useState([ < Friend highlight = {
-            true
-        } />, < Friend />
-    ]);
+        setFriends] = useState([]);
     let [communities,
-        setCommunities] = useState([< Community highlight = {
-            true
-        } />]);
+        setCommunities] = useState([]);
+
+    useEffect(() => {
+        const getPrivateConversations = async() => {
+            const response = await getRequest(`/privateChat/privateConversationsDetails`);
+            setFriends(response);
+            console.log(response, "frieeeendssss conversations")
+        };
+        getPrivateConversations();
+    }, []);
 
     return (
         <div

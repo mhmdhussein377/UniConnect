@@ -115,11 +115,13 @@ router.get("/privateConversationsDetails", async(req, res) => {
             .populate({path: "messages.sender", model: "User"})
             .populate({path: "Members", model: "User"});
 
-        if (!conversations || conversations.length === 0) {
-            return res
-                .status(404)
-                .json({message: "Conversations not found"});
-        }
+        console.log(conversations)
+
+        // if (!conversations || conversations.length === 0) {
+        //     return res
+        //         .status(404)
+        //         .json({message: "Conversations not found"});
+        // }
 
         const details = conversations.map((item) => {
             const conversationDetails = {
