@@ -1,10 +1,13 @@
-import {useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import {MdOutlineClose} from "react-icons/md";
 import {handleCloseModal} from "../../utils/closeModal";
 import {handleChange} from "../../utils/handleChange"
 import {postRequest} from "../../utils/requests"
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = ({setShowCommunityModal}) => {
+
+    const {dispatch} = useContext(AuthContext)
 
     let [inputs,
         setInputs] = useState({})
@@ -30,7 +33,8 @@ const index = ({setShowCommunityModal}) => {
         }
 
         const response = await postRequest("/community/create", inputs)
-        console.log(response)
+        const {name: communityName, privacy: communityPrivacy, _id, creator} = response
+        dispatch({type: "CREATE_COMMUNITY", payload: {name: communityName, privacy: communityPrivacy, _id, creator}})
         response && setShowCommunityModal(false)
     }
 

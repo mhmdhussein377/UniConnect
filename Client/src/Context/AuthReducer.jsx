@@ -54,11 +54,12 @@ const AuthReducer = (state, action) => {
                 }
             };
         case "CREATE_COMMUNITY":
+            console.log(action.payload)
             return {
                 ...state,
                 user: {
                     ...state.user,
-                    createdCommunities: state.user.createdCommunities.unshift(action.payload)
+                    createdCommunities: [action.payload, ...state.user.createdCommunities]
                 }
             }
         case "DELETE_COMMUNITY":
