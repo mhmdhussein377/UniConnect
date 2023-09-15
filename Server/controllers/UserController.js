@@ -1,5 +1,6 @@
 const User = require("./../models/User")
 const Community = require("./../models/Community")
+const Friendship = require("./../models/Friendship")
 
 const EditProfile = async(req, res) => {
     const userId = req.user.id
@@ -336,16 +337,28 @@ const GetSuggestedUsers = async(req, res) => {
                 .toLowerCase()
         }));
 
-        const suggestedUsersList = usersWithCommonAttributes.filter((item) => item.commonSkills.length > 0 || item.commonMajor || item.commonUniversity);
+        const suggestedUsersList = usersWithCommonAttributes.filter(async(item) => {
+            const existingRelationship = await Friendship.find({
+                $or: [
+                    {
+                        userOne: currentUser,
+                        userTwo: item.user._id
+                    }, {
+                        userOne: item.user._id,
+                        userTwo: currentUser
+                    }
+                ]
+            })
+
+            const hasRelationship = user.friends.includes(item.user._id) || existingRelationship
+
+            return (item.commonSkills.length > 0 || item.commonMajor || item.commonUniversity) && !hasRelationship ;
+        });
 
         const top = 5
-        suggestedUsersList
-            .slice(0, top)
-            .map(item => item.user)
+        suggestedUsersList.slice(0, top).map(item => item.user)
 
-        res
-            .status(200)
-            .json(suggestedUsersList);
+        res.status(200).json(suggestedUsersList);
     } catch (error) {
         res
             .status(500)

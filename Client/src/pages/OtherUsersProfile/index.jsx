@@ -85,6 +85,7 @@ const index = () => {
                                 ?.major}
                             emptyHeadline="No educational background available"/>
                         <ShowFriends friends={friends || []}/>
+                        
                     </div>
                 </div>
             </div>
