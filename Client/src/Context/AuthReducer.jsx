@@ -58,10 +58,7 @@ const AuthReducer = (state, action) => {
                 ...state,
                 user: {
                     ...state.user,
-                    profile: {
-                        ...state.user.profile,
-                        joinedCommunities: action.payload
-                    }
+                    joinedCommunities: action.payload
                 }
             }
         case "CREATE_COMMUNITY":

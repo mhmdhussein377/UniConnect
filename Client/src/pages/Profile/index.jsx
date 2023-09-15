@@ -17,7 +17,7 @@ import { getRequest } from "../../utils/requests"
 
 const index = () => {
 
-    const {user} = useContext(AuthContext)
+    const {user, dispatch} = useContext(AuthContext)
     const {username} = useParams()
 
     let [showEducationalInfoModal,
@@ -38,6 +38,7 @@ const index = () => {
         const getUser = async() => {
             const response = await getRequest(`/user/${user.username}`);
             response && setJoinedCommunities(response.user.joinedCommunities);
+            dispatch({type: "SET_JOINED_COMMUNITIES", payload: response.user.joinedCommunities})
         };
         getUser();
     }, [user]);
