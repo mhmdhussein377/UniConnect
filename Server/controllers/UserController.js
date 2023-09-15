@@ -296,10 +296,68 @@ const SearchUsersCommunities = async(req, res) => {
     }
 }
 
+const GetSuggestedUsers = async(req, res) => {
+    const currentUser = req
+        ?.user
+            ?.id
+
+    try {
+        const user = await User.findById(currentUser)
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
+        }
+        const suggestedUsers = await User.find({
+            _id: {
+                $ne: currentUser
+            }
+        })
+
+        const usersWithCommonAttributes = suggestedUsers.map((user) => ({
+            user,
+            commonSkills: user
+                .profile
+                .skills
+                .filter((skill) => currentUser.profile.skills.includes(skill)),
+            commonMajor: user
+                .profile
+                .major
+                .toLowerCase() === currentUser
+                .profile
+                .major
+                .toLowerCase(),
+            commonUniversity: user
+                .profile
+                .university
+                .toLowerCase() === currentUser
+                .profile
+                .university
+                .toLowerCase()
+        }));
+
+        const suggestedUsersList = usersWithCommonAttributes.filter((item) => item.commonSkills.length > 0 || item.commonMajor || item.commonUniversity);
+
+        const top = 5
+        suggestedUsersList
+            .slice(0, top)
+            .map(item => item.user)
+
+        res
+            .status(200)
+            .json(suggestedUsersList);
+    } catch (error) {
+        res
+            .status(500)
+            .json({error: "Internal Server Error"});
+    }
+}
+
 module.exports = {
     EditProfile,
     UserData,
     SearchUsers,
     SearchUsersCommunities,
-    GetFriends
+    GetFriends,
+    GetSuggestedUsers
 }
