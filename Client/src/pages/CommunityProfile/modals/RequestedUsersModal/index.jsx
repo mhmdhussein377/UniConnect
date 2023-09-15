@@ -31,7 +31,7 @@ const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, commu
                 .filter(user => !selectedUsers.includes(user._id))
         }))
         setShowRequestedUsersModal(false)
-        // setUsers(prev => prev.filter(user => !selectedUsers.includes(user)))
+        setUsers(prev => prev.filter(user => !selectedUsers.includes(user)))
 
         const response = await postRequest(`/community/accept-community-join-requests/${communityId}`, {
             requestedUsersIds: selectedUsers.map((user) => user._id)

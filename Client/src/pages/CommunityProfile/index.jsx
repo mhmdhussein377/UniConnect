@@ -58,7 +58,7 @@ const index = () => {
             const community = response.community;
 
             setCommunity(community);
-            // setRequesters(community.requestedUsers)
+            setRequesters(community.requestedUsers)
 
             setUserStatus((prev) => ({
                 ...prev,
@@ -276,7 +276,7 @@ const index = () => {
                 setCommunity={setCommunity}
                 communityId={_id}
                 setUsers={setRequesters}
-                users={requestedUsers}/>)}
+                users={requesters}/>)}
         </div>
     );
 };
