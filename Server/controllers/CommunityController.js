@@ -265,7 +265,7 @@ const LeaveCommunity = async(req, res) => {
 
         community.members = community
             .members
-            .filter(member => member._id !== userId)
+            .filter(member => member.toString() !== userId)
         await community.save()
 
         user.joinedCommunities = user
