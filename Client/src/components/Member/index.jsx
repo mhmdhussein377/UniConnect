@@ -10,36 +10,35 @@ const index = ({searched, member, creator, invite, communityId}) => {
     const {user} = useContext(AuthContext)
     let [isInvited,
         setIsInvited] = useState(false)
+    let [loading,
+        setLoading] = useState(false)
 
     const {name, username, _id} = member
 
     const actualUser = user._id === _id
 
-    function debounce(func, delay) {
-        let timer = null;
-
-        return function () {
-            clearTimeout(timer);
-            timer = setTimeout(func, delay);
-        };
-    }
-
     const handleInvite = async() => {
-        debounce(handleInvite, 3000)
+        setLoading(true)
         setIsInvited(!isInvited)
 
-        if (isInvited) {
-            const response = await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`)
-            console.log(response)
-        } else {
-            const response = await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`)
-            console.log(response)
+        try {
+            if (isInvited) {
+                const response = await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`);
+                console.log(response);
+            } else {
+                const response = await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`);
+                console.log(response);
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
     }
 
     return (
         <div
-            className={`flex items-center justify-between gap-2 ${!actualUser
+            className={`flex items-center justify-between gap-2 ${ !actualUser
             ? "cursor-pointer"
             : "cursor-auto"}`}>
             <Link
@@ -64,6 +63,7 @@ const index = ({searched, member, creator, invite, communityId}) => {
                 ? (
                     <button
                         onClick={handleInvite}
+                        disabled={loading}
                         className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
                         <AiOutlineMinus/>
                         Cancel Invite
@@ -72,6 +72,7 @@ const index = ({searched, member, creator, invite, communityId}) => {
                 : (
                     <button
                         onClick={handleInvite}
+                        disabled={loading}
                         className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
                         <AiOutlinePlus/>
                         Invite
