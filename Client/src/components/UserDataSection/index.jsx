@@ -23,7 +23,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             const response = await getRequest(`/friendship/${user.username}`);
             let friendship = response.friendship[0];
             setFriendship(friendship);
-
+            
             if (friendship) {
                 setFriendshipStatus({requester: friendship.requester, status: friendship.status});
             } else {

@@ -31,7 +31,7 @@ const index = () => {
             <Header profile={true}/>
             <div className="bg-gray-100 py-6 h-full flex-1">
                 <div
-                    className="w-full max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row gap-4">
+                    className="w-full max-w-[1200px] mx-auto px-8 flex flex-col lg:flex-row gap-4">
                     <div className="lg:flex-[4] xl:flex-[8] flex flex-col gap-6">
                         {user && (<UserDataSection
                             isCurrentUser={user.username === currentUser.username}

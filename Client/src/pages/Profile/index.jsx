@@ -93,7 +93,7 @@ const index = () => {
                             major={major}
                             setShowEducationalInfoModal={setShowEducationalInfoModal}
                             emptyHeadline="Share your university and major to showcase your academic background."/>
-                        <ShowFriends friends={friends}/>
+                        <ShowFriends friends={friends} currentUser={true}/>
                     </div>
                 </div>
             </div>
