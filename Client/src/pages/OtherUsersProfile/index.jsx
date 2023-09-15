@@ -23,7 +23,7 @@ const index = () => {
             response && setUser(response.user)
         }
         getUser()
-    }, [username, user._id])
+    }, [username])
 
     const {createdCommunities, joinedCommunities, friends} = user
 

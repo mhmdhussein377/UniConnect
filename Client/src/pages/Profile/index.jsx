@@ -3,7 +3,7 @@ import EducationalInfo from "./../../components/EducationalInfo"
 import UserDataSection from "./../../components/UserDataSection"
 import About from "./../../components/About"
 import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection"
-import {useContext, useState} from "react"
+import {useContext, useEffect, useState} from "react"
 import {AuthContext} from "./../../Context/AuthContext"
 import ShowCommunities from "./../../components/ShowCommunites"
 import ShowFriends from "./../../components/ShowFriends"
@@ -13,6 +13,7 @@ import EditUserModal from './components/EditUserModal'
 import LanguagesModal from "./components/LanguagesModal"
 import SkillsModal from "./components/SkillsModal"
 import {useParams} from "react-router-dom"
+import { getRequest } from "../../utils/requests"
 
 const index = () => {
 
@@ -27,9 +28,20 @@ const index = () => {
         setShowLanguagesModal] = useState(false)
     let [showSkillsModal,
         setShowSkillsModal] = useState(false);
+    let [joinedCommunities,
+        setJoinedCommunities] = useState([])
 
-    let {joinedCommunities, createdCommunities, friends} = user
+    let {createdCommunities, friends} = user
     let {skills, languages, bio, university, major} = user.profile
+
+    useEffect(() => {
+        const getUser = async() => {
+            const response = await getRequest(`/user/${user.username}`);
+            console.log(response.user.joinedCommunities)
+            response && setJoinedCommunities(response.user.joinedCommunities);
+        };
+        getUser();
+    }, [user]);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -59,8 +71,7 @@ const index = () => {
                             maxDataToShow={4}
                             currentUser={user
                             ?.usrname === username}
-                            emptyHeadline="Your multilingual talengts await."/>
-                        {createdCommunities
+                            emptyHeadline="Your multilingual talengts await."/> {createdCommunities
                             ?.length > 0 && (<ShowCommunities
                                 withoutUsername={true}
                                 text={"Created communities"}
@@ -80,7 +91,7 @@ const index = () => {
                             major={major}
                             setShowEducationalInfoModal={setShowEducationalInfoModal}
                             emptyHeadline="Share your university and major to showcase your academic background."/>
-                        <ShowFriends friends={friends} />
+                        <ShowFriends friends={friends}/>
                     </div>
                 </div>
             </div>
