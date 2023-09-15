@@ -27,7 +27,10 @@ const index = () => {
         setUserStatus] = useState({isCreator: false, isMember: false, isInvited: false, isRequested: false, privacy: ""})
     let [buttonText,
         setButtonText] = useState("")
-    let [requesters, setRequesters] = useState([])
+    let [requesters,
+        setRequesters] = useState([])
+    let [loading,
+        setLoading] = useState(false)
 
     let [showUpdateCommunityModal,
         setShowUpdateCommunityModal] = useState(false)
@@ -40,14 +43,7 @@ const index = () => {
     let [showRequestedUsersModal,
         setShowRequestedUsersModal] = useState(false)
 
-    let {
-        name,
-        privacy,
-        description,
-        _id,
-        members,
-        requestedUsers
-    } = community
+    let {name, privacy, description, _id, members} = community
 
     useEffect(() => {
         const getCommunity = async() => {
@@ -91,7 +87,7 @@ const index = () => {
         : "private";
 
     useEffect(() => {
-        const { isMember, isInvited, isRequested, privacy } = userStatus;
+        const {isMember, isInvited, isRequested, privacy} = userStatus;
         if (privacy === "public" && !isMember) {
             console.log("first")
             setButtonText("Join community")
@@ -109,33 +105,53 @@ const index = () => {
             setButtonText("Accept invite request")
         }
     }, [userStatus])
-    
+
     const handleJoinLeaveCommunity = async() => {
+        setLoading(true)
         const {isMember, isInvited, isRequested, privacy} = userStatus
-        if (!isMember && privacy === "public") {
-            setUserStatus(prev => ({
-                ...prev,
-                isMember: true
-            }))
-            const response = await postRequest(`/community/send-community-join-request/${id}`)
-            console.log(response)
-        } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
-            setUserStatus(prev => ({...prev, isRequested: true}))
-            const response = await postRequest(`/community/send-community-join-request/${id}`);
-            console.log(response)
-        } else if (isMember) {
-            setUserStatus(prev => ({...prev,isMember: false, isInvited: false, isRequested: false
-            }))
-            const response = await postRequest(`/community/leave/${id}`)
-            console.log(response)
-        } else if (isInvited) {
-            setUserStatus(prev => ({...prev,isMember: true}))
-            const response = await postRequest(`/community/accept-community-invite-request/${id}`)
-            console.log(response)
-        }else if(isRequested) {
-            setUserStatus(prev => ({...prev, isRequested: false}))
-            const response = await postRequest(`/community/cancel-community-join-request/${id}`)
-            console.log(response)
+        try {
+            if (!isMember && privacy === "public") {
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isMember: true
+                }));
+                const response = await postRequest(`/community/send-community-join-request/${id}`);
+                console.log(response);
+            } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isRequested: true
+                }));
+                const response = await postRequest(`/community/send-community-join-request/${id}`);
+                console.log(response);
+            } else if (isMember) {
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isMember: false,
+                    isInvited: false,
+                    isRequested: false
+                }));
+                const response = await postRequest(`/community/leave/${id}`);
+                console.log(response);
+            } else if (isInvited) {
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isMember: true
+                }));
+                const response = await postRequest(`/community/accept-community-invite-request/${id}`);
+                console.log(response);
+            } else if (isRequested) {
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isRequested: false
+                }));
+                const response = await postRequest(`/community/cancel-community-join-request/${id}`);
+                console.log(response);
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
     }
 
@@ -190,6 +206,7 @@ const index = () => {
                                         {< div > {
                                             !userStatus.isCreator && (
                                                 <button
+                                                    disabled={loading}
                                                     onClick={handleJoinLeaveCommunity}
                                                     className="bg-primary text-white px-2 py-1.5 rounded-md">
                                                     {buttonText}
