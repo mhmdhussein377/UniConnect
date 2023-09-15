@@ -7,7 +7,12 @@ const index = ({friends}) => {
             <div className="flex flex-col gap-3">
                 <div className="font-semibold text-lg">Friends</div>
                 <div className="flex flex-col gap-4">
-                    {friends.length > 0 && friends.map((friend, index) => (<Member key={index} member={friend} />))}
+                    {friends.length > 0
+                        ? friends.map((friend, index) => (<Member key={index} member={friend}/>))
+                        : <div className="flex flex-col items-center gap-1 mt-2">
+                            <h1 className="font-semibold text-xl">Your Friendship Story Begins Here</h1>
+                            <h3 className="font-medium text-lg">Add Friends Today!</h3>
+                        </div>}
                 </div>
             </div>
         </div>
