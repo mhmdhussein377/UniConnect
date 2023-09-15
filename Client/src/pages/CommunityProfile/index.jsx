@@ -19,7 +19,7 @@ import RequestedUsersModal from "./modals/RequestedUsersModal"
 const index = () => {
 
     const {id} = useParams()
-    const {user} = useContext(AuthContext)
+    const {user, dispatch} = useContext(AuthContext)
 
     let [community,
         setCommunity] = useState({})
@@ -132,6 +132,7 @@ const index = () => {
                     isRequested: false
                 }));
                 const response = await postRequest(`/community/leave/${id}`);
+                dispatch({type: 'EDIT_JOINED_COMMUNITIES', payload: id})
                 console.log(response);
             } else if (isInvited) {
                 setUserStatus((prev) => ({
@@ -154,6 +155,8 @@ const index = () => {
             setLoading(false)
         }
     }
+
+    console.log(userStatus)
 
     return (
         <div className="flex flex-col min-h-screen">

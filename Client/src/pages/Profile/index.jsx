@@ -41,7 +41,9 @@ const index = () => {
             dispatch({type: "SET_JOINED_COMMUNITIES", payload: response.user.joinedCommunities})
         };
         getUser();
-    }, [user]);
+    }, []);
+
+    console.log(joinedCommunities)
 
     return (
         <div className="flex flex-col min-h-screen">
