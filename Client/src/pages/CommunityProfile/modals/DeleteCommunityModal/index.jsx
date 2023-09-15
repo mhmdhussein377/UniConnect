@@ -1,10 +1,13 @@
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {handleCloseModal} from "../../../../utils/closeModal";
 import {MdOutlineClose} from "react-icons/md";
 import {postRequest} from "../../../../utils/requests";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../../Context/AuthContext";
 
 const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
+
+    const {dispatch} = useContext(AuthContext)
 
     let [input,
         setInput] = useState("")
@@ -15,8 +18,9 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
     
     const handleDeleteCommunity = async() => {
         if (input === communityName) {
-            const response = await postRequest(`/community/delete/${communityId}`, {communityName});
-            response && navigate('/home')
+            dispatch({ type: "DELETE_COMMUNITY", payload: communityId });
+            navigate('/home')
+            await postRequest(`/community/delete/${communityId}`, {communityName});
         }
     }
     

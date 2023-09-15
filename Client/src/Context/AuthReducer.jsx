@@ -58,7 +58,7 @@ const AuthReducer = (state, action) => {
                 ...state,
                 user: {
                     ...state.user,
-                    createdCommunities: state.createdCommunities.filter(comm => comm._id !== action.payload)
+                    createdCommunities: state.user.createdCommunities.filter(comm => comm._id !== action.payload)
                 }
             }
         case "LOGOUT":
