@@ -53,6 +53,14 @@ const AuthReducer = (state, action) => {
                     }
                 }
             };
+        case "DELETE_COMMUNITY":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    createdCommunities: state.createdCommunities.filter(comm => comm._id !== action.payload)
+                }
+            }
         case "LOGOUT":
             return {user: null, isFetching: false, error: false};
         default:
