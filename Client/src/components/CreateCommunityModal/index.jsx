@@ -31,11 +31,11 @@ const index = ({setShowCommunityModal}) => {
             }, 3000)
             return;
         }
-
+        
+        setShowCommunityModal(false)
         const response = await postRequest("/community/create", inputs)
         const {name: communityName, privacy: communityPrivacy, _id, creator} = response
         dispatch({type: "CREATE_COMMUNITY", payload: {name: communityName, privacy: communityPrivacy, _id, creator}})
-        response && setShowCommunityModal(false)
     }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowCommunityModal);

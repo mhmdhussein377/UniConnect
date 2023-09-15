@@ -533,9 +533,10 @@ const AcceptCommunityJoinRequests = async(req, res) => {
             community
                 .members
                 .push(requestedUser._id)
-            community.invitedUsers = community
-                .invitedUsers
-                .filter(user => user !== requestedUser._id)
+            community.requestedUsers = community
+                .requestedUsers
+                .filter(user => user.toString() !== requestedUser._id.toString())
+            console.log(community.requestedUsers, requestedUser)
             await community.save()
 
             requestedUser

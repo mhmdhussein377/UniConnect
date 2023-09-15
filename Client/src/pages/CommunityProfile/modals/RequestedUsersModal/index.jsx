@@ -4,7 +4,7 @@ import {MdOutlineClose} from "react-icons/md";
 import User from "./../../User"
 import {postRequest} from "../../../../utils/requests";
 
-const index = ({setShowRequestedUsersModal, users, setCommunity, communityId}) => {
+const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, communityId}) => {
 
     let [selectedUsers,
         setSelectedUsers] = useState([])
@@ -31,6 +31,7 @@ const index = ({setShowRequestedUsersModal, users, setCommunity, communityId}) =
                 .filter(user => !selectedUsers.includes(user._id))
         }))
         setShowRequestedUsersModal(false)
+        // setUsers(prev => prev.filter(user => !selectedUsers.includes(user)))
 
         const response = await postRequest(`/community/accept-community-join-requests/${communityId}`, {
             requestedUsersIds: selectedUsers.map((user) => user._id)

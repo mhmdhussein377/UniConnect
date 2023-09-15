@@ -27,6 +27,7 @@ const index = () => {
         setUserStatus] = useState({isCreator: false, isMember: false, isInvited: false, isRequested: false, privacy: ""})
     let [buttonText,
         setButtonText] = useState("")
+    let [requesters, setRequesters] = useState([])
 
     let [showUpdateCommunityModal,
         setShowUpdateCommunityModal] = useState(false)
@@ -57,6 +58,7 @@ const index = () => {
             const community = response.community;
 
             setCommunity(community);
+            // setRequesters(community.requestedUsers)
 
             setUserStatus((prev) => ({
                 ...prev,
@@ -87,8 +89,6 @@ const index = () => {
     const getPrivacyStatus = (community) => community.privacy === "public"
         ? "public"
         : "private";
-
-    console.log(userStatus)
 
     useEffect(() => {
         const { isMember, isInvited, isRequested, privacy } = userStatus;
@@ -139,9 +139,7 @@ const index = () => {
         }
     }
 
-    console.log(community)
-
-    console.log(userStatus)
+    console.log("requesteeers", requesters)
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -277,6 +275,7 @@ const index = () => {
                 setShowRequestedUsersModal={setShowRequestedUsersModal}
                 setCommunity={setCommunity}
                 communityId={_id}
+                setUsers={setRequesters}
                 users={requestedUsers}/>)}
         </div>
     );
