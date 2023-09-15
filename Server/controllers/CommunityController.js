@@ -719,16 +719,19 @@ const AcceptCommunityInviteRequest = async(req, res) => {
                 .splice(inviteIndex, 1);
         }
 
-        await Notification.findByIdAndUpdate({
-            recipient: community.creator,
+        await Notification.findOneAndUpdate({
+            recipient: userId,
+            sender: community.creator,
             community: communityId,
             type: "community invite request"
         }, {
             $set: {
-                content: `${user.name} have accepted an invitation to join the community "${community.name}"`,
-                status: "accepted"
+                isRead: true
             }
         });
+
+        const notification = new Notification({sender: userId, recipient: community.creator, community: communityId, type: "community invite accepted", content: `${user.username} has accepted an invitation to join the community "${community.name}"`})
+        await notification.save()
 
         user
             .joinedCommunities

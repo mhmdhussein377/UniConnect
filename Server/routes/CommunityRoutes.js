@@ -35,15 +35,20 @@ router.post("/:communityId/add-members", AddMembers);
 // done
 router.post("/:communityId/remove-members", RemoveMembers);
 
+// ##############
+
 router.post("/leave/:communityId", LeaveCommunity)
 
 router.post('/send-community-join-request/:communityId', SendCommunityJoinRequest)
 
 router.post("/cancel-community-join-request/:communityId", CancelCommunityJoinRequest);
 
+// #############
+
 router.post("/accept-community-join-request/:communityId/:requesterUserId", AcceptCommunityJoinRequest)
 
 router.post("/accept-community-join-requests/:communityId", AcceptCommunityJoinRequests)
+
 
 // done
 router.post("/send-community-invite-request/:communityId/:recipientUserId", SendCommunityInviteRequest);
@@ -51,6 +56,6 @@ router.post("/send-community-invite-request/:communityId/:recipientUserId", Send
 // done
 router.post("/cancel-community-invite-request/:communityId/:recipientUserId", CancelCommunityInviteRequest)
 
-router.post("/accept-community-invite-request/:communityId/:requesterUserId", AcceptCommunityInviteRequest);
+router.post("/accept-community-invite-request/:communityId", AcceptCommunityInviteRequest);
 
 module.exports = router;

@@ -5,7 +5,7 @@ import Member from "./../../components/Member"
 import {useContext, useEffect, useState} from "react";
 import {HiPencil} from "react-icons/hi"
 import {useParams} from "react-router-dom";
-import {getRequest} from "./../../utils/requests"
+import {getRequest, postRequest} from "./../../utils/requests"
 import About from "./../../components/About"
 import {AuthContext} from "./../../Context/AuthContext"
 
@@ -98,15 +98,35 @@ const index = () => {
             setButtonText("Request to join")
         } else if (isMember) {
             setButtonText("Leave community")
-        }else if(isRequested) {
+        } else if (isRequested) {
             setButtonText("Cancel request")
-        }else if(isInvited) {
+        } else if (isInvited) {
             setButtonText("Accept invite request")
         }
     }, [userStatus])
 
-    const handleJoinLeaveCommunity = () => {
-        
+    const handleJoinLeaveCommunity = async() => {
+        if (!isMember && privacy === "public") {
+            setUserStatus(prev => ({
+                ...prev,
+                isMember: true
+            }))
+            const response = await postRequest(`/community/send-community-join-request/${id}`)
+            console.log(response)
+        } else if (!isMember && privacy === "private") {
+            setUserStatus(prev => ({...prev,isRequested: true}))
+            const response = await postRequest(`/community/send-community-join-request/${id}`);
+            console.log(response)
+        } else if (isMember) {
+            setUserStatus(prev => ({...prev,isMember: false
+            }))
+            const response = await postRequest(`/community/leave/${id}`)
+            console.log(response)
+        } else if (isInvited) {
+            setUserStatus(prev => ({...prev,isMember: true}))
+            const response = await postRequest(`/community/accept-community-invite-request/${id}`)
+            console.log(response)
+        }
     }
 
     return (
@@ -155,7 +175,7 @@ const index = () => {
                                                 className="cursor-pointer"
                                                 size={30}/>
                                         </div>
-                                        {<div> {
+                                        {< div > {
                                             !userStatus.isCreator && (
                                                 <button
                                                     onClick={handleJoinLeaveCommunity}
@@ -163,7 +183,7 @@ const index = () => {
                                                     {buttonText}
                                                 </button>
                                             )
-                                        } </div>}
+                                        } < /div>}
                                     </div>
                                 </div>
                             </div>
