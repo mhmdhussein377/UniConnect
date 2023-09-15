@@ -30,6 +30,7 @@ const index = ({setShowCommunityModal}) => {
         }
 
         const response = await postRequest("/community/create", inputs)
+        console.log(response)
         response && setShowCommunityModal(false)
     }
 

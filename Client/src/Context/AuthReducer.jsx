@@ -53,6 +53,14 @@ const AuthReducer = (state, action) => {
                     }
                 }
             };
+        case "CREATE_COMMUNITY":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    createdCommunities: state.user.createdCommunities.unshift(action.payload)
+                }
+            }
         case "DELETE_COMMUNITY":
             return {
                 ...state,
