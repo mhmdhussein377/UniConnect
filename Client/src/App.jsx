@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { AuthContext } from "./Context/AuthContext";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
+import SmNotifications from "./pages/SmNotifications";
 
 function App() {
   
@@ -34,6 +35,7 @@ function App() {
         path="/community/:id"
         element={user ? <CommunityProfile /> : <Navigate to={"/"} />}
       />
+      <Route path="/notifications" element={<SmNotifications />} />
     </Routes>
   );
 }

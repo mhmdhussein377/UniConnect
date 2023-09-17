@@ -28,3 +28,7 @@ body {
 -webkit-box-shadow: -2px 0px 10px 0px rgba(0,0,0,0.55);
 -moz-box-shadow: -2px 0px 10px 0px rgba(0,0,0,0.55);
 }
+
+.sm-notifications {
+    min-height: calc(100vh - 70px)
+}

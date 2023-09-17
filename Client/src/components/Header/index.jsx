@@ -1,40 +1,51 @@
 import Logo from "./../../assets/UniConnectLogo.png";
-import SearchBar from "./../SearchBar"
+import SearchBar from "./../SearchBar";
 import {MdLightMode} from "react-icons/md";
 import {AiFillBell} from "react-icons/ai";
 import {AiFillHome} from "react-icons/ai";
-import {Link} from "react-router-dom";
-import Notifications from "./../Notifications"
-import {useContext, useEffect, useRef, useState} from "react";
-import { AuthContext } from "../../Context/AuthContext";
+import {Link, useNavigate} from "react-router-dom";
+import Notifications from "./../Notifications";
+import {Fragment, useContext, useEffect, useRef, useState} from "react";
+import {AuthContext} from "../../Context/AuthContext";
 
 const index = ({profile}) => {
+    const {user} = useContext(AuthContext);
+    const {username} = user;
 
-    const {user} = useContext(AuthContext)
-    const {username} = user
-
-    const [showNotifications,setShowNotifications] = useState(false);
+    const [showNotifications,
+        setShowNotifications] = useState(false);
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
+    const navigate = useNavigate()
 
     const toggleNotifications = () => {
-        setShowNotifications(prev => !prev)
-    }
+        setShowNotifications((prev) => !prev);
+    };
 
     const handleClickOutside = (e) => {
         if (notificationsRef.current && !notificationsRef.current.contains(e.target) && bellIconRef.current && !bellIconRef.current.contains(e.target)) {
-            setShowNotifications(false)
+            setShowNotifications(false);
         }
-    }  
+    };
 
     const handleBellClick = (event) => {
-        event.stopPropagation()
-        toggleNotifications()
-    }
+        event.stopPropagation();
+        toggleNotifications();
+
+        if(window.innerWidth < 740) {
+            navigate("/notifications")
+        }
+    };
 
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside)
-    }, [])
+        document.addEventListener("click", handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        if(window.innerWidth < 740) {
+            setShowNotifications(false)
+        }
+    })
 
     return (
         <div
@@ -63,12 +74,18 @@ const index = ({profile}) => {
                             <AiFillBell size={28} color="#575D65"/>
                         </div>
                         {showNotifications && (
-                            <div ref={notificationsRef}>
-                                <Notifications/>
-                            </div>
+                            <Fragment>
+                                <div ref={notificationsRef}>
+                                    <div className="max-[740px]:hidden">
+                                        <Notifications/>
+                                    </div>
+                                </div>
+                            </Fragment>
                         )}
                     </div>
-                    <Link to={`/profile/${username}`} className="w-[40px] h-[40px] rounded-full overflow-hidden">
+                    <Link
+                        to={`/profile/${username}`}
+                        className="w-[40px] h-[40px] rounded-full overflow-hidden">
                         <img
                             className="w-full h-full object-cover"
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"

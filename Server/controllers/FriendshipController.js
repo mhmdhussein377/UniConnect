@@ -155,21 +155,19 @@ const AcceptFriendRequest = async(req, res) => {
         if (!existingFriendship) 
             return res.status(400).json({message: "Friendship doesn't exist"})
 
-        if (existingFriendship && existingFriendship.status === "accepted") {
+        if (existingFriendship.status === "accepted") {
             return res
                 .status(400)
                 .json({message: "You are already friends"})
         }
 
-        if (existingFriendship && existingFriendship.status === "rejected") {
+        if (existingFriendship.status === "rejected") {
             return res
                 .status(400)
                 .json({message: "You can't reject an accepted relationship"});
         }
 
-        if (existingFriendship && existingFriendship.status === "pending") {
-            await existingFriendship.updateOne({status: "accepted"})
-        }
+        await existingFriendship.updateOne({status: "accepted"})
 
         const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
 
@@ -215,11 +213,11 @@ const CancelFriendRequest = async(req, res) => {
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    // requester: currentUser
+                    requester: currentUser,
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    // requester: recipientUserId
+                    requester: currentUser,
                 }
             ]
         });
@@ -348,8 +346,6 @@ const RejectFriendRequest = async(req, res) => {
 
         if (!existingNotification) 
             return res.status(400).json({message: "Notification not found"});
-        
-        console.log(existingNotification)
 
         existingNotification.status = "rejected";
         existingNotification.isRead = true;

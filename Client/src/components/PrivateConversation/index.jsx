@@ -92,8 +92,8 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
             ?._id
     ]);
 
-    // //////////////////////////////////////////////////////////////////////////////
-    // //////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////////
+    // / //////////////////////////////
     const location = useLocation();
     useEffect(() => {
         setConversation(JSON.parse(localStorage.getItem("conversationData")));
@@ -146,21 +146,23 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                 </div>
                 <form
                     onSubmit={handleSendMessage}
-                    className="flex items-center mt-auto h-[70px] px-6  bg-[#F4F3FC]">
+                    className="flex items-center mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC]">
                     <div
-                        className="flex items-center gap-4 pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white">
+                        className="flex items-center gap-2 sm:gap-4 pr-2 sm:pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white">
                         <input
                             value={messageInput}
                             onChange={(e) => setMessageInput(e.target.value)}
-                            className="flex-1 h-[100%] px-4 border-none outline-none bg-transparent placeholder:text-[#737373] placeholder:font-medium"
+                            className="flex-1 h-[100%] px-2 sm:px-4 border-none outline-none bg-transparent placeholder:text-[#737373] placeholder:font-medium "
                             type="text"
                             placeholder="Send a message"/>
-                        <GrAttachment size={25}/>
-                        <BsEmojiSmile size={25}/>
+                        <div className="flex items-center gap-3">
+                            <GrAttachment size={25}/>
+                            <BsEmojiSmile size={25}/>
+                        </div>
                     </div>
                     <button
                         type="submit"
-                        className="h-[50px] px-10 py-2 bg-primary text-white rounded-tr-md rounded-br-md flex items-center justify-center gap-3 text-lg font-medium">
+                        className="h-[50px] px-4 sm:px-10 py-2 bg-primary text-white rounded-tr-md rounded-br-md flex items-center justify-center gap-3 text-base sm:text-lg font-medium">
                         <BsFillSendFill size={20}/>
                         Send
                     </button>

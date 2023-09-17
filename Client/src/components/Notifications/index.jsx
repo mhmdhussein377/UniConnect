@@ -30,16 +30,15 @@ const index = () => {
         getNotifications()
     }, [])
 
-    useEffect(() => {
-        console.log("hereee")
-        socket.on("friend_request_received", (data) => {
-            console.log("Received friend request: ", data.data)
-        })
+    // useEffect(() => {
+    //     socket.on("friend_request_received", (data) => {
+    //         console.log("Received friend request: ", data.data)
+    //     })
 
-        return () => {
-            socket.off("friend_request_received")
-        }
-    }, [])
+    //     return () => {
+    //         socket.off("friend_request_received")
+    //     }
+    // }, [])
 
     return (
         <div
