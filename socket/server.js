@@ -25,10 +25,25 @@ const io = require("socket.io")(server, {
     }
 });
 
-const Conversations = require("./models/PrivateConversation");
-const Users = require("./models/User");
+const {getUsers, addUser} = require("./controllers/UserController");
 
+io.on("connection", (socket) => {
+    socket.on("addUser", (userId) => {
+        addUser(userId, socket.id)
+    })
 
+    socket.on("sendMessage", async({sender, receiver, content}) => {
+        try {
+            const user = await getUsers(sender, receiver);
+            io
+                .to(user[0].socket)
+                .emit("getMessage", {sender, content});
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    });
+})
 
 server.listen(3001, () => {
     console.log(`Socket.io server is running`);
