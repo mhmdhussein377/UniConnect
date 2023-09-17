@@ -6,15 +6,19 @@ import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "./../../Context/AuthContext";
 import {useParams} from "react-router-dom";
-import {getRequest} from "./../../utils/requests"
+import {getRequest, postRequest} from "./../../utils/requests"
 import ShowCommunities from "./../../components/ShowCommunites"
 import ShowFriends from "./../../components/ShowFriends"
+import Member from "./../../components/Member"
 
 const index = () => {
 
     const {username} = useParams()
     const {user: currentUser} = useContext(AuthContext)
-    let [user, setUser] = useState({})
+    let [user,
+        setUser] = useState({})
+    let [suggestedUsers,
+        setSuggestedUsers] = useState([])
 
     useEffect(() => {
         const getUser = async() => {
@@ -28,11 +32,15 @@ const index = () => {
 
     useEffect(() => {
         const getSuggestedUsers = async() => {
-            const response = await getRequest(`/user/suggested-users`);
-            console.log(response, "suggested frieeeends")
+            const response = await postRequest(`/user/suggested-users`, {
+                excludedUser: user
+                    ?._id
+            });
+            response && setSuggestedUsers(response)
         }
         getSuggestedUsers()
-    }, [])
+    }, [user
+            ?._id])
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -92,7 +100,16 @@ const index = () => {
                             ?.profile
                                 ?.major}
                             emptyHeadline="No educational background available"/>
-                        <ShowFriends friends={friends || []}/>
+                        <ShowFriends friends={friends || []}/> 
+                        {suggestedUsers.length > 0 && <div
+                            className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
+                            <div className="flex flex-col gap-3">
+                                <div className="font-semibold text-lg">Suggested friends</div>
+                                <div className="flex flex-col gap-4">
+                                    {suggestedUsers.map((friend, index) => (<Member key={index} member={friend}/>))}
+                                </div>
+                            </div>
+                        </div>}
                     </div>
                 </div>
             </div>

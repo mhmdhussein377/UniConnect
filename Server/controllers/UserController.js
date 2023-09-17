@@ -298,9 +298,10 @@ const SearchUsersCommunities = async(req, res) => {
 }
 
 const GetSuggestedUsers = async(req, res) => {
-    const currentUser = req
-        ?.user
-            ?.id
+    const currentUser = req?.user?.id
+    const {excludedUser} = req.body
+
+    console.log(excludedUser)
 
     try {
         const user = await User.findById(currentUser)
@@ -312,7 +313,7 @@ const GetSuggestedUsers = async(req, res) => {
 
         const suggestedUsers = await User.find({
             _id: {
-                $ne: currentUser
+                $nin: [currentUser, excludedUser]
             },
             "profile.skills": {
                 $in: user.profile.skills
