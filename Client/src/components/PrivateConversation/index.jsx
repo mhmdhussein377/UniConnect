@@ -140,9 +140,12 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                 <div
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
-                        ?.map((message) => (
-                            <div>Message</div>
-                        ))}
+                        ?.map((message) => (<Message
+                            key={message._id}
+                            own={message.sender._id}
+                            content={message.content}
+                            sender={message.sender.name}
+                            date={format(message.createdAt)}/>))}
                 </div>
                 <form
                     onSubmit={handleSendMessage}

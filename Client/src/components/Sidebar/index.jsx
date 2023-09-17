@@ -28,7 +28,13 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
 
     const navigate = useNavigate();
 
-    
+    useEffect(() => {
+        const getPrivateConversations = async() => {
+            const response = await getRequest(`/privateChat/privateConversationDetails`)
+            setFriends(response)
+        }
+        getPrivateConversations()
+    }, [location.state])
 
     return (
         <div
