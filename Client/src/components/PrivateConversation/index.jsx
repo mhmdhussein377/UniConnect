@@ -44,6 +44,19 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         getPrivateConversations()
     }, [conversation])
 
+    const handleSendMessage = async(e) => {
+        e.preventDefault()
+
+        const message = {
+            sender: user._id,
+            receiver: conversation?.member._id,
+            content: messageInput.toString().trim()
+        }
+        await postRequest("/privateChat/newPrivateMessage", message, true, null)
+        socket.current.emit("sendMessage", message)
+        setMessageInput("")
+    }
+
     return !conversation
         ? (
             <div className="flex-[8.8] flex flex-col">
@@ -88,7 +101,7 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                         ?.map((message) => (<div>Message</div>))}
                 </div>
                 <form
-                    // onSubmit={handleSendMessage}
+                    onSubmit={handleSendMessage}
                     className="flex items-center mt-auto h-[70px] px-6  bg-[#F4F3FC]">
                     <div
                         className="flex items-center gap-4 pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white">
