@@ -36,6 +36,17 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
         getPrivateConversations()
     }, [location.state])
 
+    const handleSelectedConversation = async(index, ID) => {
+        localStorage.setItem("conversationData", JSON.stringify(friends[index]))
+        navigate("/home", {state: friends[index]})
+        const data = {
+            userOne: user
+                ?._id,
+            userTwo: ID
+        }
+        await postRequest(`/privateChat/readPrivateMessage`, data, true, null)
+    }
+
     return (
         <div
             className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar ${openSidebar && "left-[0%]"} transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20]`}>
@@ -58,9 +69,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                 className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white">
                 {type === "inbox" && (friends
                     ?.length > 0
-                        ? (friends.map((item, index) => (
-                            <div key={index}>Friend</div>
-                        )))
+                        ? (friends.map((item, index) => <div key={index}>Friend</div>))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">
                                 <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
@@ -72,7 +81,16 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                             </div>
                         ))}
                 {type === "community" && (communities.length > 0
-                    ? (communities.map((item, index) => (<div key={index}>Hi</div>)))
+                    ? (communities.map((item, index) => (
+                        <div key={index} onClick={() => handleSelectedConversation(index, item.member._id)}>
+                            <Friend
+                                name={item.member.name}
+                                lastMessage={item.lastMessage}
+                                messageNum={item.unreadMessages}
+                                sender={item.member._id}
+                                date={format(item.member.createdAt)}/>
+                        </div>
+                    )))
                     : (
                         <div className="h-full flex gap-4 items-center justify-center p-4">
                             <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
