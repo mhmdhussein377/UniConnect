@@ -57,6 +57,19 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         setMessageInput("")
     }
 
+    //////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        socket.current.on("getMessage", (data) => {
+            setArrivalMessage({
+                sender: data.senderId,
+                content: data.text,
+                isRead: false,
+                createdAt: format(Date.now())
+            })
+        })
+    }, [])
+
     return !conversation
         ? (
             <div className="flex-[8.8] flex flex-col">
