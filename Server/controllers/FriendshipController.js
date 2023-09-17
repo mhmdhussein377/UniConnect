@@ -2,6 +2,17 @@ const User = require('../models/User')
 const Friendship = require('./../models/Friendship')
 const Notification = require("./../models/Notification")
 
+const app = require("./../app")
+
+const http = require("http");
+const server = http.createServer(app);
+const io = require("socket.io")(server, {
+    pingTmeout: 60000,
+    cors: {
+        origin: ["http://localhost:5173"]
+    }
+});
+
 const GetFriendship = async(req, res) => {
     const {username} = req.params
     const currentUserId = req
@@ -71,6 +82,11 @@ const SendFriendRequest = async(req, res) => {
             const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
             await notification.save();
 
+            // io.to(recipientUserId).emit("friend_request_received", {
+            //     data: "woww",
+            // });
+            // console.log("friend request emitted up")
+
             return res
                 .status(200)
                 .json({message: "Friend request sent successfully"});
@@ -83,9 +99,12 @@ const SendFriendRequest = async(req, res) => {
         const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
         await notification.save()
 
-        res
-            .status(200)
-            .json({message: "Friend request sent successfully"});
+        // io.to(recipientUserId).emit("friend_request_received", {
+        //     data: "woww",
+        // });
+        // console.log("friend request emitted down")
+
+        res.status(200).json({message: "Friend request sent successfully"});
     } catch (error) {
         res
             .status(500)
@@ -157,51 +176,6 @@ const AcceptFriendRequest = async(req, res) => {
 
         const acceptanceNotification = new Notification({recipient: recipientUserId, sender: currentUser, type: "friend request accepted", content: `You are now friends with ${sender.name}`});
         await acceptanceNotification.save();
-
-        res
-            .status(200)
-            .json({message: "Friendship status updated and notifications created successfully."});
-    } catch (error) {
-        res
-            .status(500)
-            .json({message: "Internal server error"});
-    }
-}
-
-const RejectFriendRequest = async(req, res) => {
-    const currentUser = req
-        ?.user
-            ?.id;
-    const {recipientUserId} = req.params;
-
-    try {
-        const existingFriendship = await Friendship.findOne({
-            $or: [
-                {
-                    userOne: currentUser,
-                    userTwo: recipientUserId,
-                    // requester: recipientUserId
-                }, {
-                    userOne: recipientUserId,
-                    userTwo: currentUser,
-                    // requester: currentUser
-                }
-            ]
-        });
-
-        if (!existingFriendship) 
-            return res.status(400).json({message: "Friendship doesn't exist"});
-        
-        await existingFriendship.updateOne({status: "rejected"});
-
-        const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
-
-        if (!existingNotification) 
-            return res.status(400).json({message: "Notification not found"});
-        
-        existingNotification.status = "rejected"
-        existingNotification.isRead = true;
-        await existingNotification.save();
 
         res
             .status(200)
@@ -319,6 +293,51 @@ const Unfriend = async(req, res) => {
             .json({message: "Internal server error"});
     }
 }
+
+const RejectFriendRequest = async(req, res) => {
+    const currentUser = req
+        ?.user
+            ?.id;
+    const {recipientUserId} = req.params;
+
+    try {
+        const existingFriendship = await Friendship.findOne({
+            $or: [
+                {
+                    userOne: currentUser,
+                    userTwo: recipientUserId,
+                    // requester: recipientUserId
+                }, {
+                    userOne: recipientUserId,
+                    userTwo: currentUser,
+                    // requester: currentUser
+                }
+            ]
+        });
+
+        if (!existingFriendship) 
+            return res.status(400).json({message: "Friendship doesn't exist"});
+        
+        await existingFriendship.updateOne({status: "rejected"});
+
+        const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
+
+        if (!existingNotification) 
+            return res.status(400).json({message: "Notification not found"});
+        
+        existingNotification.status = "rejected";
+        existingNotification.isRead = true;
+        await existingNotification.save();
+
+        res
+            .status(200)
+            .json({message: "Friendship status updated and notifications created successfully."});
+    } catch (error) {
+        res
+            .status(500)
+            .json({message: "Internal server error"});
+    }
+};
 
 module.exports = {
     SendFriendRequest,

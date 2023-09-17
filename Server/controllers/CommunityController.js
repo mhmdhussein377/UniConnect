@@ -268,7 +268,6 @@ const LeaveCommunity = async(req, res) => {
             .filter(member => member.toString() !== userId)
         await community.save()
 
-
         user.joinedCommunities = user
             .joinedCommunities
             .filter(comm => comm.toString() !== communityId)
@@ -286,7 +285,9 @@ const LeaveCommunity = async(req, res) => {
 
 const SendCommunityJoinRequest = async(req, res) => {
     const {communityId} = req.params
-    const userId = req?.user?.id
+    const userId = req
+        ?.user
+            ?.id
 
     try {
         const user = await User.findById(userId)
@@ -388,9 +389,9 @@ const CancelCommunityJoinRequest = async(req, res) => {
             .filter(user => user.toString() !== userId)
         await community.save()
 
-        // i have to make sure about it const userRequestIndex = user
-        // .joinedCommunities     .indexOf(communityId); if (userRequestIndex !== -1) {
-        //    user         .joinedCommunities         .splice(userRequestIndex, 1); }
+        // i have to make sure about it const userRequestIndex = user .joinedCommunities
+        //     .indexOf(communityId); if (userRequestIndex !== -1) {    user
+        // .joinedCommunities         .splice(userRequestIndex, 1); }
 
         await user.save()
 
@@ -465,8 +466,7 @@ const AcceptCommunityJoinRequest = async(req, res) => {
         }, {
             $set: {
                 status: "accepted",
-                isRead: true,
-                content: `Your join request for the community "${community.name}" has been accepted`
+                isRead: true
             }
         });
 
@@ -537,13 +537,35 @@ const AcceptCommunityJoinRequests = async(req, res) => {
             community.requestedUsers = community
                 .requestedUsers
                 .filter(user => user.toString() !== requestedUser._id.toString())
-            console.log(community.requestedUsers, requestedUser)
             await community.save()
 
             requestedUser
                 .joinedCommunities
                 .push(communityId)
             requestedUser.save()
+
+            await Notification.findOneAndUpdate({
+                recipient: ownerId,
+                sender: requestedUser._id,
+                community: communityId,
+                type: "community join request"
+            }, {
+                $set: {
+                    status: "accepted",
+                    isRead: true
+                }
+            });
+
+            const notification = new Notification({
+                recipient: requestedUser._id,
+                sender: ownerId,
+                community: communityId,
+                type: "community join accepted",
+                content: `Your join request
+        for the community "${community.name}" has been accepted`,
+                status: "accepted"
+            });
+            await notification.save();
         }
 
         return res

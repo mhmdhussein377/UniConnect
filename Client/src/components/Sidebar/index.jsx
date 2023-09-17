@@ -1,67 +1,34 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import {AiFillHome} from "react-icons/ai";
 import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
-import {AiOutlinePlus, AiOutlineUser, AiFillHome} from "react-icons/ai";
-import {BiLogOut} from "react-icons/bi"
+import {AiOutlinePlus} from "react-icons/ai";
 import {RiCommunityFill} from "react-icons/ri";
-import {FaUserPlus} from "react-icons/fa"
-import {Link, useNavigate} from "react-router-dom";
-import {Fragment, useContext, useEffect, useRef, useState} from "react";
-import Friend from "./../Friend"
-import Community from "./../Community"
+import {Fragment, useContext, useEffect, useState} from "react";
+import {FaUserPlus} from "react-icons/fa";
+import {Link} from "react-router-dom";
 import {AuthContext} from "../../Context/AuthContext";
 import {getRequest, postRequest} from "../../utils/requests";
+import Friend from "./../Friend";
+import Community from "./../Community";
+import {format} from "timeago.js";
+import {useNavigate, useLocation} from "react-router-dom";
 
-const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
-
+const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
     const {user} = useContext(AuthContext);
-    const {name, username} = user
-
-    let [showSettings,
-        setShowSettings] = useState(false)
-    const navigate = useNavigate()
-    const dotsRef = useRef()
-    const settingsRef = useRef()
-
-    const handleLogout = async() => {
-        const response = await postRequest("/logout", {userId: user._id})
-        localStorage.removeItem("authToken")
-        localStorage.removeItem("user")
-
-        navigate("/")
-    }
-
-    const toggleNotifications = () => {
-        setShowSettings((prev) => !prev);
-    };
-
-    const handleClickOutside = (e) => {
-        if (settingsRef.current && !settingsRef.current.contains(e.target) && dotsRef.current && !dotsRef.current.contains(e.target)) {
-            setShowSettings(false);
-        }
-    };
-
-    const handleDotsClick = (event) => {
-        event.stopPropagation();
-        toggleNotifications();
-    };
-
-    useEffect(() => {
-        document.addEventListener("click", handleClickOutside);
-    }, []);
+    const location = useLocation();
 
     let [friends,
         setFriends] = useState([]);
     let [communities,
-        setCommunities] = useState([]);
+        setCommunities] = useState([ < Community />, < Community highlight = {
+            true
+        } />
+    ]);
 
-    useEffect(() => {
-        const getPrivateConversations = async() => {
-            const response = await getRequest(`/privateChat/privateConversationsDetails`);
-            setFriends(response);
-            console.log(response, "frieeeendssss conversations")
-        };
-        getPrivateConversations();
-    }, []);
+    const navigate = useNavigate();
+
+    
 
     return (
         <div
@@ -69,32 +36,35 @@ const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
             <div
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
-                    onClick={() => setType("community")}
+                    onClick={(e) => setType("community")}
                     className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent ${type === "community" && "border-opacity-100 border-b-primary text-primary"}`}>
                     <AiFillHome size={25}/>
                     Communities
                 </div>
                 <div
-                    onClick={() => setType("inbox")}
-                    className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent ${type === "inbox" && "border-opacity-100 border-b-primary text-primary"}`}>
+                    onClick={(e) => setType("inbox")}
+                    className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opactiy-0 border-transparent border-b-[3px] font-medium text-lg cursor-pointer ${type === "inbox" && "text-primary border-b-primary border-opacity-100"}`}>
                     <MdEmail size={25}/>
                     Inbox
                 </div>
             </div>
             <div
                 className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white">
-                {type === "inbox" && (friends.length > 0
-                    ? (friends.map((item) => item))
-                    : (
-                        <div className="h-full flex gap-4 items-center justify-center p-4">
-                            <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
-                                <FaUserPlus className="text-primary" size={45}/>
+                {type === "inbox" && friends
+                    ?.length > 0
+                        ? (friends.map((item, index) => (
+                            <div key={index}>Friend</div>
+                        )))
+                        : (
+                            <div className="h-full flex gap-4 items-center justify-center p-4">
+                                <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
+                                    <FaUserPlus className="text-primary" size={45}/>
+                                </div>
+                                <h1 className="font-medium text-[22px]">
+                                    Connect with Others to Expand Your Circle!
+                                </h1>
                             </div>
-                            <h1 className="font-medium text-[22px]">
-                                Connect with Others to Expand Your Circle!
-                            </h1>
-                        </div>
-                    ))}
+                        )}
                 {type === "community" && (communities.length > 0
                     ? (communities.map((item) => item))
                     : (
@@ -125,49 +95,25 @@ const index = ({type, setType, setShowCommunityModal, openSidebar}) => {
                 className="border-t-[2px] flex items-center justify-between px-4 py-3 bg-white ">
                 <div className="flex items-center gap-3 w-full">
                     <Link
-                        to={`/profile/${username}`}
+                        to={`/profile?username=${user.username}`}
                         className="w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center">
                         <img
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                             alt="profile-picture"/>
                     </Link>
                     <div className="flex flex-col">
-                        <div>
-                            <Link to={`/profile/${username}`} className="text-lg font-semibold">
-                                {name}
-                            </Link>
-                            <p className="text-[#737373] font-medium">{username}</p>
-                        </div>
+                        <Link
+                            to={`/profile?username=${user.username}`}
+                            className="text-lg font-semibold">
+                            {user.name}
+                        </Link>
+                        <p className="text-[#737373] font-medium">{user.username}</p>
                     </div>
                 </div>
-                <div className="relative">
-                    <div ref={dotsRef} onClick={handleDotsClick}>
-                        <BsThreeDots className="cursor-pointer select-none" size={30}/>
-                    </div>
-                    {showSettings
-                        ? (
-                            <div
-                                ref={settingsRef}
-                                className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
-                                <Link
-                                    to={`/profile/${username}`}
-                                    className="pb-2 border-b-2 flex gap-2 items-center">
-                                    <AiOutlineUser size={25}/>
-                                    Profile
-                                </Link>
-                                <div
-                                    onClick={handleLogout}
-                                    className="pt-2 flex items-center gap-2 cursor-pointer">
-                                    <BiLogOut size={25}/>
-                                    Logout
-                                </div>
-                            </div>
-                        )
-                        : null}
-                </div>
+                <BsThreeDots className="cursor-pointer" size={30}/>
             </div>
         </div>
     );
-}
+};
 
-export default index
+export default index;

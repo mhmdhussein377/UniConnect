@@ -11,10 +11,11 @@ router.post("/send-friend-request/:recipientUserId", SendFriendRequest)
 router.post("/accept-friend-request/:recipientUserId", AcceptFriendRequest)
 
 // done
-router.post("/reject-friend-request/:recipientUserId", RejectFriendRequest)
 
 router.post("/cancel-friend-request/:recipientUserId", CancelFriendRequest)
 
 router.post("/unfriend/:friendUserId", Unfriend)
+
+router.post("/reject-friend-request/:recipientUserId", RejectFriendRequest)
 
 module.exports = router;

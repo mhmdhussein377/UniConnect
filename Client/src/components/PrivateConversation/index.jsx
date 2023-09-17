@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import {GrAttachment} from "react-icons/gr";
 import {BsEmojiSmile} from "react-icons/bs";
 import {BsFillSendFill} from "react-icons/bs";
 import {CgSidebarOpen} from "react-icons/cg";
 import Message from "./../../components/Message";
 import {useContext, useEffect, useState, useRef} from "react";
-import {postRequest} from "../../utils/requests";
+import {postRequest} from "./../../utils/requests";
 import {AuthContext} from "./../../Context/AuthContext";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 
@@ -22,66 +24,9 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
     const [arrivalMessage,
         setArrivalMessage] = useState(null);
 
-    useEffect(() => {
-        const getPrivateConversations = async() => {
-            const data = {
-                userOne: user._id,
-                userTwo: conversation.member._id
-            };
-            const response = await postRequest(`messages/privateConversationsMessages`, data, true, null);
-            setMessages(response);
-        };
-        getPrivateConversations();
-    }, [conversation, user._id]);
+    const navigate = useNavigate();
 
-    const handleSendMessage = async(e) => {
-        e.preventDefault();
-        const message = {
-            sender: user._id,
-            receiver: conversation.member._id,
-            content: messageInput
-                .toString()
-                .trim()
-        };
-        console.log(message);
-        await postRequest("messages/newPrivateMessage", message, true, null);
-        setMessageInput("");
-    };
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////
-    useEffect(() => {
-        socket.current = io("ws://localhost:3000");
-        socket
-            .current
-            .on("getMessage", (data) => {
-                setArrivalMessage({
-                    sender: data.senderId,
-                    content: data.text,
-                    isRead: false,
-                    createdAt: Date.now()
-                });
-            });
-    }, []);
-
-    useEffect(() => {
-        arrivalMessage && conversation
-            ?._id === arrivalMessage.sender && setMessages((prevMessages) => [
-                ...prevMessages,
-                arrivalMessage
-            ]);
-    }, [arrivalMessage, conversation?._id]);
-
-    useEffect(() => {
-        socket
-            .current
-            .emit("addUser", user._id);
-    }, [user._id]);
-    ////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////
-    const location = useLocation();
-    useEffect(() => {
-        setConversation(JSON.parse(localStorage.getItem("conversationData")));
-    }, [location.state]);
+    
 
     return !conversation
         ? (
@@ -118,21 +63,16 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                     </div>
                     <CgSidebarOpen
                         className="lg:hidden"
-                        onClick={(e) => setOpenSidebar((prev) => !prev)}
+                        onClick={() => setOpenSidebar((prev) => !prev)}
                         size={30}/>
                 </div>
                 <div
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
-                        ?.map((message) => (<Message
-                            key={message._id}
-                            own={message.sender._id}
-                            content={message.content}
-                            sender={message.sender.name}
-                            date={format(message.createdAt)}/>))}
+                        ?.map((message) => (<div>Message</div>))}
                 </div>
                 <form
-                    onSubmit={handleSendMessage}
+                    // onSubmit={handleSendMessage}
                     className="flex items-center mt-auto h-[70px] px-6  bg-[#F4F3FC]">
                     <div
                         className="flex items-center gap-4 pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white">

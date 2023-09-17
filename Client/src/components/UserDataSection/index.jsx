@@ -67,29 +67,24 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
         try {
             if (friendshipStatus.status === "no friendship") {
                 setFriendshipStatus({status: "pending", requester: currentUser._id});
-                const response = await postRequest(`/friendship/send-friend-request/${user
+                await postRequest(`/friendship/send-friend-request/${user
                     ?._id}`);
-                console.log(response);
             } else if (friendshipStatus.status === "pending" && friendshipStatus.requester === currentUser._id) {
                 setFriendshipStatus({status: "no friendship", requester: ""});
-                const response = await postRequest(`/friendship/cancel-friend-request/${user
+                await postRequest(`/friendship/cancel-friend-request/${user
                     ?._id}`);
-                console.log(response);
             } else if (friendshipStatus.status === "pending" && friendshipStatus.requester !== currentUser._id) {
                 setFriendshipStatus({status: "accepted", requester: ""});
-                const response = await postRequest(`/friendship/accept-friend-request/${user
+                await postRequest(`/friendship/accept-friend-request/${user
                     ?._id}`);
-                console.log(response);
             } else if (friendshipStatus.status === "accepted") {
                 setFriendshipStatus({status: "no friendship", requester: ""});
-                const response = await postRequest(`/friendship/unfriend/${user
+                await postRequest(`/friendship/unfriend/${user
                     ?._id}`);
-                console.log(response);
             } else if (friendshipStatus.status === "rejected") {
                 setFriendshipStatus({status: "pending", requester: currentUser._id});
-                const response = await postRequest(`/friendship/send-friend-request/${user
+                await postRequest(`/friendship/send-friend-request/${user
                     ?._id}`);
-                console.log(response);
             }
             setLoading(false)
         } catch (error) {
