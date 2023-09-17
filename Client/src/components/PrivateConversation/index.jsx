@@ -30,22 +30,22 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         socket.current = io("ws://localhost:3001");
         socket
             .current
-            .emit("addUser", "user._id");
+            .emit("addUser", user._id);
     }, [user._id]);
 
     useEffect(() => {
-        const getPrivateConversations = async() => {
+        const getPrivateConversationMessages = async() => {
             const data = {
                 userOne: user._id,
                 userTwo: conversation.member._id
             };
-            const response = await postRequest(`/privateChat/privateConversationsMessagges`, data, true, null);
+            const response = await postRequest(`/privateChat/privateConversationsMessages`, data, true, null);
             setMessages(response);
             navigate("/home", {
                 state: messages[messages.length - 1]
             });
         };
-        getPrivateConversations();
+        getPrivateConversationMessages();
     }, [conversation]);
 
     const handleSendMessage = async(e) => {

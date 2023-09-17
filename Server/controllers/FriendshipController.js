@@ -70,22 +70,26 @@ const SendFriendRequest = async(req, res) => {
             ]
         })
 
+        if (existingFriendship && existingFriendship.status === "pending") {
+            return res
+                .status(400)
+                .json({message: "There is already a pending relationship"})
+        }
+
         if (sender.friends.includes(recipientUserId)) {
             return res
                 .status(200)
                 .json({message: `You are already frineds`});
         }
 
-        if (existingFriendship) {
+        if (existingFriendship && existingFriendship.status === "rejected") {
             existingFriendship.status = "pending"
             existingFriendship.save()
             const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
             await notification.save();
 
-            // io.to(recipientUserId).emit("friend_request_received", {
-            //     data: "woww",
-            // });
-            // console.log("friend request emitted up")
+            // io.to(recipientUserId).emit("friend_request_received", {     data: "woww",
+            // }); console.log("friend request emitted up")
 
             return res
                 .status(200)
@@ -99,12 +103,12 @@ const SendFriendRequest = async(req, res) => {
         const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
         await notification.save()
 
-        // io.to(recipientUserId).emit("friend_request_received", {
-        //     data: "woww",
-        // });
-        // console.log("friend request emitted down")
+        // io.to(recipientUserId).emit("friend_request_received", {     data: "woww",
+        // }); console.log("friend request emitted down")
 
-        res.status(200).json({message: "Friend request sent successfully"});
+        res
+            .status(200)
+            .json({message: "Friend request sent successfully"});
     } catch (error) {
         res
             .status(500)
@@ -134,18 +138,16 @@ const AcceptFriendRequest = async(req, res) => {
                 .json("Recipient not found")
         }
 
-        console.log(currentUser, recipientUserId)
-
         const existingFriendship = await Friendship.findOne({
             $or: [
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    // requester: recipientUserId
+                    requester: recipientUserId
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    // requester: currentUser
+                    requester: recipientUserId
                 }
             ]
         });
@@ -153,7 +155,21 @@ const AcceptFriendRequest = async(req, res) => {
         if (!existingFriendship) 
             return res.status(400).json({message: "Friendship doesn't exist"})
 
-        await existingFriendship.updateOne({status: "accepted"})
+        if (existingFriendship && existingFriendship.status === "accepted") {
+            return res
+                .status(400)
+                .json({message: "You are already friends"})
+        }
+
+        if (existingFriendship && existingFriendship.status === "rejected") {
+            return res
+                .status(400)
+                .json({message: "You can't reject an accepted relationship"});
+        }
+
+        if (existingFriendship && existingFriendship.status === "pending") {
+            await existingFriendship.updateOne({status: "accepted"})
+        }
 
         const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
 
@@ -306,17 +322,25 @@ const RejectFriendRequest = async(req, res) => {
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    // requester: recipientUserId
+                    requester: recipientUserId
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    // requester: currentUser
+                    requester: recipientUserId
                 }
             ]
         });
 
         if (!existingFriendship) 
             return res.status(400).json({message: "Friendship doesn't exist"});
+
+        if(existingFriendship.status === "accepted") {
+            return res.status(400).json({message: "You can't reject an accepted friendship"})
+        }
+
+        if(existingFriendship.status === "rejected") {
+            return res.status(400).json("You can't reject a rejected friendship")
+        }
         
         await existingFriendship.updateOne({status: "rejected"});
 
@@ -325,13 +349,15 @@ const RejectFriendRequest = async(req, res) => {
         if (!existingNotification) 
             return res.status(400).json({message: "Notification not found"});
         
+        console.log(existingNotification)
+
         existingNotification.status = "rejected";
         existingNotification.isRead = true;
         await existingNotification.save();
 
         res
             .status(200)
-            .json({message: "Friendship status updated and notifications created successfully."});
+            .json({message: "Friendship status updated and notifications updated successfully."});
     } catch (error) {
         res
             .status(500)

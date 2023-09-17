@@ -3,10 +3,10 @@ POST http://localhost:3000/api/register
 Content-Type : application/json
 
 {
-    "name" : "abo laban",
-    "username" : "abo laban",
-    "email" : "abolaban@gmail.com",
-    "password" : "abolaban"
+    "name" : "userTwo",
+    "username" : "userTwo",
+    "email" : "userTwo@gmail.com",
+    "password" : "userTwo"
 }
 
 ###
@@ -15,8 +15,8 @@ POST http://localhost:3000/api/login
 Content-Type : application/json
 
 {
-    "email" : "abolaban@gmail.com",
-    "password" : "abolaban"
+    "email" : "userTwo@gmail.com",
+    "password" : "userTwo"
 }
 
 ###
@@ -136,23 +136,47 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDUyNDg2NywiZXhwIjoxNjk0NTI4NDY3fQ.13j67Vm05ARvetYEe3w9E1XV1TYPS4CH5Oy6XC7F2LI
 
 // send a friend request
+
+// user one sends a friend request to user two
 ###
-POST http://localhost:3000/api/friendship/send-friend-request/64fe44232d04c0c8d719db8e
+POST http://localhost:3000/api/friendship/send-friend-request/650705ebf1a1e0158e8bdc70
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDU0MTk4NSwiZXhwIjoxNjk0NTQ1NTg1fQ.lGbMyuQTW-en_AAjMdd-mBMgE1vv7lDqydxwN64sYMM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDcwNWUwZjFhMWUwMTU4ZThiZGM2YyIsImlhdCI6MTY5NDk1OTEwN30.rlA0Fj0oybwEAr4B6D-qX8NZc575aQ9uXsJoSCySQ3s
+
+// user two sends a friend request to user one
+###
+POST http://localhost:3000/api/friendship/send-friend-request/650705e0f1a1e0158e8bdc6c
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDcwNWViZjFhMWUwMTU4ZThiZGM3MCIsImlhdCI6MTY5NDk1OTEzMn0.P3T2Usc6A5OHWm0I-fN5oJ6wms4WZm-9WemDxDK8Ch4
 
 // reject a friend request
+
+// user one rejects user two
 ###
-POST http://localhost:3000/api/friendship/reject-friend-request/64fe44232d04c0c8d719db8e
+POST http://localhost:3000/api/friendship/reject-friend-request/650705ebf1a1e0158e8bdc70
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDUzNzM5OCwiZXhwIjoxNjk0NTQwOTk4fQ.dm6JPzm4uQapLD5tkyL5Pgdov8gDYjw1UzWbgWa7KhE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDcwNWUwZjFhMWUwMTU4ZThiZGM2YyIsImlhdCI6MTY5NDk1OTEwN30.rlA0Fj0oybwEAr4B6D-qX8NZc575aQ9uXsJoSCySQ3s
+
+// user two rejects user one
+###
+POST http://localhost:3000/api/friendship/reject-friend-request/650705e0f1a1e0158e8bdc6c
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDcwNWViZjFhMWUwMTU4ZThiZGM3MCIsImlhdCI6MTY5NDk1OTEzMn0.P3T2Usc6A5OHWm0I-fN5oJ6wms4WZm-9WemDxDK8Ch4
 
 
 // accept a friend request
+
+// user one accepts user two
 ###
-POST http://localhost:3000/api/friendship/accept-friend-request/64fe44232d04c0c8d719db8e
+POST http://localhost:3000/api/friendship/accept-friend-request/650705ebf1a1e0158e8bdc70
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDUzNzAzMywiZXhwIjoxNjk0NTQwNjMzfQ.sxFwqfdeb27OjiWhBzFXAHE8-pGkGhbSLHXF7U8ZhNE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDcwNWUwZjFhMWUwMTU4ZThiZGM2YyIsImlhdCI6MTY5NDk1OTEwN30.rlA0Fj0oybwEAr4B6D-qX8NZc575aQ9uXsJoSCySQ3s
+
+// user two accepts user one
+###
+POST http://localhost:3000/api/friendship/accept-friend-request/650705e0f1a1e0158e8bdc6c
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDcwNWViZjFhMWUwMTU4ZThiZGM3MCIsImlhdCI6MTY5NDk1OTEzMn0.P3T2Usc6A5OHWm0I-fN5oJ6wms4WZm-9WemDxDK8Ch4
 
 
 // Private chat
