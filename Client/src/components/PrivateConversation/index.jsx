@@ -31,6 +31,19 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         socket.current.emit("addUser", "user._id")
     }, [user._id])
 
+    useEffect(() => {
+        const getPrivateConversations = async() => {
+            const data = {
+                userOne: user._id,
+                userTwo: conversation.member._id
+            }
+            const response = await postRequest(`/privateChat/privateConversationsMessagges`, data, true, null)
+            setMessages(response)
+            navigate('/home', {state: messages[messages.length - 1]})
+        }
+        getPrivateConversations()
+    }, [conversation])
+
     return !conversation
         ? (
             <div className="flex-[8.8] flex flex-col">
