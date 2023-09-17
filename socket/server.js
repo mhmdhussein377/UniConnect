@@ -25,6 +25,11 @@ const io = require("socket.io")(server, {
     }
 });
 
+const Conversations = require("./models/PrivateConversation");
+const Users = require("./models/User");
+
+
+
 server.listen(3001, () => {
     console.log(`Socket.io server is running`);
 });
