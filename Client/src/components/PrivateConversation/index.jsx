@@ -27,29 +27,29 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        socket.current = io("ws://localhost:3001")
+        socket.current = io("ws://localhost:3001");
         socket
             .current
-            .emit("addUser", "user._id")
-    }, [user._id])
+            .emit("addUser", "user._id");
+    }, [user._id]);
 
     useEffect(() => {
         const getPrivateConversations = async() => {
             const data = {
                 userOne: user._id,
                 userTwo: conversation.member._id
-            }
-            const response = await postRequest(`/privateChat/privateConversationsMessagges`, data, true, null)
-            setMessages(response)
-            navigate('/home', {
+            };
+            const response = await postRequest(`/privateChat/privateConversationsMessagges`, data, true, null);
+            setMessages(response);
+            navigate("/home", {
                 state: messages[messages.length - 1]
-            })
-        }
-        getPrivateConversations()
-    }, [conversation])
+            });
+        };
+        getPrivateConversations();
+    }, [conversation]);
 
     const handleSendMessage = async(e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         const message = {
             sender: user._id,
@@ -58,13 +58,13 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
             content: messageInput
                 .toString()
                 .trim()
-        }
-        await postRequest("/privateChat/newPrivateMessage", message, true, null)
+        };
+        await postRequest("/privateChat/newPrivateMessage", message, true, null);
         socket
             .current
-            .emit("sendMessage", message)
-        setMessageInput("")
-    }
+            .emit("sendMessage", message);
+        setMessageInput("");
+    };
 
     //////////////////////////////////////////////////////////////
 
@@ -77,9 +77,9 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                     content: data.text,
                     isRead: false,
                     createdAt: format(Date.now())
-                })
-            })
-    }, [])
+                });
+            });
+    }, []);
 
     useEffect(() => {
         arrivalMessage && conversation
@@ -91,6 +91,13 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         arrivalMessage, conversation
             ?._id
     ]);
+
+    // //////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////
+    const location = useLocation();
+    useEffect(() => {
+        setConversation(JSON.parse(localStorage.getItem("conversationData")));
+    }, [location.state]);
 
     return !conversation
         ? (
