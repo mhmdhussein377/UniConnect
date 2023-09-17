@@ -26,7 +26,10 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
 
     const navigate = useNavigate();
 
-    
+    useEffect(() => {
+        socket.current = io("ws://localhost:3001")
+        socket.current.emit("addUser", "user._id")
+    }, [user._id])
 
     return !conversation
         ? (

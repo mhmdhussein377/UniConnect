@@ -50,7 +50,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
             </div>
             <div
                 className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white">
-                {type === "inbox" && friends
+                {type === "inbox" && (friends
                     ?.length > 0
                         ? (friends.map((item, index) => (
                             <div key={index}>Friend</div>
@@ -64,9 +64,9 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                                     Connect with Others to Expand Your Circle!
                                 </h1>
                             </div>
-                        )}
+                        ))}
                 {type === "community" && (communities.length > 0
-                    ? (communities.map((item) => item))
+                    ? (communities.map((item, index) => (<div key={index}>Hi</div>)))
                     : (
                         <div className="h-full flex gap-4 items-center justify-center p-4">
                             <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">

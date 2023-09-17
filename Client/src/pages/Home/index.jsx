@@ -21,6 +21,8 @@ const index = () => {
         setShowCommunityModal] = useState(false);
     let [showAddMembersModal, setShowAddMembersModal] = useState(false)
 
+    console.log(type)
+
     return (
         <div className="h-screen max-h-screen">
             <Header/>
