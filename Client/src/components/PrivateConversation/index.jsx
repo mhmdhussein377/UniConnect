@@ -28,7 +28,9 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
 
     useEffect(() => {
         socket.current = io("ws://localhost:3001")
-        socket.current.emit("addUser", "user._id")
+        socket
+            .current
+            .emit("addUser", "user._id")
     }, [user._id])
 
     useEffect(() => {
@@ -39,7 +41,9 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
             }
             const response = await postRequest(`/privateChat/privateConversationsMessagges`, data, true, null)
             setMessages(response)
-            navigate('/home', {state: messages[messages.length - 1]})
+            navigate('/home', {
+                state: messages[messages.length - 1]
+            })
         }
         getPrivateConversations()
     }, [conversation])
@@ -49,26 +53,44 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
 
         const message = {
             sender: user._id,
-            receiver: conversation?.member._id,
-            content: messageInput.toString().trim()
+            receiver: conversation
+                ?.member._id,
+            content: messageInput
+                .toString()
+                .trim()
         }
         await postRequest("/privateChat/newPrivateMessage", message, true, null)
-        socket.current.emit("sendMessage", message)
+        socket
+            .current
+            .emit("sendMessage", message)
         setMessageInput("")
     }
 
     //////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        socket.current.on("getMessage", (data) => {
-            setArrivalMessage({
-                sender: data.senderId,
-                content: data.text,
-                isRead: false,
-                createdAt: format(Date.now())
+        socket
+            .current
+            .on("getMessage", (data) => {
+                setArrivalMessage({
+                    sender: data.senderId,
+                    content: data.text,
+                    isRead: false,
+                    createdAt: format(Date.now())
+                })
             })
-        })
     }, [])
+
+    useEffect(() => {
+        arrivalMessage && conversation
+            ?._id === arrivalMessage.sender && setMessages((prevMessages) => [
+                ...prevMessages,
+                arrivalMessage
+            ]);
+    }, [
+        arrivalMessage, conversation
+            ?._id
+    ]);
 
     return !conversation
         ? (
@@ -111,7 +133,9 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                 <div
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
-                        ?.map((message) => (<div>Message</div>))}
+                        ?.map((message) => (
+                            <div>Message</div>
+                        ))}
                 </div>
                 <form
                     onSubmit={handleSendMessage}
