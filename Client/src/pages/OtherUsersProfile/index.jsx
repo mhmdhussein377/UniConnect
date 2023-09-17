@@ -28,11 +28,11 @@ const index = () => {
 
     useEffect(() => {
         const getSuggestedUsers = async() => {
-            const response = await getRequest(`/user/suggested-users`)
-            console.log(response)
+            const response = await getRequest(`/user/suggested-users`);
+            console.log(response, "suggested frieeeends")
         }
         getSuggestedUsers()
-    })
+    }, [])
 
     return (
         <div className="flex flex-col min-h-screen">

@@ -306,59 +306,32 @@ const GetSuggestedUsers = async(req, res) => {
         const user = await User.findById(currentUser)
         if (!user) {
             return res
-                .status(404)
+                .status(400)
                 .json({message: "User not found"})
         }
+
         const suggestedUsers = await User.find({
             _id: {
                 $ne: currentUser
+            },
+            "profile.skills": {
+                $in: user.profile.skills
+            },
+            "profile.major": {
+                $regex: new RegExp(user.profile.major, "i")
+            },
+            "profile.university": {
+                $regex: new RegExp(user.profile.university, "i")
             }
-        })
-
-        const usersWithCommonAttributes = suggestedUsers.map((user) => ({
-            user,
-            commonSkills: user
-                .profile
-                .skills
-                .filter((skill) => currentUser.profile.skills.includes(skill)),
-            commonMajor: user
-                .profile
-                .major
-                .toLowerCase() === currentUser
-                .profile
-                .major
-                .toLowerCase(),
-            commonUniversity: user
-                .profile
-                .university
-                .toLowerCase() === currentUser
-                .profile
-                .university
-                .toLowerCase()
-        }));
-
-        const suggestedUsersList = usersWithCommonAttributes.filter(async(item) => {
-            const existingRelationship = await Friendship.find({
-                $or: [
-                    {
-                        userOne: currentUser,
-                        userTwo: item.user._id
-                    }, {
-                        userOne: item.user._id,
-                        userTwo: currentUser
-                    }
-                ]
-            })
-
-            const hasRelationship = user.friends.includes(item.user._id) || existingRelationship
-
-            return (item.commonSkills.length > 0 || item.commonMajor || item.commonUniversity) && !hasRelationship ;
         });
 
         const top = 5
-        suggestedUsersList.slice(0, top).map(item => item.user)
+        const result = suggestedUsers
+            .slice(0, top)
 
-        res.status(200).json(suggestedUsersList);
+        res
+            .status(200)
+            .json(result);
     } catch (error) {
         res
             .status(500)

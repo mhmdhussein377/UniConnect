@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { EditProfile, UserData, SearchUsers, SearchUsersCommunities, GetFriends, GetSuggestedUsers } = require("../controllers/UserController");
 
+router.get("/suggested-users", GetSuggestedUsers);
 // done
 router.post("/edit-profile", EditProfile);
 
@@ -17,7 +18,5 @@ router.get("/search/:searchTerm", SearchUsersCommunities)
 
 // done
 router.get("/search/:searchTerm/:communityId", SearchUsers)
-
-router.get("/suggested-users", GetSuggestedUsers)
 
 module.exports = router;

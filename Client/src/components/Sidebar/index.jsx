@@ -30,7 +30,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
 
     useEffect(() => {
         const getPrivateConversations = async() => {
-            const response = await getRequest(`/privateChat/privateConversationDetails`)
+            const response = await getRequest(`/privateChat/privateConversationsDetails`)
             setFriends(response)
         }
         getPrivateConversations()
@@ -69,7 +69,16 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                 className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white">
                 {type === "inbox" && (friends
                     ?.length > 0
-                        ? (friends.map((item, index) => <div key={index}>Friend</div>))
+                        ? (friends.map((item, index) => (
+                            <div key={index} onClick={() => handleSelectedConversation(index, item.member._id)}>
+                                <Friend
+                                    name={item.member.name}
+                                    lastMessage={item.lastMessage}
+                                    messageNum={item.unreadMessages}
+                                    sender={item.member._id}
+                                    date={format(item.member.createdAt)}/>
+                            </div>
+                        )))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">
                                 <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
@@ -82,7 +91,9 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                         ))}
                 {type === "community" && (communities.length > 0
                     ? (communities.map((item, index) => (
-                        <div key={index} onClick={() => handleSelectedConversation(index, item.member._id)}>
+                        <div
+                            key={index}
+                            onClick={() => handleSelectedConversation(index, item.member._id)}>
                             <Friend
                                 name={item.member.name}
                                 lastMessage={item.lastMessage}
