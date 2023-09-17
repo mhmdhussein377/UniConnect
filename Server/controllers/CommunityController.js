@@ -384,6 +384,12 @@ const CancelCommunityJoinRequest = async(req, res) => {
                 .json({message: "You do not have a pending join request for this community"});
         }
 
+        const existingNotification = await Notification.findOneAndDelete({sender: userId, recipient: community.creator, type: "community join request", isRead: false})
+
+        if(!existingNotification) {
+            return res.status(400).json({message: 'Notification not found'})
+        }
+
         community.requestedUsers = community
             .requestedUsers
             .filter(user => user.toString() !== userId)
