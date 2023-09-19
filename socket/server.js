@@ -48,6 +48,15 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on('disconnect', () => {
+        for(const [key, value] of users.entries) {
+            if(value === socket.id) {
+                users.delete(key)
+                break
+            }
+        }
+    })
+
     // socket.on("friendRequestAccepted", (data) => {
     //     console.log(data, "dataaa");
 
