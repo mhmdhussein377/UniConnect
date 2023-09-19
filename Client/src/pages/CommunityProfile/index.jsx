@@ -29,6 +29,7 @@ const index = () => {
         setButtonText] = useState("")
     let [requesters,
         setRequesters] = useState([])
+    let [members, setMembers] = useState([])
     let [loading,
         setLoading] = useState(false)
 
@@ -43,7 +44,7 @@ const index = () => {
     let [showRequestedUsersModal,
         setShowRequestedUsersModal] = useState(false)
 
-    let {name, privacy, description, _id, members} = community
+    let {name, privacy, description, _id} = community
 
     useEffect(() => {
         const getCommunity = async() => {
@@ -55,6 +56,7 @@ const index = () => {
 
             setCommunity(community);
             setRequesters(community.requestedUsers)
+            setMembers(community.members)
 
             setUserStatus((prev) => ({
                 ...prev,
@@ -108,13 +110,14 @@ const index = () => {
         try {
             if (!isMember && privacy === "public") {
                 setUserStatus((prev) => ({...prev, isMember: true}));
-                members.push({name: user.name, username: user.username, _id: user._id})
+                setMembers(prev => [...prev, {name: user.name, username: user.username, _id: user._id}])
                 await postRequest(`/community/send-community-join-request/${id}`);
             } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
                 setUserStatus((prev) => ({...prev, isRequested: true}));
                 await postRequest(`/community/send-community-join-request/${id}`);
             } else if (isMember) {
                 setUserStatus((prev) => ({...prev, isMember: false, isInvited: false, isRequested: false}))
+                setMembers(prev => prev.filter(member => member._id !== user._id))
                 await postRequest(`/community/leave/${id}`);
                 dispatch({type: 'LEAVE_COMMUNITY', payload: id})
             } else if (isInvited) {
@@ -151,16 +154,13 @@ const index = () => {
                                             {community.name}
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            {community
-                                                ?.members
+                                            {members
                                                     ? (
-                                                        <span>{community
-                                                                ?.members
+                                                        <span>{members
                                                                     ?.length + 1}</span>
                                                     )
                                                     : null}
-                                            Member{community
-                                                ?.members
+                                            Member{members
                                                     ?.length > 0 && "s"}
                                         </div>
                                     </div>
@@ -232,11 +232,9 @@ const index = () => {
                                     member={community
                                     ?.creator}/>)
                                 : null}
-                            {community
-                                ?.members
+                            {members
                                     ?.length > 0
-                                        ? community
-                                            .members
+                                        ? members
                                             .map((member, index) => (<Member key={index} member={member} searched={true}/>))
                                         : null}
                         </div>

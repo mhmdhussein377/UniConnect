@@ -14,6 +14,8 @@ const index = ({profile}) => {
 
     const [showNotifications,
         setShowNotifications] = useState(false);
+    const [themeMode,
+        setThemeMode] = useState("light")
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
     const navigate = useNavigate()
@@ -32,20 +34,38 @@ const index = ({profile}) => {
         event.stopPropagation();
         toggleNotifications();
 
-        if(window.innerWidth < 740) {
+        if (window.innerWidth < 740) {
             navigate("/notifications")
         }
     };
+
+    const handleChangeThemeMode = () => {
+        themeMode === "light" ? setThemeMode('dark') : setThemeMode("light")
+    }
 
     useEffect(() => {
         document.addEventListener("click", handleClickOutside);
     }, []);
 
     useEffect(() => {
-        if(window.innerWidth < 740) {
+        if (window.innerWidth < 740) {
             setShowNotifications(false)
         }
     })
+
+    useEffect(() => {
+        if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document
+                .documentElement
+                .classList
+                .add("dark");
+        } else {
+            document
+                .documentElement
+                .classList
+                .remove("dark");
+        }
+    }, [themeMode])
 
     return (
         <div
@@ -65,7 +85,7 @@ const index = ({profile}) => {
                     <SearchBar/>
                 </div>
                 <div className="flex items-center gap-2.5">
-                    <MdLightMode size={28} color="#575D65"/>
+                    <MdLightMode onClick={handleChangeThemeMode} size={28} color="#575D65"/>
                     <div className="relative w-fit flex items-center justify-center">
                         <div
                             className="cursor-pointer select-none bell"

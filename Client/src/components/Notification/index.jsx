@@ -1,6 +1,14 @@
+import socketIoClient from "socket.io-client"
+
 const index = ({notification}) => {
 
-    const {content} = notification
+    const {content, sender} = notification
+    const socket = socketIoClient("http://localhost:3001")
+
+    const handleAcceptFriendRequest = (sender) => {
+        console.log("emmittedd")
+        socket.emit("friendRequestAccepted", { sender });
+    };
 
     return (
         <div className="flex items-center justify-between gap-4">
@@ -18,7 +26,7 @@ const index = ({notification}) => {
                 </div>
             </div>
             <div className="flex items-center gap-4">
-                <button className="bg-primary text-white px-4 py-1 rounded-md">
+                <button onClick={() => handleAcceptFriendRequest(sender)} className="bg-primary text-white px-4 py-1 rounded-md">
                     Accept
                 </button>
                 <button className="bg-primary text-white px-4 py-1 rounded-md">

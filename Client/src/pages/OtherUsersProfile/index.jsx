@@ -10,6 +10,7 @@ import {getRequest, postRequest} from "./../../utils/requests"
 import ShowCommunities from "./../../components/ShowCommunites"
 import ShowFriends from "./../../components/ShowFriends"
 import Member from "./../../components/Member"
+import socketIOClient from "socket.io-client"
 
 const index = () => {
 
@@ -39,9 +40,22 @@ const index = () => {
             response && setSuggestedUsers(response)
         }
         getSuggestedUsers()
-    }, [user?._id])
+    }, [user
+            ?._id])
 
-    console.log(suggestedUsers)
+    const socket = socketIOClient("http://localhost:3001");
+
+    useEffect(() => {
+        console.log("up")
+        socket.on("friendRequestAccepted", (data) => {
+            console.log("in")
+            console.log(data, "from other users profile sockeeet")
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [socket]);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -101,8 +115,7 @@ const index = () => {
                             ?.profile
                                 ?.major}
                             emptyHeadline="No educational background available"/>
-                        <ShowFriends friends={friends || []}/> 
-                        {suggestedUsers.length > 0 && <div
+                        <ShowFriends friends={friends || []}/> {suggestedUsers.length > 0 && <div
                             className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
                             <div className="flex flex-col gap-3">
                                 <div className="font-semibold text-lg">Suggested friends</div>

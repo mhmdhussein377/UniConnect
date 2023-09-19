@@ -43,6 +43,16 @@ io.on("connection", (socket) => {
             console.error(error);
         }
     });
+
+    // socket.on("friendRequestAccepted", (data) => {
+    //     console.log(data, "dataaa");
+
+    //     const userSocketId = data.receiverSocketId;
+
+    //     io.to(userSocketId).emit("friendRequestAccepted", data);
+
+
+    // });
 })
 
 server.listen(3001, () => {

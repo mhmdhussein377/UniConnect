@@ -36,7 +36,7 @@ const index = () => {
     }, []);
 
     return (
-        <div className="h-screen max-h-screen">
+        <div className="h-screen max-h-screen dark:bg-black">
             <Header/>
             <div className="flex relative home-bottom">
                 <Sidebar
