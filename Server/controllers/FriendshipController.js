@@ -5,6 +5,7 @@ const Notification = require("./../models/Notification")
 const app = require("./../app")
 
 const http = require("http");
+const PrivateConversation = require('../models/PrivateConversation');
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
     pingTmeout: 60000,
@@ -190,6 +191,14 @@ const AcceptFriendRequest = async(req, res) => {
 
         const acceptanceNotification = new Notification({recipient: recipientUserId, sender: currentUser, type: "friend request accepted", content: `You are now friends with ${sender.name}`});
         await acceptanceNotification.save();
+
+        const existingConversation = await PrivateConversation.findOne({
+            members: [currentUser, recipientUserId]
+        })
+        if(!existingConversation) {
+            const newPrivateConversation = new PrivateConversation({memebers: [currentUser, recipientUserId]})
+            await newPrivateConversation.save()
+        }
 
         res
             .status(200)

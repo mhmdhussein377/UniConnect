@@ -31,7 +31,8 @@ const users = {}
 
 io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
-        users.set(userId, socket.id)
+        users[userId] = socket.id
+
         console.log(users)
     })
 
@@ -51,8 +52,10 @@ io.on("connection", (socket) => {
     });
 
     socket.on('userDisconnect', () => {
-        for(const key of users) {
-            if(users[key] === socket.id) {
+        const userEntries = Object.entries(users)
+
+        for(const [key, value] of userEntries) {
+            if(value === socket.id) {
                 delete users[key]
                 break
             }
@@ -71,6 +74,8 @@ io.on("connection", (socket) => {
 
     // });
 })
+
+console.log(users)
 
 server.listen(3001, () => {
     console.log(`Socket.io server is running`);

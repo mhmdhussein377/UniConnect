@@ -51,8 +51,8 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
     }
 
     const handleLogout = () => {
-        socket.current = io("ws://localshot:3001")
-        socket.current.emit("userDisconnect")
+        socket.current = io("ws://localhost:3001")
+        socket.current.emit("userDisconnect");
         localStorage.removeItem("user")
         localStorage.removeItem("authToken")
         navigate("/")
