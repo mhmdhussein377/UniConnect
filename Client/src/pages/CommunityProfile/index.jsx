@@ -100,12 +100,15 @@ const index = () => {
             setButtonText(determineButtonText())
     }, [userStatus])
 
+    console.log(members)
+
     const handleJoinLeaveCommunity = async() => {
         setLoading(true)
         const {isMember, isInvited, isRequested, privacy} = userStatus
         try {
             if (!isMember && privacy === "public") {
                 setUserStatus((prev) => ({...prev, isMember: true}));
+                members.push({name: user.name, username: user.username, _id: user._id})
                 await postRequest(`/community/send-community-join-request/${id}`);
             } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
                 setUserStatus((prev) => ({...prev, isRequested: true}));
@@ -113,7 +116,7 @@ const index = () => {
             } else if (isMember) {
                 setUserStatus((prev) => ({...prev, isMember: false, isInvited: false, isRequested: false}))
                 await postRequest(`/community/leave/${id}`);
-                dispatch({type: 'EDIT_JOINED_COMMUNITIES', payload: id})
+                dispatch({type: 'LEAVE_COMMUNITY', payload: id})
             } else if (isInvited) {
                 setUserStatus((prev) => ({...prev, isMember: true}));
                 await postRequest(`/community/accept-community-invite-request/${id}`);

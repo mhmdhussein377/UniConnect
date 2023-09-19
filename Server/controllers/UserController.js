@@ -301,8 +301,6 @@ const GetSuggestedUsers = async(req, res) => {
     const currentUser = req?.user?.id
     const {excludedUser} = req.body
 
-    console.log(excludedUser)
-
     try {
         const user = await User.findById(currentUser)
         if (!user) {
@@ -324,7 +322,7 @@ const GetSuggestedUsers = async(req, res) => {
             "profile.university": {
                 $regex: new RegExp(user.profile.university, "i")
             }
-        });
+        }).select("name username profile.profileImage _id");
 
         const top = 5
         const result = suggestedUsers

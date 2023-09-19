@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Header from "./../../components/Header";
 import Sidebar from "./../../components/Sidebar";
 import CommunityConversation from "./../../components/CommunityConversation";
@@ -7,6 +7,7 @@ import CommunityDetails from "./../../components/CommunityDetails";
 import UserDetails from "./../../components/UserDetails";
 import CreateCommunityModal from "../../components/CreateCommunityModal";
 import AddMembersModal from "./../../components/AddMembersModal";
+import {useNavigate} from "react-router-dom";
 
 const index = () => {
     let [type,
@@ -21,6 +22,18 @@ const index = () => {
         setShowCommunityModal] = useState(false);
     let [showAddMembersModal,
         setShowAddMembersModal] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener("popstate", (event) => {
+            event.preventDefault();
+        });
+
+        return () => {
+            window.removeEventListener("popstate", (event) => {
+                event.preventDefault();
+            });
+        };
+    }, []);
 
     return (
         <div className="h-screen max-h-screen">

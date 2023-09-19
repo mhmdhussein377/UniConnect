@@ -39,8 +39,9 @@ const index = () => {
             response && setSuggestedUsers(response)
         }
         getSuggestedUsers()
-    }, [user
-            ?._id])
+    }, [user?._id])
+
+    console.log(suggestedUsers)
 
     return (
         <div className="flex flex-col min-h-screen">
