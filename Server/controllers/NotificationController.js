@@ -73,8 +73,27 @@ const GetNotifications = async(req, res) => {
     }
 }
 
+const GetUnreadNotifications = async(req, res) => {
+    const userId = req?.user?.id
+
+    try {
+        const user = await User.findById(userId)
+
+        if(!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+
+        const unreadNotifications = user.notifications.filter(noti => noti.isRead === false).length
+
+        return res.status(400).json({unreadNotifications: unreadNotifications})
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 module.exports = {
     UpdateNotificationStatus,
     AcceptCommunityJoinRequest,
-    GetNotifications
+    GetNotifications,
+    GetUnreadNotifications
 }

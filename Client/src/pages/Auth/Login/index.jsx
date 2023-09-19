@@ -24,6 +24,8 @@ const index = () => {
     const navigate = useNavigate()
     const socket = useRef()
 
+    
+
     const handleInputChange = (e) => {
         handleChange(e, setInputs)
     };

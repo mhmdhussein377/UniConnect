@@ -32,6 +32,7 @@ const users = new Map()
 io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
         users.set(userId, socket.id)
+        console.log(users)
     })
 
     socket.on("sendMessage", async({sender, receiver, content}) => {
@@ -42,6 +43,7 @@ io.on("connection", (socket) => {
                     break
                 }
             }
+
         } catch (error) {
             // Handle errors here
             console.error(error);
@@ -55,6 +57,8 @@ io.on("connection", (socket) => {
                 break
             }
         }
+
+        console.log(users)
     })
 
     // socket.on("friendRequestAccepted", (data) => {
