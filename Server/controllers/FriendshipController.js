@@ -51,6 +51,7 @@ const GetFriendship = async(req, res) => {
     }
 }
 
+// socket
 const SendFriendRequest = async(req, res) => {
     const {recipientUserId} = req.params;
     const senderUserId = req
@@ -117,6 +118,7 @@ const SendFriendRequest = async(req, res) => {
     }
 }
 
+// socket
 const AcceptFriendRequest = async(req, res) => {
     const currentUser = req
         ?.user
@@ -210,6 +212,7 @@ const AcceptFriendRequest = async(req, res) => {
     }
 }
 
+// socket
 const CancelFriendRequest = async(req, res) => {
     const currentUser = req
         ?.user

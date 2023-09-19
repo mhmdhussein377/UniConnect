@@ -27,7 +27,7 @@ const io = require("socket.io")(server, {
 
 const {getUsers, addUser} = require("./controllers/UserController");
 
-const users = {}
+const users = []
 
 io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
