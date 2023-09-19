@@ -27,17 +27,21 @@ const io = require("socket.io")(server, {
 
 const {getUsers, addUser} = require("./controllers/UserController");
 
+const users = new Map()
+
 io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
-        addUser(userId, socket.id)
+        users.set(userId, socket.id)
     })
 
     socket.on("sendMessage", async({sender, receiver, content}) => {
         try {
-            const user = await getUsers(sender, receiver);
-            io
-                .to(user[0].socket)
-                .emit("getMessage", {sender, content});
+            for(const [key, value] of users.entries) {
+                if(key === receiver) {
+                    io.to(value).emit('getMessage', {sender, content})
+                    break
+                }
+            }
         } catch (error) {
             // Handle errors here
             console.error(error);

@@ -4,13 +4,9 @@ const {SendFriendRequest, AcceptFriendRequest, RejectFriendRequest, CancelFriend
 
 router.get("/:username", GetFriendship)
 
-// done
 router.post("/send-friend-request/:recipientUserId", SendFriendRequest)
 
-// done
 router.post("/accept-friend-request/:recipientUserId", AcceptFriendRequest)
-
-// done
 
 router.post("/cancel-friend-request/:recipientUserId", CancelFriendRequest)
 
