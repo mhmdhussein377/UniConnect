@@ -4,7 +4,7 @@ import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
 import {AiOutlinePlus} from "react-icons/ai";
 import {RiCommunityFill} from "react-icons/ri";
-import {Fragment, useContext, useEffect, useState} from "react";
+import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import {FaUserPlus} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../Context/AuthContext";
@@ -13,10 +13,13 @@ import Friend from "./../Friend";
 import Community from "./../Community";
 import {format} from "timeago.js";
 import {useNavigate, useLocation} from "react-router-dom";
+import { io } from "socket.io-client";
 
 const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
+
     const {user} = useContext(AuthContext);
     const location = useLocation();
+    const socket = useRef()
 
     let [friends,
         setFriends] = useState([]);
@@ -47,9 +50,14 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
         await postRequest(`/privateChat/readPrivateMessage`, data, true, null)
     }
 
-    
-
-    console.log(localStorage.getItem("conversationData"))
+    const handleLogout = () => {
+        socket.current = io("ws://localshot:3001")
+        socket.current.emit("userDisconnect")
+        localStorage.removeItem("user")
+        localStorage.removeItem("authToken")
+        navigate("/")
+        console.log("logout")
+    }
 
     return (
         <div
@@ -149,7 +157,8 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                         <p className="text-[#737373] font-medium">{user.username}</p>
                     </div>
                 </div>
-                <BsThreeDots className="cursor-pointer" size={30}/>
+                {/* <BsThreeDots className="cursor-pointer" size={30}/> */}
+                <div onClick={handleLogout}>Logout</div>
             </div>
         </div>
     );

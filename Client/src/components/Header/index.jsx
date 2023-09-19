@@ -15,7 +15,7 @@ const index = ({profile}) => {
     const [showNotifications,
         setShowNotifications] = useState(false);
     const [themeMode,
-        setThemeMode] = useState("dark")
+        setThemeMode] = useState("light")
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
     const navigate = useNavigate()

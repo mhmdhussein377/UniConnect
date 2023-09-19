@@ -27,7 +27,7 @@ const io = require("socket.io")(server, {
 
 const {getUsers, addUser} = require("./controllers/UserController");
 
-const users = new Map()
+const users = {}
 
 io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
@@ -37,9 +37,9 @@ io.on("connection", (socket) => {
 
     socket.on("sendMessage", async({sender, receiver, content}) => {
         try {
-            for(const [key, value] of users.entries) {
+            for(const key of users) {
                 if(key === receiver) {
-                    io.to(value).emit('getMessage', {sender, content})
+                    io.to(users[key]).emit('getMessage', {sender, content})
                     break
                 }
             }
@@ -50,10 +50,10 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on('disconnect', () => {
-        for(const [key, value] of users.entries) {
-            if(value === socket.id) {
-                users.delete(key)
+    socket.on('userDisconnect', () => {
+        for(const key of users) {
+            if(users[key] === socket.id) {
+                delete users[key]
                 break
             }
         }
