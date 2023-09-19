@@ -117,7 +117,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
     };
 
     return (
-        <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
+        <div className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="relative">
                 <img
                     ref={coverImg}

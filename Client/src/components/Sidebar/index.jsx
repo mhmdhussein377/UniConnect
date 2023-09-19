@@ -49,7 +49,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
 
     return (
         <div
-            className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar ${openSidebar && "left-[0%]"} transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20]`}>
+            className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar ${openSidebar && "left-[0%]"} transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20] dark:bg-black dark:text-white`}>
             <div
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
@@ -66,7 +66,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                 </div>
             </div>
             <div
-                className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white">
+                className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white dark:bg-black">
                 {type === "inbox" && (friends
                     ?.length > 0
                         ? (friends.map((item, index) => (
@@ -127,7 +127,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                 </Fragment>
             )}
             <div
-                className="border-t-[2px] flex items-center justify-between px-4 py-3 bg-white ">
+                className="border-t-[2px] flex items-center justify-between px-4 py-3 bg-white dark:bg-black">
                 <div className="flex items-center gap-3 w-full">
                     <Link
                         to={`/profile?username=${user.username}`}

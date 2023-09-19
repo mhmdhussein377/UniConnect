@@ -8,7 +8,8 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
         setShowAllData] = useState(false)
 
     return (
-        <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
+        <div
+            className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="text-xl font-semibold flex items-center justify-between">
                 {text}
             </div>
@@ -19,16 +20,18 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
                         ?.length
                         : maxDataToShow)
                     .map((comm, index) => {
-                        const {name, privacy, _id} = comm
-                        const {username} = comm.creator
-                        return <div key={index} className="pb-2 border-b border-b-3 border-b-gray-300">
-                            <SearchedCommunity
-                                withoutUsername={withoutUsername}
-                                name={name}
-                                privacy={privacy}
-                                id={_id}
-                                creatorUsername={username}/>
-                        </div>
+                        const {name, privacy, _id} = comm;
+                        const {username} = comm.creator;
+                        return (
+                            <div key={index} className="pb-2 border-b border-b-3 border-b-gray-300">
+                                <SearchedCommunity
+                                    withoutUsername={withoutUsername}
+                                    name={name}
+                                    privacy={privacy}
+                                    id={_id}
+                                    creatorUsername={username}/>
+                            </div>
+                        );
                     })}
             </div>
             {data

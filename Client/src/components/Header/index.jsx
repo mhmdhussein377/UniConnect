@@ -15,7 +15,7 @@ const index = ({profile}) => {
     const [showNotifications,
         setShowNotifications] = useState(false);
     const [themeMode,
-        setThemeMode] = useState("light")
+        setThemeMode] = useState("dark")
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
     const navigate = useNavigate()
@@ -40,8 +40,24 @@ const index = ({profile}) => {
     };
 
     const handleChangeThemeMode = () => {
-        themeMode === "light" ? setThemeMode('dark') : setThemeMode("light")
+        setThemeMode(themeMode === "light"
+            ? 'dark'
+            : "light")
     }
+
+    useEffect(() => {
+        if (themeMode === "dark") {
+            document
+                .documentElement
+                .classList
+                .add("dark")
+        } else {
+            document
+                .documentElement
+                .classList
+                .remove("dark")
+        }
+    }, [themeMode])
 
     useEffect(() => {
         document.addEventListener("click", handleClickOutside);
@@ -53,23 +69,17 @@ const index = ({profile}) => {
         }
     })
 
-    useEffect(() => {
-        if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-            document
-                .documentElement
-                .classList
-                .add("dark");
-        } else {
-            document
-                .documentElement
-                .classList
-                .remove("dark");
-        }
-    }, [themeMode])
+    console.log(themeMode)
+
+    // useEffect(() => {     if (localStorage.theme === "dark" || (!("theme" in
+    // localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches))
+    // {         document             .documentElement             .classList
+    // .add("dark");     } else {         document             .documentElement
+    //        .classList             .remove("dark");     } }, [themeMode])
 
     return (
         <div
-            className="h-[70px] flex items-center justify-between px-4 py-2 border-b-[2px] border-b-grayHard">
+            className="h-[70px] flex items-center justify-between px-4 py-2 border-b-[2px] border-b-grayHard dark:bg-black dark:border-b-white">
             <Link to="/home" className="flex-[3.2] flex items-center gap-8">
                 <img className="w-[48px] h-[45px] object-cover" src={Logo} alt="logo"/>
             </Link>
@@ -77,7 +87,9 @@ const index = ({profile}) => {
                 className="flex-[8.8] flex items-center justify-end sm:justify-between lg:pl-14">
                 <div className="w-[60%] hidden sm:flex items-center gap-4">
                     {profile && (
-                        <Link to="/home" className="flex flex-col items-center cursor-pointer">
+                        <Link
+                            to="/home"
+                            className="flex flex-col items-center cursor-pointer dark:text-white">
                             <AiFillHome size={25}/>
                             Home
                         </Link>
@@ -85,13 +97,16 @@ const index = ({profile}) => {
                     <SearchBar/>
                 </div>
                 <div className="flex items-center gap-2.5">
-                    <MdLightMode onClick={handleChangeThemeMode} size={28} color="#575D65"/>
+                    <MdLightMode
+                        onClick={handleChangeThemeMode}
+                        size={28}
+                        className="cursor-pointer text-[#575D65] dark:text-white"/>
                     <div className="relative w-fit flex items-center justify-center">
                         <div
                             className="cursor-pointer select-none bell"
                             ref={bellIconRef}
                             onClick={handleBellClick}>
-                            <AiFillBell size={28} color="#575D65"/>
+                            <AiFillBell size={28} className="text-[#575D65] dark:text-white"/>
                         </div>
                         {showNotifications && (
                             <Fragment>

@@ -13,6 +13,7 @@ import {format} from "timeago.js";
 import {io} from "socket.io-client";
 
 const index = ({setOpenSidebar, setShowUserDetails}) => {
+    
     const {user} = useContext(AuthContext);
     const socket = useRef();
     let [messageInput,
@@ -138,7 +139,7 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                         size={30}/>
                 </div>
                 <div
-                    className="flex-1 px-6  flex flex-col bg-[#F4F3FC] overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
+                    className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
                         ?.map((message) => (<Message
                             key={message._id}
@@ -149,7 +150,7 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                 </div>
                 <form
                     onSubmit={handleSendMessage}
-                    className="flex items-center mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC]">
+                    className="flex items-center mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC] dark:bg-black/50">
                     <div
                         className="flex items-center gap-2 sm:gap-4 pr-2 sm:pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white">
                         <input

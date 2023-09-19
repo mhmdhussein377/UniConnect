@@ -15,7 +15,7 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
 
     return (
         <div
-            className={`absolute top-0 bg-white communit-details h-screen w-[80%] xs:w-[70%] sm:w-[55%] smd:w-[48%] md:w-[42%] lg:w-[35%] xl:w-[27%] z-50 transition-all duration-300 ease-linear border-l-[2px] ${openCommunityDetails
+            className={`absolute top-0 bg-white dark:bg-black dark:text-white communit-details h-screen w-[80%] xs:w-[70%] sm:w-[55%] smd:w-[48%] md:w-[42%] lg:w-[35%] xl:w-[27%] z-50 transition-all duration-300 ease-linear border-l-[2px] ${openCommunityDetails
             ? "right-0"
             : "-left-full"}`}>
             <div className="pb-4 border-b-2 border-grayHard">

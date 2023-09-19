@@ -46,12 +46,12 @@ const index = () => {
     return (
         <Fragment>
             <div
-                className="flex items-center gap-3 w-[100%] h-[42px] rounded-md px-2 border-[2px] border-primary relative">
-                <AiOutlineSearch color="#2C3E4B" size={30}/>
+                className="flex items-center gap-3 w-[100%] h-[42px] rounded-md px-2 border-[2px] border-primary relative dark:border-white">
+                <AiOutlineSearch className="text-[#2C3E4B] dark:text-white" size={30}/>
                 <input
                     value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    className="h-full w-full bg-transparent border-none outline-none placeholder:text-[#2C3E4B] placeholder:font-medium"
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="h-full w-full bg-transparent border-none outline-none placeholder:text-[#2C3E4B] placeholder:font-medium dark:placeholder:text-white dark:text-white"
                     type="text"
                     placeholder="Search for communities or users"/>{" "} {searchTerm.length > 0 && (<IoIosCloseCircleOutline
                     className="cursor-pointer"
@@ -66,14 +66,24 @@ const index = () => {
                     {result.map((item, index) => {
                         if (item.type === "user") {
                             return (
-                                <div key={index} onClick={() => {setResult([]); setSearchTerm("")}}>
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                    setResult([]);
+                                    setSearchTerm("");
+                                }}>
                                     <Member member={item}/>
                                 </div>
                             );
                         } else if (item.type === "community") {
-                            const {name, privacy, _id, creatorUsername} = item
+                            const {name, privacy, _id, creatorUsername} = item;
                             return (
-                                <div key={index} onClick={() => {setResult([]); setSearchTerm("")}}>
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                    setResult([]);
+                                    setSearchTerm("");
+                                }}>
                                     <SearchedCommunity
                                         name={name}
                                         privacy={privacy}

@@ -2,7 +2,7 @@
 const index = ({icon, label, value}) => {
     return (
         <div className="flex items-center">
-            <div className="flex items-center gap-1.5 w-[120px] text-gray-600 text-[16px]">
+            <div className="flex items-center gap-1.5 w-[120px] text-gray-600 dark:text-white/75 text-[16px]">
                 {icon}
                 {label}
             </div>

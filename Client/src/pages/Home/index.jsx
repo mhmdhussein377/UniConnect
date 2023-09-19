@@ -36,9 +36,9 @@ const index = () => {
     }, []);
 
     return (
-        <div className="h-screen max-h-screen dark:bg-black">
+        <div className="h-screen max-h-screen">
             <Header/>
-            <div className="flex relative home-bottom">
+            <div className="flex relative home-bottom dark:bg-black dark:text-white">
                 <Sidebar
                     setType={setType}
                     type={type}
