@@ -4,7 +4,7 @@ import {MdOutlineClose} from "react-icons/md";
 import User from "./../../User"
 import {postRequest} from "../../../../utils/requests";
 
-const index = ({setShowKickUsersModal, members, communityId, setCommunity}) => {
+const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
 
     let [selectedMembers,
         setSelectedMembers] = useState([])
@@ -19,15 +19,12 @@ const index = ({setShowKickUsersModal, members, communityId, setCommunity}) => {
                 : setIsDisabled(true)
     }, [selectedMembers])
 
+    console.log(members, "membeeers")
+
     const handleKickUsers = async() => {
-        setCommunity((prev) => ({
-            ...prev,
-            members: prev
-                .members
-                .filter((member) => !selectedMembers.includes(member._id))
-        }));
+        setMembers(prev => prev.filter(member => !selectedMembers.includes(member._id)))
         setShowKickUsersModal(false)
-        const response = await postRequest(`/community/${communityId}/remove-members`, {usersIds: selectedMembers})
+        await postRequest(`/community/${communityId}/remove-members`, {usersIds: selectedMembers})
     };
     
     const handleChange = (member) => {

@@ -255,6 +255,7 @@ const index = () => {
                 setCommunity={setCommunity}
                 communityId={_id}
                 members={members}
+                setMembers={setMembers}
                 setShowKickUsersModal={setShowKickUsersModal}/>)}
             {showRequestedUsersModal && (<RequestedUsersModal
                 setShowRequestedUsersModal={setShowRequestedUsersModal}
