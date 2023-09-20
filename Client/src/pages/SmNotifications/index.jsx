@@ -40,7 +40,7 @@ const index = () => {
             </div>
             <div className="sm-notifications py-6 flex flex-col gap-3 bg-[#F4F3FC] flex-1">
                 {notifications.map((noti, index) => (
-                    <SmNotification {...noti} key={index} />
+                    <SmNotification {...noti} key={index} setNotifications={setNotifications}/>
                 ))}
             </div>
         </div>
