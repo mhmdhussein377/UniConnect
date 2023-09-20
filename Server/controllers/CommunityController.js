@@ -882,6 +882,31 @@ const RejectCommunityInviteRequest = async(req, res) => {
                 .status(400)
                 .json({message: "You are already a member of this community"});
         }
+
+        const inviteIndex = community
+            .invitedUsers
+            .indexOf(userId);
+        if (inviteIndex !== -1) {
+            community
+                .invitedUsers
+                .splice(inviteIndex, 1);
+        }
+        await community.save();
+
+        await Notification.findOneAndUpdate({
+            recipient: userId,
+            sender: community.creator,
+            community: communityId,
+            type: "community invite request"
+        }, {
+            $set: {
+                isRead: true
+            }
+        });
+
+        return res
+            .status(200)
+            .json({message: "Community invite request rejected successfully"});
     } catch (error) {
         return res
             .status(500)
