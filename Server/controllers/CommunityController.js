@@ -561,7 +561,9 @@ const RejectCommunityJoinRequest = async(req, res) => {
                 .json({message: "Notification not found"});
         }
 
-        return res.status(200).json({message: "Join request rejected successfully"});
+        return res
+            .status(200)
+            .json({message: "Join request rejected successfully"});
 
     } catch (error) {
         return res
@@ -846,7 +848,22 @@ const AcceptCommunityInviteRequest = async(req, res) => {
             .status(200)
             .json({message: "Community invite request accepted successfully"});
     } catch (error) {
-        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+const RejectCommunityInviteRequest = async(req, res) => {
+    const userId = req?.user?.id
+    const {communityId} = req.params
+
+    try {
+        const user = await User.findById(userId)
+
+        if(!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
@@ -865,5 +882,6 @@ module.exports = {
     CancelCommunityJoinRequest,
     CancelCommunityInviteRequest,
     AcceptCommunityJoinRequests,
-    RejectCommunityJoinRequest
+    RejectCommunityJoinRequest,
+    RejectCommunityInviteRequest
 };

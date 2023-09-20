@@ -15,7 +15,8 @@ const {
     CancelCommunityJoinRequest,
     CancelCommunityInviteRequest,
     AcceptCommunityJoinRequests,
-    RejectCommunityJoinRequest
+    RejectCommunityJoinRequest,
+    RejectCommunityInviteRequest
 } = require("./../controllers/CommunityController");
 
 router.get("/:communityId", GetCommunity)
@@ -29,7 +30,6 @@ router.post("/update/:communityId", UpdateCommunity);
 router.post("/:communityId/add-members", AddMembers);
 
 router.post("/:communityId/remove-members", RemoveMembers);
-
 
 router.post("/leave/:communityId", LeaveCommunity)
 
@@ -48,5 +48,7 @@ router.post("/send-community-invite-request/:communityId/:recipientUserId", Send
 router.post("/cancel-community-invite-request/:communityId/:recipientUserId", CancelCommunityInviteRequest)
 
 router.post("/accept-community-invite-request/:communityId", AcceptCommunityInviteRequest);
+
+router.post("/reject-community-invite-request/:communityId", RejectCommunityInviteRequest)
 
 module.exports = router;
