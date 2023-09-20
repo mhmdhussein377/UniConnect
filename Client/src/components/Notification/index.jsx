@@ -20,8 +20,17 @@ const index = ({notification, setNotifications}) => {
             } catch (error) {
                 console.log(error);
             }
+        } else if (type === "community invite request") {
+            try {
+                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
+                await postRequest(`/community/accept-community-invite-request/${community}`);
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
+
+    console.log(notification)
 
     const handleRejectRequest = async(e) => {
         e.stopPropagation()

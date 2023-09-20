@@ -15,7 +15,7 @@ import {format} from "timeago.js";
 import {useNavigate, useLocation} from "react-router-dom";
 import { io } from "socket.io-client";
 
-const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
+const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommunityDetails, setShowUserDetails}) => {
 
     const {user} = useContext(AuthContext);
     const location = useLocation();
@@ -65,7 +65,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
             <div
                 className="flex items-center justify-center px-4 border-b-[2px] border-grayHard">
                 <div
-                    onClick={(e) => setType("community")}
+                    onClick={() => setType("community")}
                     className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opacity-0 border-b-[3px] font-medium text-lg cursor-pointer border-transparent ${type === "community" && "border-opacity-100 border-b-primary text-primary"}`}>
                     <AiFillHome size={25}/>
                     Communities
@@ -125,7 +125,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                     <div className="my-2"></div>
                     <div className="bg-transparent w-full px-4">
                         <button
-                            onClick={() => setShowCommunityModal(true)}
+                            onClick={() => {setShowCommunityModal(true); setShowUserDetails(false); setOpenCommunityDetails(false)}}
                             className="py-3 mb-3 bg-primary text-white rounded-md w-full flex items-center justify-center gap-2 font-medium">
                             <AiOutlinePlus size={22}/>
                             New Community

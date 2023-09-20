@@ -829,7 +829,8 @@ const AcceptCommunityInviteRequest = async(req, res) => {
             recipient: userId,
             sender: community.creator,
             community: communityId,
-            type: "community invite request"
+            type: "community invite request",
+            isRead: false,
         }, {
             $set: {
                 isRead: true

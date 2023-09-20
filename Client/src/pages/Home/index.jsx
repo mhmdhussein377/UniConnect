@@ -43,7 +43,9 @@ const index = () => {
                     setType={setType}
                     type={type}
                     openSidebar={openSidebar}
-                    setShowCommunityModal={setShowCommunityModal}/>{" "} {type === "community" && (<CommunityConversation
+                    setShowCommunityModal={setShowCommunityModal}
+                    setOpenCommunityDetails={setOpenCommunityDetails}
+                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}/>)}
@@ -59,7 +61,7 @@ const index = () => {
             <UserDetails
                 showUserDetails={showUserDetails}
                 setShowUserDetails={setShowUserDetails}/>{" "} {/* Modal to create communities */}
-            {showCommunityModal && (<CreateCommunityModal setShowCommunityModal={setShowCommunityModal}/>)}
+            {showCommunityModal && <CreateCommunityModal setShowCommunityModal={setShowCommunityModal}/>}
             {/* Modal to add members to communities */}
             {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}
         </div>
