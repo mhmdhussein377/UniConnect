@@ -24,6 +24,13 @@ const index = ({notification, setNotifications, showNotifications}) => {
             } catch (error) {
                 console.log(error);
             }
+        } else if (type === "community invite request") {
+            try {
+                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
+                await postRequest(`/community/reject-community-invite-request/${community}`);
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
