@@ -35,51 +35,10 @@ const index = () => {
                 </div>
                 <h2>Notifications</h2>
             </div>
-            <div className="sm-notifications px-4 py-6 flex flex-col gap-4 bg-slate-300 flex-1">
-                <div className="notification flex flex-col gap-3">
-                    <div>Ahmad wants to join your community "Coding"</div>
-                    <div className="flex gap-4">
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Accept
-                        </button>
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Reject
-                        </button>
-                    </div>
-                </div>
-                <div className="notification flex flex-col gap-3">
-                    <div>Ahmad wants to join your community "Coding"</div>
-                    <div className="flex gap-4">
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Accept
-                        </button>
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Reject
-                        </button>
-                    </div>
-                </div>
-                <div className="notification flex flex-col gap-3">
-                    <div>Ahmad wants to join your community "Coding"</div>
-                    <div className="flex gap-4">
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Accept
-                        </button>
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Reject
-                        </button>
-                    </div>
-                </div>
-                <div className="notification flex flex-col gap-3">
-                    <div>Ahmad wants to join your community "Coding"</div>
-                    <div className="flex gap-4">
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Accept
-                        </button>
-                        <button className="bg-primary text-white px-4 py-1 rounded-md">
-                            Reject
-                        </button>
-                    </div>
-                </div>
+            <div className="sm-notifications py-6 flex flex-col gap-3 bg-[#F4F3FC] flex-1">
+                {notificaions.map((noti, index) => (
+                    
+                ))}
             </div>
         </div>
     );

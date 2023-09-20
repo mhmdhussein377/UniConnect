@@ -40,7 +40,7 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                 userOne: user._id,
                 userTwo: conversation.member._id
             };
-            const response = await postRequest(`/privateChat/privateConversationsMessages`, data, true, null);
+            const response = await postRequest(`/privateChat/privateConversationsMessages`, data);
             setMessages(response);
             navigate("/home", {
                 state: messages[messages.length - 1]
@@ -60,7 +60,7 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
                 .toString()
                 .trim()
         };
-        await postRequest("/privateChat/newPrivateMessage", message, true, null);
+        await postRequest("/privateChat/newPrivateMessage", message);
         socket
             .current
             .emit("sendMessage", message);

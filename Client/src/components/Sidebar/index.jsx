@@ -47,7 +47,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommun
                 ?._id,
             userTwo: ID
         }
-        await postRequest(`/privateChat/readPrivateMessage`, data, true, null)
+        await postRequest(`/privateChat/readPrivateMessage`, data)
     }
 
     const handleLogout = () => {
@@ -56,7 +56,6 @@ const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommun
         localStorage.removeItem("user")
         localStorage.removeItem("authToken")
         navigate("/")
-        console.log("logout")
     }
 
     return (
