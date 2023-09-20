@@ -504,7 +504,7 @@ const RejectCommunityJoinRequest = async(req, res) => {
     const currentUserId = req
         ?.user
             ?.id
-    const {requesterUserId, communityId} = req.params;
+    const {requestedUserId, communityId} = req.params;
 
     try {
         const user = await User.findById(currentUserId)
@@ -545,13 +545,23 @@ const RejectCommunityJoinRequest = async(req, res) => {
 
         const requestIndex = community
             .requestedUsers
-            .indexOf(requesterUserId);
+            .indexOf(requestedUserId);
         if (requestIndex !== -1) {
             community
                 .requestedUsers
                 .splice(requestIndex, 1);
         }
         await community.save();
+
+        const existingNotification = await Notification.findOneAndDelete({sender: requestedUserId, recipient: currentUserId, type: "community join request", isRead: false});
+
+        if (!existingNotification) {
+            return res
+                .status(400)
+                .json({message: "Notification not found"});
+        }
+
+        return res.status(200).json({message: "Join request rejected successfully"});
 
     } catch (error) {
         return res
