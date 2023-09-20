@@ -1,44 +1,11 @@
-import {postRequest} from "../../utils/requests"
+import { handleRequestAction } from "../../utils/HandleNotification";
 
 const index = ({notification, setNotifications}) => {
 
     const {content, sender, type, _id, community} = notification
 
-    const handleNotification = async(apiEndpoint) => {
-        try {
-            setNotifications(prev => prev.filter(noti => noti._id !== _id))
-            await postRequest(apiEndpoint)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const handleRequestAction = async(e, actionType) => {
-        e.stopPropagation()
-
-        let endpoint;
-
-        switch (type) {
-            case "friend request":
-                endpoint = actionType === "accept"
-                    ? `/friendship/accept-friend-request/${sender}`
-                    : `/friendship/reject-friend-request/${sender}`;
-                break;
-            case "community join request":
-                endpoint = actionType === "accept"
-                    ? `/community/accept-community-join-request/${community}/${sender}`
-                    : `/community/reject-community-join-request/${community}/${sender}`;
-                break;
-            case "community invite request":
-                endpoint = actionType === "accept"
-                    ? `/community/accept-community-invite-request/${community}`
-                    : `/community/reject-community-invite-request/${community}`;
-                break;
-            default:
-                return
-        }
-
-        handleNotification(endpoint)
+    const handleAction = (e, action) => {
+        handleRequestAction(e, action, type, sender, community, setNotifications, _id)
     }
 
     return (
@@ -59,12 +26,12 @@ const index = ({notification, setNotifications}) => {
                 .includes("request")
                 ? <div className="flex items-center gap-4">
                         <button
-                            onClick={e => handleRequestAction(e, "accept")}
+                            onClick={e => handleAction(e, "accept")}
                             className="bg-primary text-white px-4 py-1 rounded-md">
                             Accept
                         </button>
                         <button
-                            onClick={e => handleRequestAction(e, "reject")}
+                            onClick={e => handleAction(e, "reject")}
                             className="bg-primary text-white px-4 py-1 rounded-md">
                             Reject
                         </button>
