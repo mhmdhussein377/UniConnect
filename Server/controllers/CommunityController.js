@@ -543,6 +543,16 @@ const RejectCommunityJoinRequest = async(req, res) => {
                 .json({message: "The requested user does not have a pending join request for this community"});
         }
 
+        const requestIndex = community
+            .requestedUsers
+            .indexOf(requesterUserId);
+        if (requestIndex !== -1) {
+            community
+                .requestedUsers
+                .splice(requestIndex, 1);
+        }
+        await community.save();
+
     } catch (error) {
         return res
             .status(500)
