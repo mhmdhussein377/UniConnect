@@ -13,6 +13,13 @@ const index = ({notification, setNotifications}) => {
             } catch (error) {
                 console.log(error);
             }
+        } else if (type === "community join request") {
+            try {
+                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
+                await postRequest(`/community/accept-community-join-request/${community}/${sender}`);
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
