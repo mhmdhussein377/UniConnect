@@ -27,27 +27,13 @@ const index = ({notification, setNotifications}) => {
 
     const handleRejectRequest = async(e) => {
         e.stopPropagation()
+        
         if (type === "friend request") {
-            try {
-                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
-                await postRequest(`/friendship/reject-friend-request/${sender}`);
-            } catch (error) {
-                console.log(error);
-            }
+            handleNotification(`/friendship/reject-friend-request/${sender}`);
         } else if (type === "community join request") {
-            try {
-                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
-                await postRequest(`/community/reject-community-join-request/${community}/${sender}`);
-            } catch (error) {
-                console.log(error);
-            }
+            handleNotification(`/community/reject-community-join-request/${community}/${sender}`);
         } else if (type === "community invite request") {
-            try {
-                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
-                await postRequest(`/community/reject-community-invite-request/${community}`);
-            } catch (error) {
-                console.log(error);
-            }
+            handleNotification(`/community/reject-community-invite-request/${community}`);
         }
     }
 
