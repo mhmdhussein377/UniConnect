@@ -529,7 +529,19 @@ const RejectCommunityJoinRequest = async(req, res) => {
                 .json({message: "You do not have permission to accept join requests for this community"});
         }
 
-        
+        const requestedUser = await User.findById(requesterUserId);
+
+        if (!requestedUser) {
+            return res
+                .status(404)
+                .json({message: "Requested user not found"});
+        }
+
+        if (!community.requestedUsers.includes(requesterUserId)) {
+            return res
+                .status(400)
+                .json({message: "The requested user does not have a pending join request for this community"});
+        }
 
     } catch (error) {
         return res
