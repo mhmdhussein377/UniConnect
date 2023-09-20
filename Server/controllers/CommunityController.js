@@ -848,22 +848,44 @@ const AcceptCommunityInviteRequest = async(req, res) => {
             .status(200)
             .json({message: "Community invite request accepted successfully"});
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res
+            .status(500)
+            .json({message: "Internal server error"});
     }
 }
 
 const RejectCommunityInviteRequest = async(req, res) => {
-    const userId = req?.user?.id
+    const userId = req
+        ?.user
+            ?.id
     const {communityId} = req.params
 
     try {
         const user = await User.findById(userId)
 
-        if(!user) {
-            return res.status(404).json({message: "User not found"})
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
+        }
+
+        const community = await Community.findById(communityId)
+
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"})
+        }
+
+        if (community.members.includes(userId)) {
+            return res
+                .status(400)
+                .json({message: "You are already a member of this community"});
         }
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res
+            .status(500)
+            .json({message: "Internal server error"});
     }
 }
 
