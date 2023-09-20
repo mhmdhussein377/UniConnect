@@ -893,16 +893,23 @@ const RejectCommunityInviteRequest = async(req, res) => {
         }
         await community.save();
 
-        await Notification.findOneAndUpdate({
+        const existingNotification = await Notification.findOneAndUpdate({
             recipient: userId,
             sender: community.creator,
             community: communityId,
-            type: "community invite request"
+            type: "community invite request",
+            isRead: false,
         }, {
             $set: {
                 isRead: true
             }
         });
+
+        console.log(existingNotification)
+
+        if(!existingNotification) {
+            return res.status(404).json({message: "Notification not found"})
+        }
 
         return res
             .status(200)

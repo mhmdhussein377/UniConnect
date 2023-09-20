@@ -110,7 +110,7 @@ const index = ({profile}) => {
                             <Fragment>
                                 <div ref={notificationsRef}>
                                     <div className="max-[740px]:hidden">
-                                        <Notifications showNotifications={showNotifications}/>
+                                        <Notifications/>
                                     </div>
                                 </div>
                             </Fragment>

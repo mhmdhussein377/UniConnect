@@ -1,11 +1,19 @@
 import {postRequest} from "../../utils/requests"
 
-const index = ({notification, setNotifications, showNotifications}) => {
+const index = ({notification, setNotifications}) => {
 
     const {content, sender, type, _id, community} = notification
 
-    const handleAcceptRequest = (sender) => {
-        console.log("emmittedd")
+    const handleAcceptRequest = async(e) => {
+        e.stopPropagation()
+        if (type === "friend request") {
+            try {
+                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
+                await postRequest(`/friendship/accept-friend-request/${sender}`);
+            } catch (error) {
+                console.log(error);
+            }
+        }
     }
 
     const handleRejectRequest = async(e) => {
