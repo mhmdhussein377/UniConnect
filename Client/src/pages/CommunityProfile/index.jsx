@@ -8,6 +8,7 @@ import {useParams} from "react-router-dom";
 import {getRequest, postRequest} from "./../../utils/requests"
 import About from "./../../components/About"
 import {AuthContext} from "./../../Context/AuthContext"
+import Button from "./UI/Button"
 
 // MODALS
 import UpdateCommunityModal from "./modals/UpdateCommunityModal"
@@ -29,7 +30,8 @@ const index = () => {
         setButtonText] = useState("")
     let [requesters,
         setRequesters] = useState([])
-    let [members, setMembers] = useState([])
+    let [members,
+        setMembers] = useState([])
     let [loading,
         setLoading] = useState(false)
 
@@ -70,61 +72,79 @@ const index = () => {
         getCommunity()
     }, [id, user])
 
-    const isMember = (community, user) => community
-        .members
-        .some(member => member._id === user._id)
+    const isMember = (community, user) => community.members.some(member => member._id === user._id)
 
     const isCreator = (community, user) => community.creator._id === user._id
 
-    const isInvited = (community, user) => community
-        .invitedUsers
-        .includes(user._id)
+    const isInvited = (community, user) => community.invitedUsers.includes(user._id)
 
-    const isRequested = (community, user) => community
-        .requestedUsers
-        .some(requestedUser => requestedUser._id === user._id)
+    const isRequested = (community, user) => community.requestedUsers.some(requestedUser => requestedUser._id === user._id)
 
-    const getPrivacyStatus = (community) => community.privacy === "public"
-        ? "public"
-        : "private";
+    const getPrivacyStatus = (community) => community.privacy === "public" ? "public" : "private";
 
     useEffect(() => {
         const {isMember, isInvited, isRequested, privacy} = userStatus;
 
         const determineButtonText = () => {
-            if (privacy === "public" && !isMember) return "Join community";
-            if (privacy === "private" && !isMember && !isRequested && !isInvited) return "Request to join";
-            if (isMember) return "Leave community";
-            if (isInvited) return "Accept invite request";
-            if (isRequested) return "Cancel request";
+            if (privacy === "public" && !isMember) 
+                return "Join community";
+            if (privacy === "private" && !isMember && !isRequested && !isInvited) 
+                return "Request to join";
+            if (isMember) 
+                return "Leave community";
+            if (isInvited) 
+                return "Accept invite request";
+            if (isRequested) 
+                return "Cancel request";
             };
-
-            setButtonText(determineButtonText())
+        
+        setButtonText(determineButtonText())
     }, [userStatus])
-
-    console.log(members)
 
     const handleJoinLeaveCommunity = async() => {
         setLoading(true)
         const {isMember, isInvited, isRequested, privacy} = userStatus
         try {
             if (!isMember && privacy === "public") {
-                setUserStatus((prev) => ({...prev, isMember: true}));
-                setMembers(prev => [...prev, {name: user.name, username: user.username, _id: user._id}])
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isMember: true
+                }));
+                setMembers(prev => [
+                    ...prev, {
+                        name: user.name,
+                        username: user.username,
+                        _id: user._id
+                    }
+                ])
                 await postRequest(`/community/send-community-join-request/${id}`);
             } else if (!isMember && privacy === "private" && !isRequested && !isInvited) {
-                setUserStatus((prev) => ({...prev, isRequested: true}));
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isRequested: true
+                }));
                 await postRequest(`/community/send-community-join-request/${id}`);
             } else if (isMember) {
-                setUserStatus((prev) => ({...prev, isMember: false, isInvited: false, isRequested: false}))
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isMember: false,
+                    isInvited: false,
+                    isRequested: false
+                }))
                 setMembers(prev => prev.filter(member => member._id !== user._id))
                 await postRequest(`/community/leave/${id}`);
                 dispatch({type: 'LEAVE_COMMUNITY', payload: id})
             } else if (isInvited) {
-                setUserStatus((prev) => ({...prev, isMember: true}));
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isMember: true
+                }));
                 await postRequest(`/community/accept-community-invite-request/${id}`);
             } else if (isRequested) {
-                setUserStatus((prev) => ({...prev, isRequested: false}));
+                setUserStatus((prev) => ({
+                    ...prev,
+                    isRequested: false
+                }));
                 await postRequest(`/community/cancel-community-join-request/${id}`);
             }
             setLoading(false)
@@ -155,23 +175,17 @@ const index = () => {
                                         </div>
                                         <div className="flex items-center gap-1">
                                             {members
-                                                    ? (
-                                                        <span>{members
-                                                                    ?.length + 1}</span>
-                                                    )
-                                                    : null}
+                                                ? <span>{members
+                                                            ?.length + 1}</span>
+                                                : null}
                                             Member{members
-                                                    ?.length > 0 && "s"}
+                                                ?.length > 0 && "s"}
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-between gap-2.5">
                                         <div
                                             className={`w-fit ml-auto ${community
-                                            ?.creator
-                                                ?._id === user
-                                                    ?._id
-                                                        ? "visible"
-                                                        : "invisible"}`}>
+                                            ?.creator?._id === user?._id? "visible" : "invisible"}`}>
                                             <HiPencil
                                                 onClick={() => setShowUpdateCommunityModal(true)}
                                                 className="cursor-pointer"
@@ -197,29 +211,15 @@ const index = () => {
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
                         {userStatus.isCreator && (
                             <div className="flex flex-col gap-4">
-                                {privacy === "private" && <div className="flex items-center gap-4">
-                                    <button
-                                        onClick={() => setShowAddMembersModal(true)}
-                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
-                                        Invite users
-                                    </button>
-                                    <button
-                                        onClick={() => setShowRequestedUsersModal(true)}
-                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
-                                        Requested users
-                                    </button>
-                                </div>}
+                                {privacy === "private" && (
+                                    <div className="flex items-center gap-4">
+                                        <Button text="Invite Users" setModal={setShowAddMembersModal}/>
+                                        <Button text="Requested Users" setModal={setShowRequestedUsersModal}/>
+                                    </div>
+                                )}
                                 <div className="flex items-center gap-4">
-                                    <button
-                                        onClick={() => setShowKickUsersModal(true)}
-                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
-                                        Kick members
-                                    </button>
-                                    <button
-                                        onClick={() => setShowDeleteCommunityModal(true)}
-                                        className="w-full bg-primary text-white rounded-md py-1 text-lg font-medium">
-                                        Delete community
-                                    </button>
+                                    <Button text="Kick members" setModal={setShowKickUsersModal}/>
+                                    <Button text="Delete community" setModal={setShowDeleteCommunityModal}/>
                                 </div>
                             </div>
                         )}
@@ -232,11 +232,7 @@ const index = () => {
                                     member={community
                                     ?.creator}/>)
                                 : null}
-                            {members
-                                    ?.length > 0
-                                        ? members
-                                            .map((member, index) => (<Member key={index} member={member} searched={true}/>))
-                                        : null}
+                            {members?.length > 0 ? members.map((member, index) => (<Member key={index} member={member} searched={true}/>)) : null}
                         </div>
                     </div>
                 </div>
