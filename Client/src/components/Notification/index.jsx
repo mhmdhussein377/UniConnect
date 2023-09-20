@@ -13,28 +13,32 @@ const index = ({notification, setNotifications}) => {
         }
     }
 
-    const handleAcceptRequest = async(e) => {
+    const handleRequestAction = async(e, actionType) => {
         e.stopPropagation()
 
-        if (type === "friend request") {
-            handleNotification(`/friendship/accept-friend-request/${sender}`);
-        } else if (type === "community join request") {
-            handleNotification(`/community/accept-community-join-request/${community}/${sender}`);
-        } else if (type === "community invite request") {
-            handleNotification(`/community/accept-community-invite-request/${community}`);
-        }
-    }
+        let endpoint;
 
-    const handleRejectRequest = async(e) => {
-        e.stopPropagation()
-        
-        if (type === "friend request") {
-            handleNotification(`/friendship/reject-friend-request/${sender}`);
-        } else if (type === "community join request") {
-            handleNotification(`/community/reject-community-join-request/${community}/${sender}`);
-        } else if (type === "community invite request") {
-            handleNotification(`/community/reject-community-invite-request/${community}`);
+        switch (type) {
+            case "friend request":
+                endpoint = actionType === "accept"
+                    ? `/friendship/accept-friend-request/${sender}`
+                    : `/friendship/reject-friend-request/${sender}`;
+                break;
+            case "community join request":
+                endpoint = actionType === "accept"
+                    ? `/community/accept-community-join-request/${community}/${sender}`
+                    : `/community/reject-community-join-request/${community}/${sender}`;
+                break;
+            case "community invite request":
+                endpoint = actionType === "accept"
+                    ? `/community/accept-community-invite-request/${community}`
+                    : `/community/reject-community-invite-request/${community}`;
+                break;
+            default:
+                return
         }
+
+        handleNotification(endpoint)
     }
 
     return (
@@ -47,8 +51,6 @@ const index = ({notification, setNotifications}) => {
                         alt="profile-picture"/>
                 </div>
                 <div className="flex flex-row items-center gap-2 flex-wrap">
-                    {/* <span className="font-medium text-[18px]">Mohammad Hussein</span>
-                    sent you a friend request */}
                     {content}
                 </div>
             </div>
@@ -57,12 +59,12 @@ const index = ({notification, setNotifications}) => {
                 .includes("request")
                 ? <div className="flex items-center gap-4">
                         <button
-                            onClick={handleAcceptRequest}
+                            onClick={e => handleRequestAction(e, "accept")}
                             className="bg-primary text-white px-4 py-1 rounded-md">
                             Accept
                         </button>
                         <button
-                            onClick={handleRejectRequest}
+                            onClick={e => handleRequestAction(e, "reject")}
                             className="bg-primary text-white px-4 py-1 rounded-md">
                             Reject
                         </button>
