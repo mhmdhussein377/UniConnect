@@ -386,8 +386,10 @@ const CancelCommunityJoinRequest = async(req, res) => {
 
         const existingNotification = await Notification.findOneAndDelete({sender: userId, recipient: community.creator, type: "community join request", isRead: false})
 
-        if(!existingNotification) {
-            return res.status(400).json({message: 'Notification not found'})
+        if (!existingNotification) {
+            return res
+                .status(400)
+                .json({message: 'Notification not found'})
         }
 
         community.requestedUsers = community
@@ -497,6 +499,29 @@ const AcceptCommunityJoinRequest = async(req, res) => {
             .json({message: "Internal server error"});
     }
 };
+
+const RejectCommunityJoinRequest = async(req, res) => {
+    const currentUserId = req?.user?.id
+    const {requesterUserId, communityId} = req.params;
+
+    try {
+        const user = await User.findById(currentUserId)
+
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
+        }
+
+        
+
+
+    } catch (error) {
+        return res
+            .status(500)
+            .json({message: "Internal server error"});
+    }
+}
 
 const AcceptCommunityJoinRequests = async(req, res) => {
     const {communityId} = req.params
@@ -792,5 +817,6 @@ module.exports = {
     LeaveCommunity,
     CancelCommunityJoinRequest,
     CancelCommunityInviteRequest,
-    AcceptCommunityJoinRequests
+    AcceptCommunityJoinRequests,
+    RejectCommunityJoinRequest
 };
