@@ -4,6 +4,15 @@ const index = ({notification, setNotifications}) => {
 
     const {content, sender, type, _id, community} = notification
 
+    const handleNotification = async(apiEndpoint) => {
+        try {
+            setNotifications(prev => prev.filter(noti => noti._id !== _id))
+            await postRequest(apiEndpoint)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleAcceptRequest = async(e) => {
         e.stopPropagation()
         if (type === "friend request") {
@@ -29,8 +38,6 @@ const index = ({notification, setNotifications}) => {
             }
         }
     }
-
-    console.log(notification)
 
     const handleRejectRequest = async(e) => {
         e.stopPropagation()
