@@ -69,8 +69,6 @@ const index = ({profile}) => {
         }
     })
 
-    console.log(themeMode)
-
     // useEffect(() => {     if (localStorage.theme === "dark" || (!("theme" in
     // localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches))
     // {         document             .documentElement             .classList
@@ -112,7 +110,7 @@ const index = ({profile}) => {
                             <Fragment>
                                 <div ref={notificationsRef}>
                                     <div className="max-[740px]:hidden">
-                                        <Notifications/>
+                                        <Notifications showNotifications={showNotifications}/>
                                     </div>
                                 </div>
                             </Fragment>

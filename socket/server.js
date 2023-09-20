@@ -30,17 +30,20 @@ const {getUsers, addUser} = require("./controllers/UserController");
 const users = []
 
 io.on("connection", (socket) => {
-    socket.on("addUser", (userId) => {
-        users[userId] = socket.id
+    // socket.on("addUser", (userId) => {
+    //     users.push(socket.id)
+    //     console.log(users)
+    // })
 
-        console.log(users)
-    })
+    io.emit("Welcome", "hello this is socket server")
 
     socket.on("sendMessage", async({sender, receiver, content}) => {
         try {
-            for(const key of users) {
-                if(key === receiver) {
-                    io.to(users[key]).emit('getMessage', {sender, content})
+            for (const key of users) {
+                if (key === receiver) {
+                    io
+                        .to(users[key])
+                        .emit('getMessage', {sender, content})
                     break
                 }
             }
@@ -52,30 +55,22 @@ io.on("connection", (socket) => {
     });
 
     socket.on('userDisconnect', () => {
-        const userEntries = Object.entries(users)
+        // const userEntries = Object.entries(users) for(const [key, value] of
+        // userEntries) {     if(value === socket.id) {         delete users[key]
+        //  break     } }
 
-        for(const [key, value] of userEntries) {
-            if(value === socket.id) {
-                delete users[key]
-                break
-            }
+        const index = users.indexOf(socket.id);
+        if (index !== -1) {
+            users.splice(index, 1);
         }
 
         console.log(users)
     })
 
-    // socket.on("friendRequestAccepted", (data) => {
-    //     console.log(data, "dataaa");
-
-    //     const userSocketId = data.receiverSocketId;
-
-    //     io.to(userSocketId).emit("friendRequestAccepted", data);
-
-
-    // });
+    // socket.on("friendRequestAccepted", (data) => {     console.log(data,
+    // "dataaa");     const userSocketId = data.receiverSocketId;
+    // io.to(userSocketId).emit("friendRequestAccepted", data); });
 })
-
-console.log(users)
 
 server.listen(3001, () => {
     console.log(`Socket.io server is running`);

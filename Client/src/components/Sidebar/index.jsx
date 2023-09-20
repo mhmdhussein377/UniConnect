@@ -106,12 +106,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal}) => {
                         <div
                             key={index}
                             onClick={() => handleSelectedConversation(index, item.member._id)}>
-                            <Friend
-                                name={item.member.name}
-                                lastMessage={item.lastMessage}
-                                messageNum={item.unreadMessages}
-                                sender={item.member._id}
-                                date={format(item.member.createdAt)}/>
+                            <Community/>
                         </div>
                     )))
                     : (

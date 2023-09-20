@@ -105,7 +105,9 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             }
             // setInput(e.target.files[0]);
             getBase64(e.target.files[0]).then((data) => {
-                image === "cover" ? coverImg.current.src = data : profileImg.current.src = data
+                image === "cover"
+                    ? coverImg.current.src = data
+                    : profileImg.current.src = data
             });
 
             const reader = new FileReader();
@@ -117,7 +119,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
     };
 
     return (
-        <div className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
+        <div
+            className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="relative">
                 <img
                     ref={coverImg}
@@ -130,13 +133,22 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                     className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
                     src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                     alt="profile-picture"/>
-                <input onChange={e => handleInput(e, "profile")} ref={profilePicInputRef} type="file" className="hidden"/>
-                {isCurrentUser && <div
-                    onClick={() => coverPicInputRef.current.click()}
-                    className="absolute w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full top-2 right-2 cursor-pointer">
-                    <HiPencil className="text-primary" size={25}/>
-                    <input onChange={e => handleInput(e, "cover")} ref={coverPicInputRef} type="file" className="hidden"/>
-                </div>}
+                <input
+                    onChange={(e) => handleInput(e, "profile")}
+                    ref={profilePicInputRef}
+                    type="file"
+                    className="hidden"/> {isCurrentUser && (
+                    <div
+                        onClick={() => coverPicInputRef.current.click()}
+                        className="absolute w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full top-2 right-2 cursor-pointer">
+                        <HiPencil className="text-primary" size={25}/>
+                        <input
+                            onChange={(e) => handleInput(e, "cover")}
+                            ref={coverPicInputRef}
+                            type="file"
+                            className="hidden"/>
+                    </div>
+                )}
             </div>
             <div>
                 <div
@@ -159,22 +171,23 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                     {user
                         ?.profile
                             ?.location
-                                ? <div>{user.profile.location}</div>
+                                ? (
+                                    <div>{user.profile.location}</div>
+                                )
                                 : null}
-                    <div>{user.friends
-                            ?.length > 0
-                                ? user.friends
-                                    ?.length
-                                    : "No"}
-                        Friends</div>
-                    {!isCurrentUser && buttonText !== "" && <div className="mt-2">
-                        <button
-                            disabled={loading}
-                            onClick={handleAddRemoveFriend}
-                            className="bg-primary text-white px-2 py-1 5 rounded-md">
-                            {buttonText}
-                        </button>
-                    </div>}
+                    <div className="flex items-center gap-1.5">
+                        <span>{user.friends?.length > 0 ? user.friends?.length : "No"}</span> Friends
+                    </div>
+                    {!isCurrentUser && buttonText !== "" && (
+                        <div className="mt-2">
+                            <button
+                                disabled={loading}
+                                onClick={handleAddRemoveFriend}
+                                className="bg-primary text-white px-2 py-1 5 rounded-md">
+                                {buttonText}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

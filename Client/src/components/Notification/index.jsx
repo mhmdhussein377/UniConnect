@@ -1,14 +1,24 @@
-import socketIoClient from "socket.io-client"
+import {postRequest} from "../../utils/requests"
 
-const index = ({notification}) => {
+const index = ({notification, setNotifications, showNotifications}) => {
 
-    const {content, sender} = notification
-    const socket = socketIoClient("http://localhost:3001")
+    const {content, sender, type, _id} = notification
 
-    const handleAcceptFriendRequest = (sender) => {
+    const handleAcceptRequest = (sender) => {
         console.log("emmittedd")
-        socket.emit("friendRequestAccepted", { sender });
-    };
+    }
+
+    const handleRejectRequest = async(e) => {
+        e.stopPropagation()
+        if (type === "friend request") {
+            try {
+                setNotifications(prev => prev.filter(noti => noti._id !== _id))
+                await postRequest(`/friendship/reject-friend-request/${sender}`);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
 
     return (
         <div className="flex items-center justify-between gap-4">
@@ -25,14 +35,22 @@ const index = ({notification}) => {
                     {content}
                 </div>
             </div>
-            <div className="flex items-center gap-4">
-                <button onClick={() => handleAcceptFriendRequest(sender)} className="bg-primary text-white px-4 py-1 rounded-md">
-                    Accept
-                </button>
-                <button className="bg-primary text-white px-4 py-1 rounded-md">
-                    Reject
-                </button>
-            </div>
+            {type
+                .split(" ")
+                .includes("request")
+                ? <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleAcceptRequest}
+                            className="bg-primary text-white px-4 py-1 rounded-md">
+                            Accept
+                        </button>
+                        <button
+                            onClick={handleRejectRequest}
+                            className="bg-primary text-white px-4 py-1 rounded-md">
+                            Reject
+                        </button>
+                    </div>
+                : null}
         </div>
     );
 }
