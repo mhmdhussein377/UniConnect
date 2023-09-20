@@ -2,7 +2,7 @@ import {postRequest} from "../../utils/requests"
 
 const index = ({notification, setNotifications, showNotifications}) => {
 
-    const {content, sender, type, _id} = notification
+    const {content, sender, type, _id, community} = notification
 
     const handleAcceptRequest = (sender) => {
         console.log("emmittedd")
@@ -12,10 +12,17 @@ const index = ({notification, setNotifications, showNotifications}) => {
         e.stopPropagation()
         if (type === "friend request") {
             try {
-                setNotifications(prev => prev.filter(noti => noti._id !== _id))
+                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
                 await postRequest(`/friendship/reject-friend-request/${sender}`);
             } catch (error) {
-                console.log(error)
+                console.log(error);
+            }
+        } else if (type === "community join request") {
+            try {
+                setNotifications((prev) => prev.filter((noti) => noti._id !== _id));
+                await postRequest(`/community/reject-community-join-request/${community}/${sender}`);
+            } catch (error) {
+                console.log(error);
             }
         }
     }
