@@ -501,7 +501,9 @@ const AcceptCommunityJoinRequest = async(req, res) => {
 };
 
 const RejectCommunityJoinRequest = async(req, res) => {
-    const currentUserId = req?.user?.id
+    const currentUserId = req
+        ?.user
+            ?.id
     const {requesterUserId, communityId} = req.params;
 
     try {
@@ -513,8 +515,21 @@ const RejectCommunityJoinRequest = async(req, res) => {
                 .json({message: "User not found"})
         }
 
-        
+        const community = await Community.findById(communityId);
 
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"});
+        }
+
+        if (community.creator.toString() !== ownerId) {
+            return res
+                .status(403)
+                .json({message: "You do not have permission to accept join requests for this community"});
+        }
+
+        
 
     } catch (error) {
         return res
