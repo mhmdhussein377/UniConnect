@@ -985,38 +985,36 @@ const GetCommunitiesDetails = async(req, res) => {
             }
             return null;
         }));
-        
-        console.log(joinedCommunityDetails, "joinedCommunites")
 
-        // const createdCommunityDetails = await Promise.all(user.createdCommunities.map(async(communityId) => {
-        //     const community = await Community.findById(communityId);
-        //     if (community) {
-        //         const unreadCount = community
-        //             .chat
-        //             .reduce((count, message) => {
-        //                 if (!message.readBy.includes(userId)) {
-        //                     return count + 1;
-        //                 }
-        //                 return count;
-        //             }, 0);
-        //         const {_id, name, privacy, chat} = community
-        //         return {
-        //             ID: _id,
-        //             name: name,
-        //             privacy: privacy,
-        //             unreadCount,
-        //             lastMessages: chat.slice(-5)
-        //         };
-        //     }
-        //     return null;
-        // }));
+        const createdCommunityDetails = await Promise.all(user.createdCommunities.map(async(communityId) => {
+            const community = await Community.findById(communityId);
+            if (community) {
+                const unreadCount = community
+                    .chat
+                    .reduce((count, message) => {
+                        if (!message.readBy.includes(userId)) {
+                            return count + 1;
+                        }
+                        return count;
+                    }, 0);
+                const {_id, name, privacy, chat} = community
+                return {
+                    ID: _id,
+                    name: name,
+                    privacy: privacy,
+                    unreadCount,
+                    lastMessages: chat.slice(-5)
+                };
+            }
+            return null;
+        }));
 
-        // return res
-        //     .status(200)
-        //     .json([
-        //         ...joinedCommunityDetails.filter(community => community !== null),
-        //         ...createdCommunityDetails.filter(community => community !== null)
-        //     ])
+        return res
+            .status(200)
+            .json([
+                ...joinedCommunityDetails.filter(community => community !== null),
+                ...createdCommunityDetails.filter(community => community !== null)
+            ])
     } catch (error) {
         res
             .status(500)
@@ -1030,7 +1028,7 @@ const GetCommunityDetails = async(req, res) => {
     try {
         const community = await Community
             .findById(communityId)
-            .populate("creator members chat.sender", "_id name username profile.profileImage")
+            // .populate("creator members chat.sender", "_id name username profile.profileImage")
 
         if (!community) {
             return res

@@ -82,17 +82,17 @@ const index = () => {
         getCommunities()
     }, [])
 
-    // useEffect(() => {
-    //     const getCommunityInfo = async() => {
-    //         try {
-    //             const response = await getRequest(`/community/communityInfo/${communityId}`)
-    //             setSelectedCommunity(response)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     communityId && getCommunityInfo()
-    // }, [communityId])
+    useEffect(() => {
+        const getCommunityInfo = async() => {
+            try {
+                const response = await getRequest(`/community/communityInfo/${communityId}`)
+                setSelectedCommunity(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        communityId && getCommunityInfo()
+    }, [communityId])
 
     useEffect(() => {
         setConversation(selectedConversation)
