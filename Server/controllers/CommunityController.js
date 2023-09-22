@@ -826,7 +826,7 @@ const AcceptCommunityInviteRequest = async(req, res) => {
             sender: community.creator,
             community: communityId,
             type: "community invite request",
-            isRead: false,
+            isRead: false
         }, {
             $set: {
                 isRead: true
@@ -895,7 +895,7 @@ const RejectCommunityInviteRequest = async(req, res) => {
             sender: community.creator,
             community: communityId,
             type: "community invite request",
-            isRead: false,
+            isRead: false
         }, {
             $set: {
                 isRead: true
@@ -904,8 +904,10 @@ const RejectCommunityInviteRequest = async(req, res) => {
 
         console.log(existingNotification)
 
-        if(!existingNotification) {
-            return res.status(404).json({message: "Notification not found"})
+        if (!existingNotification) {
+            return res
+                .status(404)
+                .json({message: "Notification not found"})
         }
 
         return res
@@ -919,55 +921,96 @@ const RejectCommunityInviteRequest = async(req, res) => {
 }
 
 const GetCommunities = async(req, res) => {
-    const userId = req.user?.id
+    const userId = req.user
+        ?.id
 
     try {
-        const user = await User.findById(userId).populate("createdCommunities").populate("joinedCommunities")
+        const user = await User
+            .findById(userId)
+            .populate("createdCommunities")
+            .populate("joinedCommunities")
 
-        if(!user) {
-            return res.status(404).json({message: "User not found"})
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"})
         }
 
-        res.status(200).json([...user.createdCommunities, ...user.joinedCommunities])
+        res
+            .status(200)
+            .json([
+                ...user.createdCommunities,
+                ...user.joinedCommunities
+            ])
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        res
+            .status(500)
+            .json({message: "Server error"});
     }
 }
 
 const GetCommunityDetails = async(req, res) => {
-    const userId = req.user?.id
+    const userId = req.user
+        ?.id
 
     try {
         const user = await User.findById(userId)
 
-        if(!user) {
-            return res.status(404).json({ message: "User not found" });
+        if (!user) {
+            return res
+                .status(404)
+                .json({message: "User not found"});
         }
 
-        const joinedCommunityDetails = await Promise.all(
-            user.joinedCommunities.map(async (community) => {
-                const community = await Community.findById(community)
-                if(community) {
-                    const unreadCount = community.chat.reduce((count, message) => {
+        const joinedCommunityDetails = await Promise.all(user.joinedCommunities.map(async(community) => {
+            const community = await Community.findById(community)
+            if (community) {
+                const unreadCount = community
+                    .chat
+                    .reduce((count, message) => {
                         if (!message.readBy.includes(userId)) {
                             return count + 1
                         }
                         return count
                     }, 0)
-                    const {_id, name, privacy, chat} = community
-                    return {
-                        ID: _id,
-                        name,
-                        privacy,
-                        unreadCount,
-                        lastMessage: chat.slice(-5)
-                    }
+                const {_id, name, privacy, chat} = community
+                return {
+                    ID: _id,
+                    name,
+                    privacy,
+                    unreadCount,
+                    lastMessage: chat.slice(-5)
                 }
-                return null
-            })
-        )
+            }
+            return null
+        }))
+
+        const createdCommunityDetails = await Promise.all(user.createdCommunities.map(async(communityId) => {
+            const community = await Community.findById(communityId);
+            if (community) {
+                const unreadCount = community
+                    .chat
+                    .reduce((count, message) => {
+                        if (!message.readBy.includes(userId)) {
+                            return count + 1;
+                        }
+                        return count;
+                    }, 0);
+                const {_id, name, privacy, chat} = community
+                return {
+                    ID: _id,
+                    name: name,
+                    privacy: privacy,
+                    unreadCount,
+                    lastMessages: chat.slice(-5), 
+                };
+            }
+            return null;
+        }));
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        res
+            .status(500)
+            .json({message: "Server error"});
     }
 }
 
