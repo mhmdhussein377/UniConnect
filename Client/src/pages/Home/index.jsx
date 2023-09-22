@@ -132,8 +132,8 @@ const index = () => {
                 {type === "inbox" && (<PrivateConversation
                     setOpenSidebar={setOpenSidebar}
                     setShowUserDetails={setShowUserDetails}
-                    addConversations={conversation}
-                    conversationMessages={messages}
+                    conversation={conversation}
+                    messages={messages}
                     setNewMessage={setNewMessage}
                     setConversationMessages={setMessages}/>)}
             </div>

@@ -12,35 +12,15 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 
-const index = ({setOpenSidebar, setShowUserDetails}) => {
+const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setNewMessage, setConversationMessages}) => {
 
     const {user} = useContext(AuthContext);
     const socket = useRef();
+
     let [messageInput,
         setMessageInput] = useState("");
-    let [messages,
-        setMessages] = useState([]);
-    let [conversation,
-        setConversation] = useState(null);
     const [arrivalMessage,
         setArrivalMessage] = useState(null);
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const getPrivateConversationMessages = async() => {
-            const data = {
-                userOne: user._id,
-                userTwo: conversation.member._id
-            };
-            const response = await postRequest(`/privateChat/privateConversationsMessages`, data);
-            setMessages(response);
-            navigate("/home", {
-                state: messages[messages.length - 1]
-            });
-        };
-        getPrivateConversationMessages();
-    }, [conversation]);
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
