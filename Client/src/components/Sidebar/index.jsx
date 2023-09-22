@@ -4,11 +4,11 @@ import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
 import {AiOutlinePlus} from "react-icons/ai";
 import {RiCommunityFill} from "react-icons/ri";
-import {Fragment, useContext, useEffect, useRef, useState} from "react";
+import {Fragment, useContext, useRef} from "react";
 import {FaUserPlus} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../Context/AuthContext";
-import {getRequest, postRequest} from "../../utils/requests";
+import {postRequest} from "../../utils/requests";
 import Friend from "./../Friend";
 import Community from "./../Community";
 import {format} from "timeago.js";
@@ -23,7 +23,7 @@ const index = ({
     setOpenCommunityDetails,
     setShowUserDetails,
     privateConversations,
-    selectedConversation,
+    setSelectedConversation,
     selectedCommunity,
     communities
 }) => {
@@ -33,7 +33,7 @@ const index = ({
     const navigate = useNavigate();
 
     const handleSelectedConversation = async(index, ID) => {
-        selectedConversation(privateConversations[index])
+        setSelectedConversation(privateConversations[index])
         const data = {
             userOne: user
                 ?._id,
@@ -63,7 +63,7 @@ const index = ({
                     Communities
                 </div>
                 <div
-                    onClick={(e) => setType("inbox")}
+                    onClick={() => setType("inbox")}
                     className={`-mb-[1.5px] flex items-center gap-2 px-6 py-[22px] border-opactiy-0 border-transparent border-b-[3px] font-medium text-lg cursor-pointer ${type === "inbox" && "text-primary border-b-primary border-opacity-100"}`}>
                     <MdEmail size={25}/>
                     Inbox

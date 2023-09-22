@@ -49,7 +49,13 @@ const communitySchema = new Schema({
                 required: true
             },
             content: String,
-            fileURL: String
+            fileURL: String,
+            readBy: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User"
+                }
+            ]
         }
     ]
 }, {timestamps: true});

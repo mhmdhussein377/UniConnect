@@ -8,11 +8,10 @@ import Message from "./../../components/Message";
 import {useContext, useEffect, useState, useRef} from "react";
 import {postRequest} from "./../../utils/requests";
 import {AuthContext} from "./../../Context/AuthContext";
-import {useLocation, useNavigate} from "react-router-dom";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 
-const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setNewMessage, setConversationMessages}) => {
+const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setNewMessage,setConversationMessages}) => {
 
     const {user} = useContext(AuthContext);
     const socket = useRef();

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {useContext, useEffect, useState} from "react";
 import Header from "./../../components/Header";
 import Sidebar from "./../../components/Sidebar";
@@ -72,7 +73,7 @@ const index = () => {
     useEffect(() => {
         const getCommunities = async() => {
             try {
-                const response = await getRequest(`/community/communityDetails`)
+                const response = await getRequest(`/community/communitiesDetails`)
                 setCommunities(response)
             } catch (error) {
                 console.log(error)
@@ -81,17 +82,17 @@ const index = () => {
         getCommunities()
     }, [])
 
-    useEffect(() => {
-        const getCommunityInfo = async() => {
-            try {
-                const response = await getRequest(`/community/communityInfo/${communityId}`)
-                setSelectedCommunity(response)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        communityId && getCommunityInfo()
-    }, [communityId])
+    // useEffect(() => {
+    //     const getCommunityInfo = async() => {
+    //         try {
+    //             const response = await getRequest(`/community/communityInfo/${communityId}`)
+    //             setSelectedCommunity(response)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     communityId && getCommunityInfo()
+    // }, [communityId])
 
     useEffect(() => {
         setConversation(selectedConversation)
@@ -117,7 +118,7 @@ const index = () => {
                     setType={setType}
                     type={type}
                     openSidebar={openSidebar}
-                    selectedConversation={selectedConversation}
+                    setSelectedConversation={setSelectedConversation}
                     selectedCommunity={setCommunityId}
                     privateConversations={friends}
                     communities={communities}
