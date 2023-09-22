@@ -12,7 +12,7 @@ import {getRequest, postRequest} from "../../utils/requests";
 import Friend from "./../Friend";
 import Community from "./../Community";
 import {format} from "timeago.js";
-import {useNavigate, useLocation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {io} from "socket.io-client";
 
 const index = ({
@@ -21,34 +21,19 @@ const index = ({
     setType,
     setShowCommunityModal,
     setOpenCommunityDetails,
-    setShowUserDetails
+    setShowUserDetails,
+    privateConversations,
+    selectedConversation,
+    selectedCommunity,
+    communities
 }) => {
 
     const {user} = useContext(AuthContext);
-    const location = useLocation();
     const socket = useRef()
-
-    let [friends,
-        setFriends] = useState([]);
-    let [communities,
-        setCommunities] = useState([ < Community />, < Community highlight = {
-            true
-        } />
-    ]);
-
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getPrivateConversations = async() => {
-            const response = await getRequest(`/privateChat/privateConversationsDetails`)
-            setFriends(response)
-        }
-        getPrivateConversations()
-    }, [])
-
     const handleSelectedConversation = async(index, ID) => {
-        localStorage.setItem("conversationData", JSON.stringify(friends[index]))
-        navigate("/home", {state: friends[index]})
+        selectedConversation(privateConversations[index])
         const data = {
             userOne: user
                 ?._id,
@@ -86,9 +71,9 @@ const index = ({
             </div>
             <div
                 className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white dark:bg-black">
-                {type === "inbox" && (friends
+                {type === "inbox" && (privateConversations
                     ?.length > 0
-                        ? (friends.map((item, index) => (
+                        ? (privateConversations.map((item, index) => (
                             <div
                                 key={index}
                                 onClick={() => handleSelectedConversation(index, item.member._id)}>
@@ -110,12 +95,12 @@ const index = ({
                                 </h1>
                             </div>
                         ))}
-                {type === "community" && (communities.length > 0
-                    ? (communities.map((item, index) => (
+                {type === "community" && (communities?.length > 0
+                    ? (communities.map((community, index) => (
                         <div
                             key={index}
-                            onClick={() => handleSelectedConversation(index, item.member._id)}>
-                            <Community/>
+                            onClick={() => selectedCommunity(community.ID)}>
+                            <Community {...community}/>
                         </div>
                     )))
                     : (

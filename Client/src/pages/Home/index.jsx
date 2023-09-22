@@ -9,7 +9,7 @@ import CreateCommunityModal from "../../components/CreateCommunityModal";
 import AddMembersModal from "./../../components/AddMembersModal";
 import {useNavigate} from "react-router-dom";
 import {getRequest, postRequest} from "../../utils/requests";
-import { AuthContext } from "../../Context/AuthContext";
+import {AuthContext} from "../../Context/AuthContext";
 
 const index = () => {
 
@@ -28,13 +28,22 @@ const index = () => {
     const [showAddMembersModal,
         setShowAddMembersModal] = useState(false);
 
-    const [selectedConversation, setSelectedConversation] = useState(null)
-    const [conversation, setConversation] = useState(null)
-    const [friends, setFriends] = useState([])
-    const [messages, setMessages] = useState([])
-    const [communities, setCommunities] = useState([])
-    const [communityId, setCommunityId] = useState([])
-    const [selectedCommunity, setSelectedCommunity] = useState(null)
+    const [selectedConversation,
+        setSelectedConversation] = useState(null)
+    const [conversation,
+        setConversation] = useState(null)
+    const [friends,
+        setFriends] = useState([])
+    const [messages,
+        setMessages] = useState([])
+    const [communities,
+        setCommunities] = useState([])
+    const [communityId,
+        setCommunityId] = useState([])
+    const [selectedCommunity,
+        setSelectedCommunity] = useState(null)
+    const [newMessage,
+        setNewMessage] = useState("")
 
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
@@ -61,7 +70,7 @@ const index = () => {
     }, [messages])
 
     useEffect(() => {
-        const getCommunities = async () => {
+        const getCommunities = async() => {
             try {
                 const response = await getRequest(`/community/communityDetails`)
                 setCommunities(response)
@@ -73,7 +82,7 @@ const index = () => {
     }, [])
 
     useEffect(() => {
-        const getCommunityInfo = async () => {
+        const getCommunityInfo = async() => {
             try {
                 const response = await getRequest(`/community/communityInfo/${communityId}`)
                 setSelectedCommunity(response)
@@ -85,7 +94,11 @@ const index = () => {
     }, [communityId])
 
     useEffect(() => {
-        const getPrivateConversationMessages = async () => {
+        setConversation(selectedConversation)
+    }, [selectedConversation])
+
+    useEffect(() => {
+        const getPrivateConversationMessages = async() => {
             const data = {
                 userOne: user._id,
                 userTwo: conversation.member._id
@@ -94,7 +107,7 @@ const index = () => {
             setMessages(response)
         }
         getPrivateConversationMessages()
-    }, [conversation, user._id])
+    }, [conversation, user._id, newMessage])
 
     return (
         <div className="h-screen max-h-screen">
@@ -104,15 +117,25 @@ const index = () => {
                     setType={setType}
                     type={type}
                     openSidebar={openSidebar}
+                    selectedConversation={selectedConversation}
+                    selectedCommunity={setCommunityId}
+                    privateConversations={friends}
+                    communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> 
+                {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
-                    setOpenSidebar={setOpenSidebar}/>)}
+                    setOpenSidebar={setOpenSidebar}
+                    communityInfo={selectedCommunity}/>)}
                 {type === "inbox" && (<PrivateConversation
                     setOpenSidebar={setOpenSidebar}
-                    setShowUserDetails={setShowUserDetails}/>)}
+                    setShowUserDetails={setShowUserDetails}
+                    addConversations={conversation}
+                    conversationMessages={messages}
+                    setNewMessage={setNewMessage}
+                    setConversationMessages={setMessages}/>)}
             </div>
             {/* Sidebar to show details about the community */}
             <CommunityDetails
