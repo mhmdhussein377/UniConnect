@@ -943,6 +943,29 @@ const GetCommunityDetails = async(req, res) => {
         if(!user) {
             return res.status(404).json({ message: "User not found" });
         }
+
+        const joinedCommunityDetails = await Promise.all(
+            user.joinedCommunities.map(async (community) => {
+                const community = await Community.findById(community)
+                if(community) {
+                    const unreadCount = community.chat.reduce((count, message) => {
+                        if (!message.readBy.includes(userId)) {
+                            return count + 1
+                        }
+                        return count
+                    }, 0)
+                    const {_id, name, privacy, chat} = community
+                    return {
+                        ID: _id,
+                        name,
+                        privacy,
+                        unreadCount,
+                        lastMessage: chat.slice(-5)
+                    }
+                }
+                return null
+            })
+        )
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
