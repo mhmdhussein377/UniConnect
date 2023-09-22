@@ -140,12 +140,14 @@ const index = () => {
             </div>
             {/* Sidebar to show details about the community */}
             <CommunityDetails
+                community={selectedCommunity}
                 setOpenCommunityDetails={setOpenCommunityDetails}
                 openCommunityDetails={openCommunityDetails}
                 setShowAddMembersModal={setShowAddMembersModal}/>{" "} {/* Sidebar to show details of the user */}
             <UserDetails
                 showUserDetails={showUserDetails}
-                setShowUserDetails={setShowUserDetails}/>{" "} {/* Modal to create communities */}
+                setShowUserDetails={setShowUserDetails}/>
+            {/* Modal to create communities */}
             {showCommunityModal && <CreateCommunityModal setShowCommunityModal={setShowCommunityModal}/>}
             {/* Modal to add members to communities */}
             {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}

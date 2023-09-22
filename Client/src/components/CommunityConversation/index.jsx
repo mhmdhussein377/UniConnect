@@ -5,8 +5,8 @@ import {FiUserPlus} from "react-icons/fi";
 import Message from "./../Message"
 import {useEffect, useState} from "react";
 import {AiTwotoneLock} from "react-icons/ai";
-import { format } from "timeago.js";
-import { postRequest } from "../../utils/requests";
+import {format} from "timeago.js";
+import {postRequest} from "../../utils/requests";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityConversation}) => {
 
@@ -21,21 +21,29 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     }, [communityConversation
             ?.chat])
 
-    let onlineUsers = communityConversation?.members.reduce((count, member) => {
+    let onlineUsers = communityConversation
+        ?.members.reduce((count, member) => {
                 if (member.online) {
                     return count + 1
                 }
                 return count
             }, 0)
-    if (communityConversation?.creator.online) {onlineUsers += 1;}
+
+    if (communityConversation
+        ?.creator.online) {
+        onlineUsers += 1;
+    }
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
 
         const message = {
-            content: messageInput.toString().trim()
+            content: messageInput
+                .toString()
+                .trim()
         }
-        await postRequest(`/community/${communityConversation?._id}/add-message`, message)
+        await postRequest(`/community/${communityConversation
+            ?._id}/add-message`, message)
         setMessageInput("")
     };
 
@@ -58,24 +66,20 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                         <div
                             onClick={() => setOpenCommunityDetails((prev) => !prev)}
                             className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300 select-none">
-                            <BsHash size={25}/>{" "} {communityConversation.privacy === "public"
+                            {communityConversation.privacy === "public"
                                 ? (<BsHash size={25}/>)
                                 : (<AiTwotoneLock size={25}/>)}
                             {communityConversation.name}
                         </div>
                         <div className="flex items-center">
-                            <span className="">
-                                {communityConversation
-                                    ?.members.length + 1}
-                                member
-                            </span>
+                            <span className="mr-1">{communityConversation
+                                    ?.members.length + 1}</span>
+                            <span className="">member{communityConversation?.members.length > 0 && "s"}</span>
                             <span>
                                 <BsDot size={25}/>
                             </span>
-                            <span className="text-[#007D76] font-medium">
-                                {onlineUsers}
-                                online
-                            </span>
+                            <span className="text-[#007d76] font-medium mr-1">{onlineUsers}</span>
+                            <span className="text-[#007D76] font-medium">online</span>
                         </div>
                     </div>
                     <CgSidebarOpen
@@ -123,9 +127,9 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                         className="w-full flex items-center px-6 py-5 bg-[#F4F3FC]">
                         <div
                             className="flex items-center gap-4 pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white ">
-                            <input 
+                            <input
                                 value={messageInput}
-                                onChange={e => setMessageInput(e.target.value)}
+                                onChange={(e) => setMessageInput(e.target.value)}
                                 className="flex-1 h-[100%] px-4 border-none outline-none bg-transparent placeholder:text-[#737373] placeholder:font-medium"
                                 type="text"
                                 placeholder="Send a message"/>

@@ -1028,7 +1028,7 @@ const GetCommunityDetails = async(req, res) => {
     try {
         const community = await Community
             .findById(communityId)
-            // .populate("creator members chat.sender", "_id name username profile.profileImage")
+            .populate("creator members chat.sender", "_id name username profile.profileImage")
 
         if (!community) {
             return res
