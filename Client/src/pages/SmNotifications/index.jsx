@@ -27,8 +27,6 @@ const index = () => {
         navigate(-1)
     }
 
-    console.log(notifications)
-
     return (
         <div className="absolute top-0 left-0 w-full z-[99] min-h-[100vh]">
             <div
@@ -38,10 +36,17 @@ const index = () => {
                 </div>
                 <h2>Notifications</h2>
             </div>
-            <div className="sm-notifications py-6 flex flex-col gap-3 bg-[#F4F3FC] flex-1">
-                {notifications.map((noti, index) => (
-                    <SmNotification {...noti} key={index} setNotifications={setNotifications}/>
-                ))}
+            <div
+                className={`sm-notifications py-6 flex flex-col gap-3 bg-[#F4F3FC] flex-1 ${notifications.length === 0 && "items-center justify-center"}`}>
+                {notifications.length > 0
+                    ? (notifications.map((noti, index) => (<SmNotification {...noti} key={index} setNotifications={setNotifications}/>)))
+                    : (
+                        <div className="w-full max-w-[450px]">
+                            <h1 className="text-2xl text-center font-medium">
+                                No new notifications at the moment. Check back later for updates.
+                            </h1>
+                        </div>
+                    )}
             </div>
         </div>
     );

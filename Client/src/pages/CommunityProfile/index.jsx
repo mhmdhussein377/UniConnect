@@ -228,7 +228,6 @@ const index = () => {
                             {community.creator
                                 ? (<Member
                                     creator={true}
-                                    searched={true}
                                     member={community
                                     ?.creator}/>)
                                 : null}
