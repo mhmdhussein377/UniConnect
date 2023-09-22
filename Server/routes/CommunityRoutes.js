@@ -17,10 +17,13 @@ const {
     AcceptCommunityJoinRequests,
     RejectCommunityJoinRequest,
     RejectCommunityInviteRequest,
-    GetCommunities
+    GetCommunities,
+    GetCommunityDetails
 } = require("./../controllers/CommunityController");
 
 router.get("/communities", GetCommunities)
+
+router.get("/communityDetails/:communityId", GetCommunityDetails)
 
 router.get("/:communityId", GetCommunity)
 
