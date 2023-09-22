@@ -28,10 +28,13 @@ const index = () => {
     const [showAddMembersModal,
         setShowAddMembersModal] = useState(false);
 
-    const [conversation, setConversation] = useState([])
+    const [selectedConversation, setSelectedConversation] = useState(null)
+    const [conversation, setConversation] = useState(null)
     const [friends, setFriends] = useState([])
     const [messages, setMessages] = useState([])
     const [communities, setCommunities] = useState([])
+    const [communityId, setCommunityId] = useState([])
+    const [selectedCommunity, setSelectedCommunity] = useState(null)
 
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
@@ -68,6 +71,18 @@ const index = () => {
         }
         getCommunities()
     }, [])
+
+    useEffect(() => {
+        const getCommunityInfo = async () => {
+            try {
+                const response = await getRequest(`/community/communityInfo/${communityId}`)
+                setSelectedCommunity(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        communityId && getCommunityInfo()
+    }, [communityId])
 
     useEffect(() => {
         const getPrivateConversationMessages = async () => {
