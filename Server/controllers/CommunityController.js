@@ -949,7 +949,7 @@ const GetCommunities = async(req, res) => {
     }
 }
 
-const GetCommunityDetails = async(req, res) => {
+const GetCommunitiesDetails = async(req, res) => {
     const userId = req.user
         ?.id
 
@@ -1002,13 +1002,42 @@ const GetCommunityDetails = async(req, res) => {
                     name: name,
                     privacy: privacy,
                     unreadCount,
-                    lastMessages: chat.slice(-5), 
+                    lastMessages: chat.slice(-5)
                 };
             }
             return null;
         }));
 
-        return res.status(200).json([...joinedCommunityDetails.filter(community => community !== null), ...createdCommunityDetails.filter(community => community !== null)])
+        return res
+            .status(200)
+            .json([
+                ...joinedCommunityDetails.filter(community => community !== null),
+                ...createdCommunityDetails.filter(community => community !== null)
+            ])
+    } catch (error) {
+        res
+            .status(500)
+            .json({message: "Server error"});
+    }
+}
+
+const GetCommunityDetails = async(req, res) => {
+    const {communityId} = req.params
+
+    try {
+        const community = await Community
+            .findById(communityId)
+            .populate("creator members chat.sender", "_id name username profile.profileImage")
+
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"});
+        }
+
+        res
+            .status(200)
+            .json(community);
     } catch (error) {
         res
             .status(500)
@@ -1034,5 +1063,6 @@ module.exports = {
     RejectCommunityJoinRequest,
     RejectCommunityInviteRequest,
     GetCommunities,
+    GetCommunitiesDetails,
     GetCommunityDetails
 };
