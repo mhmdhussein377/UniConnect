@@ -8,6 +8,7 @@ import UserDetails from "./../../components/UserDetails";
 import CreateCommunityModal from "../../components/CreateCommunityModal";
 import AddMembersModal from "./../../components/AddMembersModal";
 import {useNavigate} from "react-router-dom";
+import {getRequest} from "../../utils/requests";
 
 const index = () => {
     let [type,
@@ -22,6 +23,8 @@ const index = () => {
         setShowCommunityModal] = useState(false);
     let [showAddMembersModal,
         setShowAddMembersModal] = useState(false);
+    const [friends, setFriends] = useState([])
+    const [messages, setMessages] = useState([])
 
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
@@ -34,6 +37,18 @@ const index = () => {
             });
         };
     }, []);
+
+    useEffect(() => {
+        const getPrivateConversations = async() => {
+            try {
+                const response = await getRequest(`/privateChat/privateConversationsDetails`);
+                setFriends(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getPrivateConversations()
+    }, [messages])
 
     return (
         <div className="h-screen max-h-screen">

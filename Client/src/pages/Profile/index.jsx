@@ -21,15 +21,15 @@ const index = () => {
     const {user, dispatch} = useContext(AuthContext)
     const {username} = useParams()
 
-    let [showEducationalInfoModal,
+    const [showEducationalInfoModal,
         setShowEducationalInfoModal] = useState(false);
-    let [showEditUserModal,
+    const [showEditUserModal,
         setShowEditUserModal] = useState(false)
-    let [showLanguagesModal,
+    const [showLanguagesModal,
         setShowLanguagesModal] = useState(false)
-    let [showSkillsModal,
+    const [showSkillsModal,
         setShowSkillsModal] = useState(false);
-    let [joinedCommunities,
+    const [joinedCommunities,
         setJoinedCommunities] = useState([])
     const [friends, setFriends] = useState([])
 
@@ -44,7 +44,7 @@ const index = () => {
             dispatch({type: "SET_JOINED_COMMUNITIES", payload: response.user.joinedCommunities})
         };
         getUser();
-    }, []);
+    }, [user.username]);
 
     console.log(friends)
 
