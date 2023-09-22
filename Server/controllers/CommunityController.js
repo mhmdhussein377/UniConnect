@@ -1045,6 +1045,25 @@ const GetCommunityDetails = async(req, res) => {
     }
 }
 
+const AddNewCommunityMessage = async(req, res) => {
+    const {communityId} = req.params
+    const userId = req.user?.id
+
+    try {
+        const community = await Community.findById(communityId)
+
+        if(!community) {
+            return res.status(404).json({message: "Community not found"})
+        }
+
+        if(!community.members.includes(userId) && !community.creator === userId) {
+            return res.status(403).json({message: "User is not a member of the community"})
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
 module.exports = {
     GetCommunity,
     CreateCommunity,
@@ -1064,5 +1083,6 @@ module.exports = {
     RejectCommunityInviteRequest,
     GetCommunities,
     GetCommunitiesDetails,
-    GetCommunityDetails
+    GetCommunityDetails,
+    AddNewCommunityMessage
 };

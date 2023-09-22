@@ -19,7 +19,8 @@ const {
     RejectCommunityInviteRequest,
     GetCommunities,
     GetCommunitiesDetails,
-    GetCommunityDetails
+    GetCommunityDetails,
+    AddNewCommunityMessage
 } = require("./../controllers/CommunityController");
 
 router.get("/communities", GetCommunities)
@@ -29,6 +30,8 @@ router.get("/communitiesDetails", GetCommunitiesDetails)
 router.get("/communityInfo/:communityId", GetCommunityDetails)
 
 router.get("/:communityId", GetCommunity)
+
+router.post("/:communityId/add-message", AddNewCommunityMessage)
 
 router.post("/create", CreateCommunity);
 
