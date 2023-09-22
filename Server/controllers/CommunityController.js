@@ -801,10 +801,6 @@ const AcceptCommunityInviteRequest = async(req, res) => {
                 .json({message: "You are already a member of this community"});
         }
 
-        // if (community.requestedUsers.includes(userId)) {     return
-        // res.status(400).json({ message: "You have a pending join request for this
-        // community" }); }
-
         if (!community.invitedUsers.includes(userId)) {
             return res
                 .status(400)
@@ -922,6 +918,22 @@ const RejectCommunityInviteRequest = async(req, res) => {
     }
 }
 
+const GetCommunities = async(req, res) => {
+    const userId = req.user?.id
+
+    try {
+        const user = await User.findById(userId).populate("createdCommunities").populate("joinedCommunities")
+
+        if(!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+
+        res.status(200).json([...user.createdCommunities, ...user.joinedCommunities])
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
 module.exports = {
     GetCommunity,
     CreateCommunity,
@@ -938,5 +950,6 @@ module.exports = {
     CancelCommunityInviteRequest,
     AcceptCommunityJoinRequests,
     RejectCommunityJoinRequest,
-    RejectCommunityInviteRequest
+    RejectCommunityInviteRequest,
+    GetCommunities
 };
