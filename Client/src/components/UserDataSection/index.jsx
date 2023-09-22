@@ -5,7 +5,7 @@ import {AuthContext} from "../../Context/AuthContext";
 import { imageDB } from "../../utils/FirebaseConfig";
 import { ref } from "firebase/storage"
 
-const index = ({setShowEditUserModal, user, isCurrentUser}) => {
+const index = ({setShowEditUserModal, user, isCurrentUser, setFriends}) => {
 
     const {user: currentUser} = useContext(AuthContext)
 
@@ -15,7 +15,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
         setFriendshipStatus] = useState({status: "", requester: ""});
     let [buttonText, setButtonText] = useState("")
     const [loading, setLoading] = useState(false);
-    const [profilemg, setProfileImg] = useState()
+    const [profileImg, setProfileImg] = useState()
 
     const coverPicInputRef = useRef();
     const profilePicInputRef = useRef();
@@ -80,8 +80,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                     ?._id}`);
             } else if (friendshipStatus.status === "accepted") {
                 setFriendshipStatus({status: "no friendship", requester: ""});
-                await postRequest(`/friendship/unfriend/${user
-                    ?._id}`);
+                setFriends(prev => prev.filter(friend => friend._id !== currentUser._id))
+                await postRequest(`/friendship/unfriend/${user?._id}`);
             } else if (friendshipStatus.status === "rejected") {
                 setFriendshipStatus({status: "pending", requester: currentUser._id});
                 await postRequest(`/friendship/send-friend-request/${user

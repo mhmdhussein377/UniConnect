@@ -18,18 +18,20 @@ const index = () => {
     const {user: currentUser} = useContext(AuthContext)
     let [user,
         setUser] = useState({})
-    let [suggestedUsers,
-        setSuggestedUsers] = useState([])
+    let [suggestedUsers, setSuggestedUsers] = useState([])
+    const [friends, setFriends] = useState([])
 
     useEffect(() => {
         const getUser = async() => {
             const response = await getRequest(`/user/${username}`)
-            response && setUser(response.user)
+            const {user} = response
+            response && setUser(user)
+            response && setFriends(user.friends)
         }
         getUser()
     }, [username])
 
-    const {createdCommunities, joinedCommunities, friends} = user
+    const {createdCommunities, joinedCommunities} = user
 
     useEffect(() => {
         const getSuggestedUsers = async() => {
@@ -43,19 +45,7 @@ const index = () => {
     }, [user
             ?._id])
 
-    const socket = socketIOClient("http://localhost:3001");
-
-    useEffect(() => {
-        console.log("up")
-        socket.on("friendRequestAccepted", (data) => {
-            console.log("in")
-            console.log(data, "from other users profile sockeeet")
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, [socket]);
+    console.log(user, "ussseeer")
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -65,6 +55,7 @@ const index = () => {
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col lg:flex-row gap-4">
                     <div className="lg:flex-[4] xl:flex-[8] flex flex-col gap-6">
                         {user && (<UserDataSection
+                            setFriends={setFriends}
                             isCurrentUser={user.username === currentUser.username}
                             user={user}/>)}
                         {user
@@ -115,7 +106,8 @@ const index = () => {
                             ?.profile
                                 ?.major}
                             emptyHeadline="No educational background available"/>
-                        <ShowFriends friends={friends || []}/> {suggestedUsers.length > 0 && <div
+                        {friends && <ShowFriends friends={friends || []}/>} 
+                        {suggestedUsers.length > 0 && <div
                             className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
                             <div className="flex flex-col gap-3">
                                 <div className="font-semibold text-lg">Suggested friends</div>

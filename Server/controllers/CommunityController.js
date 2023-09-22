@@ -962,8 +962,8 @@ const GetCommunitiesDetails = async(req, res) => {
                 .json({message: "User not found"});
         }
 
-        const joinedCommunityDetails = await Promise.all(user.joinedCommunities.map(async(community) => {
-            const community = await Community.findById(community)
+        const joinedCommunityDetails = await Promise.all(user.joinedCommunities.map(async(communityId) => {
+            const community = await Community.findById(communityId)
             if (community) {
                 const unreadCount = community
                     .chat
