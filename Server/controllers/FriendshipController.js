@@ -1,18 +1,7 @@
 const User = require('../models/User')
 const Friendship = require('./../models/Friendship')
 const Notification = require("./../models/Notification")
-
-const app = require("./../app")
-
-const http = require("http");
-const PrivateConversation = require('../models/PrivateConversation');
-const server = http.createServer(app);
-const io = require("socket.io")(server, {
-    pingTmeout: 60000,
-    cors: {
-        origin: ["http://localhost:5173"]
-    }
-});
+const PrivateConversation = require("./../models/PrivateConversation")
 
 const GetFriendship = async(req, res) => {
     const {username} = req.params
@@ -51,7 +40,6 @@ const GetFriendship = async(req, res) => {
     }
 }
 
-// socket
 const SendFriendRequest = async(req, res) => {
     const {recipientUserId} = req.params;
     const senderUserId = req
@@ -118,7 +106,6 @@ const SendFriendRequest = async(req, res) => {
     }
 }
 
-// socket
 const AcceptFriendRequest = async(req, res) => {
     const currentUser = req
         ?.user
@@ -212,7 +199,6 @@ const AcceptFriendRequest = async(req, res) => {
     }
 }
 
-// socket
 const CancelFriendRequest = async(req, res) => {
     const currentUser = req
         ?.user

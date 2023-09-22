@@ -15,11 +15,12 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
 
     const {user} = useContext(AuthContext);
     const socket = useRef();
+    const chatRef = useRef();
 
     let [messageInput,
         setMessageInput] = useState("");
     const [arrivalMessage,
-        setArrivalMessage] = useState(null);
+        setArrivalMessage] = useState({});
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
@@ -66,6 +67,12 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
         }
     }, [arrivalMessage])
 
+    useEffect(() => {
+        if(chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight
+        }
+    }, [messages])
+
     return !conversation
         ? (
             <div className="flex-[8.8] flex flex-col">
@@ -105,6 +112,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                         size={30}/>
                 </div>
                 <div
+                    ref={chatRef}
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
                         ?.map((message) => (<Message
