@@ -3,22 +3,25 @@ const PrivateConversation = require("./../models/PrivateConversation")
 const CreatePrivateConversation = async(req, res) => {
     const {userOne, userTwo} = req.body;
     try {
-        const conversation = await PrivateConversation.findOne({
-            Members: {
+        const conversation = await PrivateConversation
+            .findOne({
+            members: {
                 $all: [userOne, userTwo]
             }
-        });
+        })
+            .populate({path: "messages.sender", model: "User"})
+            .populate({path: "members", model: "User"});
 
         if (!conversation) {
             const newConversation = new PrivateConversation({
-                Members: [userOne, userTwo]
+                members: [userOne, userTwo]
             });
-            await newConversation.save();
-        }
+            newConversation.save();
 
-        res
-            .status(200)
-            .json(conversation);
+            res
+                .status(200)
+                .json(newConversation);
+        }
     } catch (error) {
         res
             .status(500)
@@ -31,8 +34,8 @@ const CreatePrivateMessage = async(req, res) => {
 
     try {
         await PrivateConversation.findOneAndUpdate({
-            Members: {
-                $in: [sender, receiver]
+            members: {
+                $all: [sender, receiver]
             }
         }, {
             $push: {
@@ -56,7 +59,108 @@ const CreatePrivateMessage = async(req, res) => {
     }
 }
 
+const ReadPrivateMessage = async(req, res) => {
+    const {userOne, userTwo} = req.body;
+
+    try {
+        const data = await PrivateConversation.findOneAndUpdate({
+            members: {
+                $in: [userOne, userTwo]
+            }
+        }, {
+            $set: {
+                "messages.$[].isRead": true
+            }
+        });
+
+        res
+            .status(200)
+            .json("message updated successfully");
+    } catch (error) {
+        res
+            .status(500)
+            .json(error);
+    }
+};
+
+const GetPrivateConversationMessages = async(req, res) => {
+    const {userOne, userTwo} = req.body;
+
+    try {
+        const conversation = await PrivateConversation
+            .find({
+            members: {
+                $all: [userOne, userTwo]
+            }
+        })
+            .populate({path: "messages.sender", model: "User"})
+            .populate({path: "members", model: "User"});
+        res
+            .status(200)
+            .json(conversation[0].messages);
+    } catch (error) {
+        res
+            .status(500)
+            .json(error);
+    }
+};
+
+const GetPrivateConversationsDetails = async(req, res) => {
+    try {
+        const conversations = await PrivateConversation
+            .find({
+            members: {
+                $in: [req.user.id]
+            }
+        })
+            .populate({path: "messages.sender", model: "User"})
+            .populate({path: "members", model: "User"});
+
+        const details = conversations.map((item) => {
+            const conversationDetails = {
+                member: null,
+                lastMessage: null,
+                unreadMessages: 0
+            };
+
+            item
+                .members
+                .forEach((member) => {
+                    if (member._id.toString() !== req.user.id) {
+                        conversationDetails.member = member;
+                    }
+                });
+
+            if (item.messages.length > 0) {
+                const lastMessage = item.messages[item.messages.length - 1];
+                conversationDetails.lastMessage = lastMessage.content;
+
+                item
+                    .messages
+                    .forEach((message) => {
+                        if (!message.isRead && message.sender !== req.user.id) {
+                            conversationDetails.unreadMessages += 1;
+                        }
+                    });
+            }
+
+            return conversationDetails;
+        });
+
+        res
+            .status(200)
+            .json(details);
+    } catch (error) {
+        res
+            .status(500)
+            .json(error);
+    }
+};
+
 module.exports = {
     CreatePrivateConversation,
-    CreatePrivateMessage
+    CreatePrivateMessage,
+    ReadPrivateMessage,
+    GetPrivateConversationMessages,
+    GetPrivateConversationsDetails
 }

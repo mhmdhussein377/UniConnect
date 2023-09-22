@@ -78,23 +78,16 @@ const SendFriendRequest = async(req, res) => {
             const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
             await notification.save();
 
-            // io.to(recipientUserId).emit("friend_request_received", {     data: "woww",
-            // }); console.log("friend request emitted up")
-
             return res
                 .status(200)
                 .json({message: "Friend request sent successfully"});
         }
-        // return res.status(400).json({message: "Friendship request already exists"});
 
         const newFriendship = new Friendship({userOne: senderUserId, userTwo: recipientUserId, requester: senderUserId})
         await newFriendship.save()
 
         const notification = new Notification({recipient: recipientUserId, sender: senderUserId, type: "friend request", content: `You received a friend request from ${sender.name}`});
         await notification.save()
-
-        // io.to(recipientUserId).emit("friend_request_received", {     data: "woww",
-        // }); console.log("friend request emitted down")
 
         res
             .status(200)
@@ -185,7 +178,7 @@ const AcceptFriendRequest = async(req, res) => {
             members: [currentUser, recipientUserId]
         })
         if(!existingConversation) {
-            const newPrivateConversation = new PrivateConversation({memebers: [currentUser, recipientUserId]})
+            const newPrivateConversation = new PrivateConversation({members: [currentUser, recipientUserId]})
             await newPrivateConversation.save()
         }
 

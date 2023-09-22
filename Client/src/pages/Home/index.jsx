@@ -62,6 +62,7 @@ const index = () => {
             try {
                 const response = await getRequest(`/privateChat/privateConversationsDetails`);
                 setFriends(response)
+                console.log(response, "responseeee")
             } catch (error) {
                 console.log(error)
             }
@@ -103,7 +104,7 @@ const index = () => {
                 userOne: user._id,
                 userTwo: conversation.member._id
             }
-            const response = await postRequest(`/privateChat/privateConversationsMessages`, data)
+            const response = await postRequest(`/privateChat/privateConversationMessages`, data)
             setMessages(response)
         }
         getPrivateConversationMessages()

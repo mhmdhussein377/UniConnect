@@ -30,6 +30,7 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
+    const {username} = user
     const socket = useRef()
     const dotsRef = useRef();
     const settingsRef = useRef();
@@ -167,7 +168,7 @@ const index = ({
                 className="border-t-[2px] flex items-center justify-between px-4 py-3 bg-white dark:bg-black">
                 <div className="flex items-center gap-3 w-full">
                     <Link
-                        to={`/profile?username=${user.username}`}
+                        to={`/profile?username=${username}`}
                         className="w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center">
                         <img
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
@@ -175,11 +176,11 @@ const index = ({
                     </Link>
                     <div className="flex flex-col">
                         <Link
-                            to={`/profile?username=${user.username}`}
+                            to={`/profile?username=${username}`}
                             className="text-lg font-semibold">
                             {user.name}
                         </Link>
-                        <p className="text-[#737373] font-medium">{user.username}</p>
+                        <p className="text-[#737373] font-medium">{username}</p>
                     </div>
                 </div>
                 <div className="relative">
@@ -192,7 +193,7 @@ const index = ({
                                 ref={settingsRef}
                                 className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
                                 <Link
-                                    to={`/profile/${user.username}`}
+                                    to={`/profile/${username}`}
                                     className="pb-2 border-b-2 flex gap-2 items-center">
                                     <AiOutlineUser size={25}/>
                                     Profile

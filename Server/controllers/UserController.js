@@ -1,6 +1,5 @@
 const User = require("./../models/User")
 const Community = require("./../models/Community")
-const Friendship = require("./../models/Friendship")
 
 const EditProfile = async(req, res) => {
     const userId = req.user.id
@@ -50,7 +49,6 @@ const EditProfile = async(req, res) => {
     }
 }
 
-// needs modification
 const UserData = async(req, res) => {
     const {username} = req.params;
 

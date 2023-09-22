@@ -25,8 +25,6 @@ const io = require("socket.io")(server, {
     }
 });
 
-const {getUsers, addUser} = require("./controllers/UserController");
-
 const users = new Map()
 
 io.on("connection", (socket) => {
