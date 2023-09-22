@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {AiFillHome} from "react-icons/ai";
+import {AiFillHome, AiOutlineUser} from "react-icons/ai";
 import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
 import {AiOutlinePlus} from "react-icons/ai";
 import {RiCommunityFill} from "react-icons/ri";
-import {Fragment, useContext, useRef} from "react";
+import {Fragment, useContext, useRef, useState} from "react";
 import {FaUserPlus} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../Context/AuthContext";
@@ -14,6 +14,7 @@ import Community from "./../Community";
 import {format} from "timeago.js";
 import {useNavigate} from "react-router-dom";
 import {io} from "socket.io-client";
+import {BiLogOut} from "react-icons/bi";
 
 const index = ({
     openSidebar,
@@ -31,6 +32,8 @@ const index = ({
     const {user} = useContext(AuthContext);
     const socket = useRef()
     const navigate = useNavigate();
+    const [showSettings,
+        setShowSettings] = useState(false)
 
     const handleSelectedConversation = async(index, ID) => {
         setSelectedConversation(privateConversations[index])
@@ -47,7 +50,9 @@ const index = ({
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
         socket.current = io("http://localhost:3001");
-        socket.current.emit("disconnectUser", user._id);
+        socket
+            .current
+            .emit("disconnectUser", user._id);
         navigate("/");
     };
 
@@ -76,7 +81,11 @@ const index = ({
                         ? (privateConversations.map((item, index) => (
                             <div
                                 key={index}
-                                onClick={() => handleSelectedConversation(index, item.member._id)}>
+                                onClick={() => {
+                                handleSelectedConversation(index, item.member._id);
+                                setOpenCommunityDetails(false);
+                                setShowUserDetails(false);
+                            }}>
                                 <Friend
                                     name={item.member.name}
                                     lastMessage={item.lastMessage}
@@ -95,24 +104,29 @@ const index = ({
                                 </h1>
                             </div>
                         ))}
-                {type === "community" && (communities?.length > 0
-                    ? (communities.map((community, index) => (
-                        <div
-                            key={index}
-                            onClick={() => selectedCommunity(community.ID)}>
-                            <Community {...community}/>
-                        </div>
-                    )))
-                    : (
-                        <div className="h-full flex gap-4 items-center justify-center p-4">
-                            <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
-                                <RiCommunityFill className="text-primary" size={50}/>
+                {type === "community" && (communities
+                    ?.length > 0
+                        ? (communities.map((community, index) => (
+                            <div
+                                key={index}
+                                onClick={() => {
+                                selectedCommunity(community.ID);
+                                setOpenCommunityDetails(false);
+                                setShowUserDetails(false);
+                            }}>
+                                <Community {...community}/>
                             </div>
-                            <h1 className="font-medium text-[22px]">
-                                Explore New Communities to Connect With!
-                            </h1>
-                        </div>
-                    ))}
+                        )))
+                        : (
+                            <div className="h-full flex gap-4 items-center justify-center p-4">
+                                <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
+                                    <RiCommunityFill className="text-primary" size={50}/>
+                                </div>
+                                <h1 className="font-medium text-[22px]">
+                                    Explore New Communities to Connect With!
+                                </h1>
+                            </div>
+                        ))}
             </div>
             {type === "community" && (
                 <Fragment>
@@ -122,7 +136,7 @@ const index = ({
                             onClick={() => {
                             setShowCommunityModal(true);
                             setShowUserDetails(false);
-                            setOpenCommunityDetails(false)
+                            setOpenCommunityDetails(false);
                         }}
                             className="py-3 mb-3 bg-primary text-white rounded-md w-full flex items-center justify-center gap-2 font-medium">
                             <AiOutlinePlus size={22}/>
@@ -150,8 +164,33 @@ const index = ({
                         <p className="text-[#737373] font-medium">{user.username}</p>
                     </div>
                 </div>
-                {/* <BsThreeDots className="cursor-pointer" size={30}/> */}
-                <div onClick={handleLogout}>Logout</div>
+                <div className="relative">
+                    <div>
+                        <BsThreeDots
+                            onClick={() => setShowSettings(!showSettings)}
+                            className="cursor-pointer"
+                            size={30}/>
+                    </div>
+                    {showSettings
+                        ? (
+                            <div
+                                className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
+                                <Link
+                                    to={`/profile/${user.username}`}
+                                    className="pb-2 border-b-2 flex gap-2 items-center">
+                                    <AiOutlineUser size={25}/>
+                                    Profile
+                                </Link>
+                                <div
+                                    onClick={handleLogout}
+                                    className="pt-2 flex items-center gap-2 cursor-pointer">
+                                    <BiLogOut size={25}/>
+                                    Logout
+                                </div>
+                            </div>
+                        )
+                        : null}
+                </div>
             </div>
         </div>
     );

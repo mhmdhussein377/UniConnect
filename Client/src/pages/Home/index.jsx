@@ -8,7 +8,6 @@ import CommunityDetails from "./../../components/CommunityDetails";
 import UserDetails from "./../../components/UserDetails";
 import CreateCommunityModal from "../../components/CreateCommunityModal";
 import AddMembersModal from "./../../components/AddMembersModal";
-import {useNavigate} from "react-router-dom";
 import {getRequest, postRequest} from "../../utils/requests";
 import {AuthContext} from "../../Context/AuthContext";
 

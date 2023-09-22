@@ -16,10 +16,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setMessages] = useState([]);
 
     useEffect(() => {
-        setMessages(communityConversation
-            ?.chat)
-    }, [communityConversation
-            ?.chat])
+        setMessages(communityConversation?.chat)
+    }, [communityConversation?.chat])
 
     let onlineUsers = communityConversation
         ?.members.reduce((count, member) => {

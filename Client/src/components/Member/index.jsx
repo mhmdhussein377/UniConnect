@@ -23,15 +23,20 @@ const index = ({searched, member, creator, invite, communityId}) => {
 
         try {
             if (isInvited) {
-                const response = await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`);
-                console.log(response);
+                try {
+                    await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`);
+                } catch (error) {
+                    console.log(error)
+                }
             } else {
-                const response = await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`);
-                console.log(response);
+                try {
+                    await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`);
+                } catch (error) {
+                    console.log(error)
+                }
             }
             setLoading(false)
         } catch (error) {
-            console.log(error)
             setLoading(false)
         }
     }
