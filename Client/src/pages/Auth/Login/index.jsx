@@ -62,7 +62,6 @@ const index = () => {
             response && navigate("/home");
         } catch (error) {
             dispatch({type: "LOGIN_FAILURE"})
-            console.log(error)
         }
     }
 

@@ -7,7 +7,7 @@ import {postRequest} from "../../../utils/requests";
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
 import Button from "../components/Button";
-import { handleChange } from "../../../utils/handleChange";
+import {handleChange} from "../../../utils/handleChange";
 
 const index = () => {
 
@@ -44,10 +44,16 @@ const index = () => {
         const {name, email, password, username} = inputs
 
         if (!name || !email || !password || !username) {
-            setError({isError: true, type: "Missing fields", message: "All fields are requried"})
-            resetError()
-            return
+            setError({isError: true, type: "Missing fields", message: "All fields are requried"});
+            resetError();
+            return;
+        } else if (password.length < 8) {
+            setError({isError: true, type: "password", message: "Password must be at least 8 characters"});
+            resetError();
+            return 
         }
+
+        console.log(password, password.length)
 
         const response = await postRequest("/register", inputs, handleRegisterError)
         response && navigate("/")
@@ -111,8 +117,9 @@ const index = () => {
                         minLength="8"
                         icon={< FiLock color = "C1C5C5" size = {
                         27
-                    } />}/> {error.isError && error.type === "Missing fields" && (
-                        <p className="text-danger text-start">All fields are required!</p>
+                    } />}/> {error.isError && error.type === "password" && <p className="text-danger text-start">{error.message}</p>}
+                    {error.isError && error.type === "Missing fields" && (
+                        <p className="text-danger text-start">{error.message}</p>
                     )}
                     <p className="text-start text-[#737373]">
                         Already have an account?{" "}
