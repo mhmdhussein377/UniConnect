@@ -27,8 +27,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
 
         const message = {
             sender: user._id,
-            receiver: conversation
-                ?.member._id,
+            receiver: conversation?.member._id,
             content: messageInput
                 .toString()
                 .trim()
@@ -37,10 +36,9 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
         socket
             .current
             .emit("sendMessage", message);
+        setNewMessage(message)
         setMessageInput("");
     };
-
-    // //////////////////////////////////////////////////////////// useEffect(() =>
 
     useEffect(() => {
         socket.current = io("http://localhost:3001")
@@ -55,7 +53,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
             }
             setArrivalMessage(data)
         })
-    })
+    }, [])
 
     useEffect(() => {
         socket
@@ -64,23 +62,10 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
     }, []);
 
     useEffect(() => {
-        arrivalMessage && conversation
-            ?._id === arrivalMessage.sender && setMessages((prevMessages) => [
-                ...prevMessages,
-                arrivalMessage
-            ]);
-    }, [
-        arrivalMessage, conversation
-            ?._id
-    ]);
-
-    // /////////////////////////////////////////////////////////////////////////////
-    // / //////////////////////////////
-    const location = useLocation();
-    useEffect(() => {
-        const conversationData = JSON.parse(localStorage.getItem("conversationData"));
-        setConversation(conversationData);
-    }, [location.state]);
+        if(arrivalMessage && conversation) {
+            setConversationMessages(prevMessages => [...prevMessages, arrivalMessage])
+        }
+    }, [arrivalMessage])
 
     return !conversation
         ? (
