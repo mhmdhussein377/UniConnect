@@ -11,20 +11,21 @@ import {useNavigate} from "react-router-dom";
 import {getRequest} from "../../utils/requests";
 
 const index = () => {
-    let [type,
+    const [type,
         setType] = useState("inbox");
-    let [openSidebar,
+    const [openSidebar,
         setOpenSidebar] = useState(false);
-    let [openCommunityDetails,
+    const [openCommunityDetails,
         setOpenCommunityDetails] = useState(false);
-    let [showUserDetails,
+    const [showUserDetails,
         setShowUserDetails] = useState(false);
-    let [showCommunityModal,
+    const [showCommunityModal,
         setShowCommunityModal] = useState(false);
-    let [showAddMembersModal,
+    const [showAddMembersModal,
         setShowAddMembersModal] = useState(false);
     const [friends, setFriends] = useState([])
     const [messages, setMessages] = useState([])
+    const [communities, setCommunities] = useState([])
 
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
@@ -49,6 +50,18 @@ const index = () => {
         }
         getPrivateConversations()
     }, [messages])
+
+    useEffect(() => {
+        const getCommunities = async () => {
+            try {
+                const response = await getRequest(`/community/communityDetails`)
+                setCommunities(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getCommunities()
+    }, [])
 
     return (
         <div className="h-screen max-h-screen">
