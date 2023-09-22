@@ -1059,6 +1059,23 @@ const AddNewCommunityMessage = async(req, res) => {
         if(!community.members.includes(userId) && !community.creator === userId) {
             return res.status(403).json({message: "User is not a member of the community"})
         }
+
+        const {content, fileURL} = req.body
+        if(!content && !fileURL) {
+            return res.status(400).json({message: "Message content or fileURL is required"})
+        }
+
+        const newMessage = {
+            sender: userId,
+            content,
+            fileURL,
+            readBy: []
+        }
+
+        community.chat.push(newMessage)
+        await community.save()
+
+        return res.status(200).json({message: "Message added successfully"})
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
