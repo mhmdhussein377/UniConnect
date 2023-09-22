@@ -97,22 +97,22 @@ const index = ({
                 className="flex-grow w-full max-h-full overflow-y-scroll scrollbar-hide  bg-white dark:bg-black">
                 {type === "inbox" && (privateConversations
                     ?.length > 0
-                        ? (privateConversations.map((item, index) => (
-                            <div
+                        ? (privateConversations.map((conversation, index) => {
+                            const {member, lastMessage, unreadMessages} = conversation
+                            return <div
                                 key={index}
                                 onClick={() => {
-                                handleSelectedConversation(index, item.member._id);
+                                handleSelectedConversation(index, member._id);
                                 setOpenCommunityDetails(false);
                                 setShowUserDetails(false);
                             }}>
                                 <Friend
-                                    name={item.member.name}
-                                    lastMessage={item.lastMessage}
-                                    messageNum={item.unreadMessages}
-                                    sender={item.member._id}
-                                    date={format(item.member.createdAt)}/>
-                            </div>
-                        )))
+                                    name={member.name}
+                                    lastMessage={lastMessage}
+                                    messageNum={unreadMessages}
+                                    sender={member._id}
+                                    date={format(member.createdAt)}/>
+                            </div>}))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">
                                 <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
@@ -123,8 +123,7 @@ const index = ({
                                 </h1>
                             </div>
                         ))}
-                {type === "community" && (communities
-                    ?.length > 0
+                {type === "community" && (communities?.length > 0
                         ? (communities.map((community, index) => (
                             <div
                                 key={index}

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 const index = ({showUserDetails, setShowUserDetails, conversation}) => {
 
     const [user, setUser] = useState({})
+    // const {profile} = user
 
     useEffect(() => {
         setUser(conversation?.member)

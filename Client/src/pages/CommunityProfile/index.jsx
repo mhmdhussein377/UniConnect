@@ -231,7 +231,7 @@ const index = () => {
                                     member={community
                                     ?.creator}/>)
                                 : null}
-                            {members?.length > 0 ? members.map((member, index) => (<Member key={index} member={member} searched={true}/>)) : null}
+                            {members?.length > 0 ? members.map((member, index) => (<Member key={index} member={member}/>)) : null}
                         </div>
                     </div>
                 </div>

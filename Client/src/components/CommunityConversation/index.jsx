@@ -27,8 +27,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 return count
             }, 0)
 
-    if (communityConversation
-        ?.creator.online) {
+    if (communityConversation?.creator.online) {
         onlineUsers += 1;
     }
 
@@ -40,8 +39,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 .toString()
                 .trim()
         }
-        await postRequest(`/community/${communityConversation
-            ?._id}/add-message`, message)
+        await postRequest(`/community/${communityConversation?._id}/add-message`, message)
         setMessageInput("")
     };
 
@@ -110,13 +108,15 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                     <div
                         className="flex-grow w-full bg-[#F4F3FC] max-h-full overflow-y-scroll scrollbar-hide px-6 py-2">
                         {messages
-                            ?.map((message, index) => (<Message
+                            ?.map((message, index) => {
+                            const {content, sender} = message
+                            return <Message
                                 key={index}
                                 communitMessage={true}
-                                content={message.content}
-                                sender={message.sender.name}
-                                own={message.sender._id}
-                                date={format(Date.now())}/>))}
+                                content={content}
+                                sender={sender.name}
+                                own={sender._id}
+                                date={format(Date.now())}/>})}
                     </div>
                 )}
                 {!communityConversation.members.length == 0 && (
