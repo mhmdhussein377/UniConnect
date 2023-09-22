@@ -4,7 +4,7 @@ import {MdEmail} from "react-icons/md";
 import {BsThreeDots} from "react-icons/bs";
 import {AiOutlinePlus} from "react-icons/ai";
 import {RiCommunityFill} from "react-icons/ri";
-import {Fragment, useContext, useRef, useState} from "react";
+import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import {FaUserPlus} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../Context/AuthContext";
@@ -31,6 +31,8 @@ const index = ({
 
     const {user} = useContext(AuthContext);
     const socket = useRef()
+    const dotsRef = useRef();
+    const settingsRef = useRef();
     const navigate = useNavigate();
     const [showSettings,
         setShowSettings] = useState(false)
@@ -50,11 +52,28 @@ const index = ({
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
         socket.current = io("http://localhost:3001");
-        socket
-            .current
-            .emit("disconnectUser", user._id);
+        socket.current.emit("disconnectUser", user._id);
         navigate("/");
     };
+
+    const toggleNotifications = () => {
+        setShowSettings((prev) => !prev);
+    };
+
+    const handleClickOutside = (e) => {
+        if (settingsRef.current && !settingsRef.current.contains(e.target) && dotsRef.current && !dotsRef.current.contains(e.target)) {
+            setShowSettings(false);
+        }
+    };
+
+    const handleDotsClick = (event) => {
+        event.stopPropagation();
+        toggleNotifications();
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+    }, []);
 
     return (
         <div
@@ -165,15 +184,13 @@ const index = ({
                     </div>
                 </div>
                 <div className="relative">
-                    <div>
-                        <BsThreeDots
-                            onClick={() => setShowSettings(!showSettings)}
-                            className="cursor-pointer"
-                            size={30}/>
+                    <div ref={dotsRef} onClick={handleDotsClick}>
+                        <BsThreeDots className="cursor-pointer" size={30}/>
                     </div>
                     {showSettings
                         ? (
                             <div
+                                ref={settingsRef}
                                 className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
                                 <Link
                                     to={`/profile/${user.username}`}
