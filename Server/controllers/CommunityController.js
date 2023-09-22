@@ -1007,6 +1007,8 @@ const GetCommunityDetails = async(req, res) => {
             }
             return null;
         }));
+
+        return res.status(200).json([...joinedCommunityDetails.filter(community => community !== null), ...createdCommunityDetails.filter(community => community !== null)])
     } catch (error) {
         res
             .status(500)
