@@ -145,6 +145,7 @@ const index = () => {
                 openCommunityDetails={openCommunityDetails}
                 setShowAddMembersModal={setShowAddMembersModal}/>{" "} {/* Sidebar to show details of the user */}
             <UserDetails
+                conversation={conversation}
                 showUserDetails={showUserDetails}
                 setShowUserDetails={setShowUserDetails}/>
             {/* Modal to create communities */}

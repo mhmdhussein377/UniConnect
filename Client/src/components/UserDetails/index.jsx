@@ -2,11 +2,17 @@ import {MdOutlineClose, MdEmail} from "react-icons/md";
 import {RiGraduationCapFill} from "react-icons/ri";
 import {BiSolidBuildingHouse} from "react-icons/bi";
 import {FaLocationDot} from "react-icons/fa6";
-import {BsFillTelephoneFill} from "react-icons/bs";
 import {Link} from "react-router-dom";
 import UserDetail from "./../UserDetail"
+import { useEffect, useState } from "react";
 
-const index = ({showUserDetails, setShowUserDetails}) => {
+const index = ({showUserDetails, setShowUserDetails, conversation}) => {
+
+    const [user, setUser] = useState({})
+
+    useEffect(() => {
+        setUser(conversation?.member)
+    }, [conversation])
 
     return (
         <div
@@ -30,40 +36,32 @@ const index = ({showUserDetails, setShowUserDetails}) => {
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                             alt="profile-picture"/>
                     </Link>
-                    <Link className="text-2xl cursor-pointer">Mohammad Hussein</Link>
+                    <Link className="text-2xl cursor-pointer">{user?.name}</Link>
                 </div>
             </div>
             <div className="p-4 flex flex-col gap-2">
-                <UserDetail
-                    icon={< MdEmail size = {
-                    20
-                } />}
+                {user?.profile?.email && <UserDetail
+                    icon={< MdEmail size = {20} />}
                     label="Email"
-                    value="mohammad.hussein377@gmail.com"/>
-                <UserDetail
+                    value={user.profile.email}/>}
+                {user?.prfoile?.major && <UserDetail
                     icon={< RiGraduationCapFill size = {
                     20
                 } />}
                     label="Major"
-                    value="Computer Science"/>
-                <UserDetail
+                    value={user.profile.major}/>}
+                {user?.pfoile?.university && <UserDetail
                     icon={< BiSolidBuildingHouse size = {
                     20
                 } />}
                     label="University"
-                    value="Toronto University"/>
-                <UserDetail
+                    value={user.profile.university}/>}
+                {user?.pofile?.location && <UserDetail
                     icon={< FaLocationDot size = {
                     20
                 } />}
                     label="Location"
-                    value="Berlin, Germany"/>
-                <UserDetail
-                    icon={< BsFillTelephoneFill size = {
-                    20
-                } />}
-                    label="Phone"
-                    value="81 954 732"/>
+                    value={user.profile.location}/>}
             </div>
         </div>
     );
