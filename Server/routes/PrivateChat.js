@@ -6,9 +6,9 @@ router.post("/newPrivateMessage", async(req, res) => {
     const {sender, receiver, content} = req.body;
 
     try {
-        await PrivateConversation.findOneAndUpdate({
+        const existingPrivateConversation = await PrivateConversation.findOneAndUpdate({
             Members: {
-                $in: [sender, receiver]
+                $all: [sender, receiver]
             }
         }, {
             $push: {
@@ -114,8 +114,6 @@ router.get("/privateConversationsDetails", async(req, res) => {
         })
             .populate({path: "messages.sender", model: "User"})
             .populate({path: "Members", model: "User"});
-
-        console.log(conversations)
 
         // if (!conversations || conversations.length === 0) {
         //     return res

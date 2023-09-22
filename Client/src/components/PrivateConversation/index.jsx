@@ -13,7 +13,7 @@ import {format} from "timeago.js";
 import {io} from "socket.io-client";
 
 const index = ({setOpenSidebar, setShowUserDetails}) => {
-    
+
     const {user} = useContext(AuthContext);
     const socket = useRef();
     let [messageInput,
@@ -26,13 +26,6 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         setArrivalMessage] = useState(null);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        socket.current = io("ws://localhost:3001");
-        socket
-            .current
-            .emit("addUser", user._id);
-    }, [user._id]);
 
     useEffect(() => {
         const getPrivateConversationMessages = async() => {
@@ -67,19 +60,14 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
         setMessageInput("");
     };
 
-    //////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////// useEffect(() =>
+
+    
 
     useEffect(() => {
         socket
             .current
-            .on("getMessage", (data) => {
-                setArrivalMessage({
-                    sender: data.senderId,
-                    content: data.text,
-                    isRead: false,
-                    createdAt: format(Date.now())
-                });
-            });
+            .emit("addUser", user._id);
     }, []);
 
     useEffect(() => {
@@ -97,7 +85,8 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
     // / //////////////////////////////
     const location = useLocation();
     useEffect(() => {
-        setConversation(JSON.parse(localStorage.getItem("conversationData")));
+        const conversationData = JSON.parse(localStorage.getItem("conversationData"));
+        setConversation(conversationData);
     }, [location.state]);
 
     return !conversation

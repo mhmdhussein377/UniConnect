@@ -2,6 +2,8 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {HiPencil} from "react-icons/hi";
 import {getRequest, postRequest} from "../../utils/requests";
 import {AuthContext} from "../../Context/AuthContext";
+import { imageDB } from "../../utils/FirebaseConfig";
+import { ref } from "firebase/storage"
 
 const index = ({setShowEditUserModal, user, isCurrentUser}) => {
 
@@ -11,14 +13,14 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
         setFriendship] = useState({});
     let [friendshipStatus,
         setFriendshipStatus] = useState({status: "", requester: ""});
-    let [buttonText,
-        setButtonText] = useState("")
-    const [loading,
-        setLoading] = useState(false);
+    let [buttonText, setButtonText] = useState("")
+    const [loading, setLoading] = useState(false);
+    const [profilemg, setProfileImg] = useState()
+
     const coverPicInputRef = useRef();
     const profilePicInputRef = useRef();
-    const coverImg = useRef()
-    const profileImg = useRef()
+    const coverImgRef = useRef()
+    const profileImgRef = useRef()
 
     useEffect(() => {
         const getFrienship = async() => {
@@ -55,8 +57,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             setButtonText("Add friend")
         }
     }, [
-        friendship
-            ?.status,
+        friendship?.status,
         currentUser._id,
         friendshipStatus.requester,
         friendshipStatus.status
@@ -106,8 +107,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             // setInput(e.target.files[0]);
             getBase64(e.target.files[0]).then((data) => {
                 image === "cover"
-                    ? coverImg.current.src = data
-                    : profileImg.current.src = data
+                    ? coverImgRef.current.src = data
+                    : profileImgRef.current.src = data
             });
 
             const reader = new FileReader();
@@ -115,6 +116,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
                 console.log(reader.result);
             };
             reader.readAsDataURL(e.target.files[0]);
+
+            
         }
     };
 
@@ -123,12 +126,12 @@ const index = ({setShowEditUserModal, user, isCurrentUser}) => {
             className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="relative">
                 <img
-                    ref={coverImg}
+                    ref={coverImgRef}
                     className="h-[200px] w-full object-cover rounded-md"
                     src="https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-2148215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be9518049b4ce73ba01a29d7839bc73212e6627c7fe2bd3"
                     alt="cover-picture"/>
                 <img
-                    ref={profileImg}
+                    ref={profileImgRef}
                     onClick={() => isCurrentUser && profilePicInputRef.current.click()}
                     className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
                     src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"

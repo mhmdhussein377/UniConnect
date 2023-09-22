@@ -13,9 +13,16 @@ import Friend from "./../Friend";
 import Community from "./../Community";
 import {format} from "timeago.js";
 import {useNavigate, useLocation} from "react-router-dom";
-import { io } from "socket.io-client";
+import {io} from "socket.io-client";
 
-const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommunityDetails, setShowUserDetails}) => {
+const index = ({
+    openSidebar,
+    type,
+    setType,
+    setShowCommunityModal,
+    setOpenCommunityDetails,
+    setShowUserDetails
+}) => {
 
     const {user} = useContext(AuthContext);
     const location = useLocation();
@@ -37,7 +44,7 @@ const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommun
             setFriends(response)
         }
         getPrivateConversations()
-    }, [location.state])
+    }, [])
 
     const handleSelectedConversation = async(index, ID) => {
         localStorage.setItem("conversationData", JSON.stringify(friends[index]))
@@ -50,13 +57,14 @@ const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommun
         await postRequest(`/privateChat/readPrivateMessage`, data)
     }
 
-    const handleLogout = () => {
-        socket.current = io("ws://localhost:3001")
-        socket.current.emit("userDisconnect");
-        localStorage.removeItem("user")
-        localStorage.removeItem("authToken")
-        navigate("/")
-    }
+    const handleLogout = async() => {
+        await postRequest("/logout", {userId: user._id});
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        socket.current = io("http://localhost:3001");
+        socket.current.emit("disconnectUser", user._id);
+        navigate("/");
+    };
 
     return (
         <div
@@ -81,7 +89,9 @@ const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommun
                 {type === "inbox" && (friends
                     ?.length > 0
                         ? (friends.map((item, index) => (
-                            <div key={index} onClick={() => handleSelectedConversation(index, item.member._id)}>
+                            <div
+                                key={index}
+                                onClick={() => handleSelectedConversation(index, item.member._id)}>
                                 <Friend
                                     name={item.member.name}
                                     lastMessage={item.lastMessage}
@@ -124,7 +134,11 @@ const index = ({openSidebar, type, setType, setShowCommunityModal, setOpenCommun
                     <div className="my-2"></div>
                     <div className="bg-transparent w-full px-4">
                         <button
-                            onClick={() => {setShowCommunityModal(true); setShowUserDetails(false); setOpenCommunityDetails(false)}}
+                            onClick={() => {
+                            setShowCommunityModal(true);
+                            setShowUserDetails(false);
+                            setOpenCommunityDetails(false)
+                        }}
                             className="py-3 mb-3 bg-primary text-white rounded-md w-full flex items-center justify-center gap-2 font-medium">
                             <AiOutlinePlus size={22}/>
                             New Community

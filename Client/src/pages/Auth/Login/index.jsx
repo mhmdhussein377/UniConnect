@@ -11,7 +11,6 @@ import {GoogleOAuthProvider, GoogleLogin} from "@react-oauth/google";
 import jwt_decode from "jwt-decode"
 import axios from "axios";
 import {handleChange} from "./../../../utils/handleChange.js"
-import { io } from "socket.io-client";
 
 const index = () => {
 
@@ -22,9 +21,6 @@ const index = () => {
     let [error,
         setError] = useState({});
     const navigate = useNavigate()
-    const socket = useRef()
-
-    
 
     const handleInputChange = (e) => {
         handleChange(e, setInputs)
@@ -63,9 +59,6 @@ const index = () => {
             const response = await postRequest("/login", inputs, handleLoginError);
             response && setAuthToken(response.token)
             dispatch({type: "LOGIN_SUCCESS", payload: response})
-            socket.current = io("ws://localhost:3001")
-            socket.current.emit("addUser", response._id)
-
             response && navigate("/home");
         } catch (error) {
             dispatch({type: "LOGIN_FAILURE"})

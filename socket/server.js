@@ -19,57 +19,48 @@ mongoose
     });
 
 const io = require("socket.io")(server, {
-    pingTimeout: 60000,
     cors: {
-        origin: ["http://localhost:5173", "http://localhost:5174"]
+        origin: ["http://localhost:5173", "http://localhost:5174"],
+        methods: ["GET", "POST"]
     }
 });
 
 const {getUsers, addUser} = require("./controllers/UserController");
 
-const users = []
+const users = new Map()
 
 io.on("connection", (socket) => {
-    // socket.on("addUser", (userId) => {
-    //     users.push(socket.id)
-    //     console.log(users)
-    // })
 
-    io.emit("Welcome", "hello this is socket server")
+    socket.on("addUser", (userId) => {
+        users.set(userId, socket.id);
+    });
 
     socket.on("sendMessage", async({sender, receiver, content}) => {
         try {
-            for (const key of users) {
+            for (const [key,
+                value]of users.entries()) {
                 if (key === receiver) {
                     io
-                        .to(users[key])
-                        .emit('getMessage', {sender, content})
-                    break
+                        .to(value)
+                        .emit("getMessage", {sender, content});
+                    break;
                 }
             }
-
         } catch (error) {
-            // Handle errors here
             console.error(error);
         }
     });
 
-    socket.on('userDisconnect', () => {
-        // const userEntries = Object.entries(users) for(const [key, value] of
-        // userEntries) {     if(value === socket.id) {         delete users[key]
-        //  break     } }
-
-        const index = users.indexOf(socket.id);
-        if (index !== -1) {
-            users.splice(index, 1);
+    socket.on("disconnectUser", (userId) => {
+        for (const [key,
+            value]of users.entries()) {
+            if (key === userId) {
+                console.log(`Socket disconnected: ${value}`);
+                users.delete(key);
+                break;
+            }
         }
-
-        console.log(users)
-    })
-
-    // socket.on("friendRequestAccepted", (data) => {     console.log(data,
-    // "dataaa");     const userSocketId = data.receiverSocketId;
-    // io.to(userSocketId).emit("friendRequestAccepted", data); });
+    });
 })
 
 server.listen(3001, () => {

@@ -7,6 +7,7 @@ import {useContext, useEffect, useState} from "react"
 import {AuthContext} from "./../../Context/AuthContext"
 import ShowCommunities from "./../../components/ShowCommunites"
 import ShowFriends from "./../../components/ShowFriends"
+
 // MODALS
 import EducationalModal from './components/EducationalModal'
 import EditUserModal from './components/EditUserModal'
