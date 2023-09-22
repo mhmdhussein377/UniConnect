@@ -62,7 +62,20 @@ const index = ({setOpenSidebar, setShowUserDetails}) => {
 
     // //////////////////////////////////////////////////////////// useEffect(() =>
 
-    
+    useEffect(() => {
+        socket.current = io("http://localhost:3001")
+        socket.current.on("getMessage", ({sender, content}) => {
+            const data = {
+                sender: {
+                    _id: sender
+                },
+                content,
+                isRead: false,
+                createdAt: format(Date.now())
+            }
+            setArrivalMessage(data)
+        })
+    })
 
     useEffect(() => {
         socket
