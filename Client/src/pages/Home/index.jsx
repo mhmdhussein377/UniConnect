@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Header from "./../../components/Header";
 import Sidebar from "./../../components/Sidebar";
 import CommunityConversation from "./../../components/CommunityConversation";
@@ -8,9 +8,13 @@ import UserDetails from "./../../components/UserDetails";
 import CreateCommunityModal from "../../components/CreateCommunityModal";
 import AddMembersModal from "./../../components/AddMembersModal";
 import {useNavigate} from "react-router-dom";
-import {getRequest} from "../../utils/requests";
+import {getRequest, postRequest} from "../../utils/requests";
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = () => {
+
+    const {user} = useContext(AuthContext)
+
     const [type,
         setType] = useState("inbox");
     const [openSidebar,
@@ -23,6 +27,8 @@ const index = () => {
         setShowCommunityModal] = useState(false);
     const [showAddMembersModal,
         setShowAddMembersModal] = useState(false);
+
+    const [conversation, setConversation] = useState([])
     const [friends, setFriends] = useState([])
     const [messages, setMessages] = useState([])
     const [communities, setCommunities] = useState([])
@@ -62,6 +68,18 @@ const index = () => {
         }
         getCommunities()
     }, [])
+
+    useEffect(() => {
+        const getPrivateConversationMessages = async () => {
+            const data = {
+                userOne: user._id,
+                userTwo: conversation.member._id
+            }
+            const response = await postRequest(`/privateChat/privateConversationsMessages`, data)
+            setMessages(response)
+        }
+        getPrivateConversationMessages()
+    }, [conversation, user._id])
 
     return (
         <div className="h-screen max-h-screen">
