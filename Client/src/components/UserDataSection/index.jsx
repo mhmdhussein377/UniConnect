@@ -5,7 +5,7 @@ import {AuthContext} from "../../Context/AuthContext";
 import { imageDB } from "../../utils/FirebaseConfig";
 import { ref } from "firebase/storage"
 
-const index = ({setShowEditUserModal, user, isCurrentUser, setFriends}) => {
+const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends}) => {
 
     const {user: currentUser} = useContext(AuthContext)
 
@@ -76,8 +76,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends}) => {
                     ?._id}`);
             } else if (friendshipStatus.status === "pending" && friendshipStatus.requester !== currentUser._id) {
                 setFriendshipStatus({status: "accepted", requester: ""});
-                await postRequest(`/friendship/accept-friend-request/${user
-                    ?._id}`);
+                await postRequest(`/friendship/accept-friend-request/${user?._id}`);
             } else if (friendshipStatus.status === "accepted") {
                 setFriendshipStatus({status: "no friendship", requester: ""});
                 setFriends(prev => prev.filter(friend => friend._id !== currentUser._id))
@@ -179,7 +178,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends}) => {
                                 )
                                 : null}
                     <div className="flex items-center gap-1.5">
-                        <span>{user.friends?.length > 0 ? user.friends?.length : "No"}</span> Friends
+                        <span>{friends?.length > 0 ? friends?.length : "No"}</span> Friends
                     </div>
                     {!isCurrentUser && buttonText !== "" && (
                         <div className="mt-2">

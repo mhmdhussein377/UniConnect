@@ -55,6 +55,7 @@ const index = () => {
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col lg:flex-row gap-4">
                     <div className="lg:flex-[4] xl:flex-[8] flex flex-col gap-6">
                         {user && (<UserDataSection
+                            friends={friends}
                             setFriends={setFriends}
                             isCurrentUser={user.username === currentUser.username}
                             user={user}/>)}

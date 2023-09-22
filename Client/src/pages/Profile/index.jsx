@@ -31,18 +31,22 @@ const index = () => {
         setShowSkillsModal] = useState(false);
     let [joinedCommunities,
         setJoinedCommunities] = useState([])
+    const [friends, setFriends] = useState([])
 
-    let {createdCommunities, friends} = user
+    let {createdCommunities} = user
     let {skills, languages, bio, university, major} = user.profile
 
     useEffect(() => {
         const getUser = async() => {
             const response = await getRequest(`/user/${user.username}`);
             response && setJoinedCommunities(response.user.joinedCommunities);
+            response && setFriends(response.user.friends)
             dispatch({type: "SET_JOINED_COMMUNITIES", payload: response.user.joinedCommunities})
         };
         getUser();
     }, []);
+
+    console.log(friends)
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -52,6 +56,7 @@ const index = () => {
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col lg:flex-row gap-4">
                     <div className="lg:flex-[4] xl:flex-[8] flex flex-col gap-6">
                         {user && (<UserDataSection
+                            friends={friends}
                             isCurrentUser={user
                             ?.usrname === username}
                             user={user}
