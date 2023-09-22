@@ -3,9 +3,10 @@ import {GrAttachment} from "react-icons/gr";
 import {CgSidebarOpen} from "react-icons/cg";
 import {FiUserPlus} from "react-icons/fi";
 import Message from "./../Message"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {AiTwotoneLock} from "react-icons/ai";
 import { format } from "timeago.js";
+import { postRequest } from "../../utils/requests";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityConversation}) => {
 
@@ -30,6 +31,12 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
+
+        const message = {
+            content: messageInput.toString().trim()
+        }
+        await postRequest(`/community/${communityConversation?._id}/add-message`, message)
+        setMessageInput("")
     };
 
     return !communityConversation
@@ -110,13 +117,15 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                                 date={format(Date.now())}/>))}
                     </div>
                 )}
-                {!communityConversation.members.length && (
+                {!communityConversation.members.length == 0 && (
                     <form
                         onSubmit={handleSendMessage}
                         className="w-full flex items-center px-6 py-5 bg-[#F4F3FC]">
                         <div
                             className="flex items-center gap-4 pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white ">
-                            <input
+                            <input 
+                                value={messageInput}
+                                onChange={e => setMessageInput(e.target.value)}
                                 className="flex-1 h-[100%] px-4 border-none outline-none bg-transparent placeholder:text-[#737373] placeholder:font-medium"
                                 type="text"
                                 placeholder="Send a message"/>
