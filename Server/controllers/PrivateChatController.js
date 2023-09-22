@@ -120,7 +120,8 @@ const GetPrivateConversationsDetails = async(req, res) => {
             const conversationDetails = {
                 member: null,
                 lastMessage: null,
-                unreadMessages: 0
+                unreadMessages: 0,
+                _id: item._id
             };
 
             item

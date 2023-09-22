@@ -26,8 +26,8 @@ const index = ({
     privateConversations,
     setSelectedConversation,
     selectedCommunity,
-    communities
-}) => {
+    communities,
+    selectedConversation}) => {
 
     const {user} = useContext(AuthContext);
     const {username} = user
@@ -76,6 +76,8 @@ const index = ({
         document.addEventListener("click", handleClickOutside);
     }, []);
 
+    console.log(selectedConversation, "sidebaar")
+
     return (
         <div
             className={`w-[80%] sm:w-[65%] smd:w-[55%] md:w-[45%] flex flex-col h-full border-r-[2px] border-grayHard absolute top-0 -left-full sidebar ${openSidebar && "left-[0%]"} transition-all duration-300 ease-linear lg:static lg:flex-[3.5] bg-white z-[20] dark:bg-black dark:text-white`}>
@@ -99,7 +101,7 @@ const index = ({
                 {type === "inbox" && (privateConversations
                     ?.length > 0
                         ? (privateConversations.map((conversation, index) => {
-                            const {member, lastMessage, unreadMessages} = conversation
+                            const {member, lastMessage, unreadMessages, _id} = conversation
                             return <div
                                 key={index}
                                 onClick={() => {
@@ -108,6 +110,7 @@ const index = ({
                                 setShowUserDetails(false);
                             }}>
                                 <Friend
+                                    highlight={selectedConversation?._id === _id}
                                     name={member.name}
                                     lastMessage={lastMessage}
                                     messageNum={unreadMessages}

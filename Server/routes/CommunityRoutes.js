@@ -32,7 +32,6 @@ router.get("/communityInfo/:communityId", GetCommunityDetails)
 router.post("/:communityId/add-message", AddNewCommunityMessage)
 
 
-
 router.get("/:communityId", GetCommunity)
 
 router.post("/create", CreateCommunity);

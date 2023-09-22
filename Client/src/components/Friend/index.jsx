@@ -7,7 +7,7 @@ const index = ({
     lastMessage,
     date,
     messageNum,
-    sender
+    sender,
 }) => {
     const {user} = useContext(AuthContext);
 

@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const {UpdateNotificationStatus, AcceptCommunityJoinRequest, GetNotifications, GetUnreadNotifications} = require("./../controllers/NotificationController");
-
-// app.post("/accepct-community-join-request", AcceptCommunityJoinRequest)
+const {GetNotifications, GetUnreadNotifications} = require("./../controllers/NotificationController");
 
 router.get("/", GetNotifications)
 
-router.get("/", GetUnreadNotifications)
+router.get("/unreadNotifications", GetUnreadNotifications)
 
 module.exports = router;

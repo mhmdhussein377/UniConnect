@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { CreatePrivateMessage, CreatePrivateConversation, ReadPrivateMessage } = require("../controllers/PrivateChatController");
+const { CreatePrivateMessage, CreatePrivateConversation, ReadPrivateMessage, GetPrivateConversationsDetails, GetPrivateConversationMessages } = require("../controllers/PrivateChatController");
 
 router.post("/newPrivateMessage", CreatePrivateMessage);
 

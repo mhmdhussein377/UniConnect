@@ -62,7 +62,6 @@ const index = () => {
             try {
                 const response = await getRequest(`/privateChat/privateConversationsDetails`);
                 setFriends(response)
-                console.log(response, "responseeee")
             } catch (error) {
                 console.log(error)
             }
@@ -110,6 +109,8 @@ const index = () => {
         getPrivateConversationMessages()
     }, [conversation, user._id, newMessage])
 
+    console.log(selectedConversation, 'homeeee')
+
     return (
         <div className="h-screen max-h-screen">
             <Header/>
@@ -118,6 +119,7 @@ const index = () => {
                     setType={setType}
                     type={type}
                     openSidebar={openSidebar}
+                    selectedConversation={selectedConversation}
                     setSelectedConversation={setSelectedConversation}
                     selectedCommunity={setCommunityId}
                     privateConversations={friends}
