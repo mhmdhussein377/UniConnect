@@ -40,11 +40,11 @@ const index = () => {
     const [communities,
         setCommunities] = useState([])
     const [communityId,
-        setCommunityId] = useState([])
+        setCommunityId] = useState()
     const [selectedCommunity,
         setSelectedCommunity] = useState(null)
     const [newMessage,
-        setNewMessage] = useState("")
+        setNewMessage] = useState({})
 
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
@@ -129,7 +129,7 @@ const index = () => {
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}
-                    communityInfo={selectedCommunity}/>)}
+                    communityConversation={selectedCommunity}/>)}
                 {type === "inbox" && (<PrivateConversation
                     setOpenSidebar={setOpenSidebar}
                     setShowUserDetails={setShowUserDetails}

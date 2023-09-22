@@ -3,10 +3,28 @@ import {GrAttachment} from "react-icons/gr";
 import {CgSidebarOpen} from "react-icons/cg";
 import {FiUserPlus} from "react-icons/fi";
 import Message from "./../Message"
+import { useState } from "react";
 
-const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar}) => {
+const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityConversation}) => {
 
     const newCommunity = false;
+
+    const [messageInput, setMessageInput] = useState("");
+    const [messages, setMessages] = useState([]);
+
+    useEffect(()  => {
+        setMessages(communityConversation?.chat)
+    }, [communityConversation?.chat])
+
+    let onlineUsers = communityConversation?.members.reduce((count, member) => {
+        if(member.online) {
+            return count + 1
+        }
+        return count
+    }, 0)
+    if(communityConversation?.creator.online) {
+        onlineUsers += 1;
+    }
 
     const handleSendMessage = (e) => {
         e.preventDefault();
