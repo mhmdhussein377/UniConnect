@@ -14,6 +14,9 @@ const index = () => {
     const {id: userId, token} = useParams();
     const navigate = useNavigate();
 
+    localStorage.removeItem("user");
+    localStorage.removeItem("authToken");
+
     const handleResetPassword = async(e) => {
         e.preventDefault();
 

@@ -16,6 +16,9 @@ const index = () => {
 
     const {dispatch} = useContext(AuthContext)
 
+    localStorage.removeItem("user")
+    localStorage.removeItem("authToken")
+
     let [inputs,
         setInputs] = useState({});
     let [error,
@@ -35,9 +38,7 @@ const index = () => {
     const handleLoginError = (error) => {
         if (error.response.data.error.status === 401) {
             setError({isError: true, type: "Wrong credentials", message: "Wrong credentials"})
-            setTimeout(() => {
-                setError(false)
-            }, 3000)
+            resetError()
             return
         }
     }
@@ -58,6 +59,7 @@ const index = () => {
 
             const response = await postRequest("/login", inputs, handleLoginError);
             response && setAuthToken(response.token)
+            
             dispatch({type: "LOGIN_SUCCESS", payload: response})
             response && navigate("/home");
         } catch (error) {

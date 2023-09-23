@@ -13,6 +13,9 @@ const index = () => {
     let [error, setError] = useState(false)
     const navigate = useNavigate()
 
+    localStorage.removeItem("user");
+    localStorage.removeItem("authToken");
+
     const handleForgotPassword = async(e) => {
         e.preventDefault();
 

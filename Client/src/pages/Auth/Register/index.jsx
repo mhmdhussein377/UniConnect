@@ -17,6 +17,9 @@ const index = () => {
         setError] = useState({isError: false, type: "", message: ""})
     const navigate = useNavigate()
 
+    localStorage.removeItem("user");
+    localStorage.removeItem("authToken");
+
     const handleInputChange = (e) => {
         handleChange(e, setInputs)
     };
@@ -52,8 +55,6 @@ const index = () => {
             resetError();
             return 
         }
-
-        console.log(password, password.length)
 
         const response = await postRequest("/register", inputs, handleRegisterError)
         response && navigate("/")
