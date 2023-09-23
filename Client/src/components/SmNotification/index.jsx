@@ -1,6 +1,7 @@
 import { handleRequestAction } from "../../utils/handleNotification";
 
 const index = ({ _id, sender, content, community, type, setNotifications }) => {
+  
   const handleAction = (e, action) => {
     handleRequestAction(
       e,

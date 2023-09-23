@@ -10,6 +10,7 @@ import {AuthContext} from "./Context/AuthContext";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import SmNotifications from "./pages/SmNotifications";
+import NotFound from "./pages/NotFound"
 import {QueryClientProvider, QueryClient} from "react-query";
 
 const queryClient = new QueryClient()
@@ -55,6 +56,9 @@ function App() {
         }, {
             path: "/notifications",
             element: <SmNotifications/>
+        }, {
+            path: "*",
+            element: <NotFound />
         }
     ];
 
