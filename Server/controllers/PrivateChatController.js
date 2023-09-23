@@ -134,7 +134,10 @@ const GetPrivateConversationsDetails = async(req, res) => {
 
             if (item.messages.length > 0) {
                 const lastMessage = item.messages[item.messages.length - 1];
-                conversationDetails.lastMessage = lastMessage.content;
+                conversationDetails.lastMessage = {
+                    content: lastMessage.content,
+                    createdAt: lastMessage.timestamps
+                };
 
                 item
                     .messages

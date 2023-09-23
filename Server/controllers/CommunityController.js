@@ -978,9 +978,7 @@ const GetCommunitiesDetails = async(req, res) => {
                     name: community.name,
                     privacy: community.privacy,
                     unreadCount,
-                    lastMessages: community
-                    .chat
-                    .slice(-5)
+                    lastMessages: community.chat.slice(-5)
                 };
             }
             return null;

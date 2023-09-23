@@ -49,7 +49,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                 },
                 content,
                 isRead: false,
-                createdAt: format(Date.now())
+                // createdAt: format(Date.now())
             }
             setArrivalMessage(data)
         })
