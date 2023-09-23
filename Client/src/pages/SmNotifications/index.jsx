@@ -1,27 +1,22 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {BsArrowLeft} from "react-icons/bs"
 import {useNavigate} from "react-router-dom";
 import {getRequest} from "../../utils/requests";
 import SmNotification from "./../../components/SmNotification"
+import { useQuery } from "react-query";
 
 const index = () => {
 
-    let [notifications,
-        setNotifications] = useState([]);
-    let [loading,
-        setLoading] = useState(false);
-
-    useEffect(() => {
-        const getNotifications = async() => {
-            setLoading(true);
-            const response = await getRequest("/notifications");
-            response && setNotifications(response.notificaions);
-            setLoading(false);
-        };
-        getNotifications();
-    }, []);
-
     const navigate = useNavigate()
+    const [notifications,
+        setNotifications] = useState([]);
+
+    const getNotifications = async() => {
+        const response = await getRequest("/notifications");
+        response && setNotifications(response.notifications);
+    };
+
+    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 5000});
 
     const handleBackClick = () => {
         navigate(-1)
@@ -37,7 +32,7 @@ const index = () => {
                 <h2>Notifications</h2>
             </div>
             <div
-                className={`sm-notifications flex flex-col bg-[#F4F3FC] flex-1 ${notifications.length === 0 && "items-center justify-center"}`}>
+                className={`sm-notifications flex flex-col bg-[#F4F3FC] flex-1  ${notifications.length == 0 ? "items-center justify-center" : null}`}>
                 {notifications.length > 0
                     ? (notifications.map((noti, index) => (<SmNotification {...noti} key={index} setNotifications={setNotifications}/>)))
                     : (
