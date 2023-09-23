@@ -19,35 +19,52 @@ function App() {
 
     const {user} = useContext(AuthContext);
 
+    const routes = [
+        {
+            path: "/",
+            element: <Login/>
+        }, {
+            path: "/register",
+            element: <Register/>
+        }, {
+            path: "/forgot-password",
+            element: <ForgotPassword/>
+        }, {
+            path: "/reset-password/:id/:token",
+            element: <ResetPassword/>
+        }, {
+            path: "/home",
+            element: user
+                ? <Home/>
+                : <Navigate to={"/"}/>
+        }, {
+            path: `/profile/${user
+                ?.username}`,
+            element: user
+                ? <Profile/>
+                : <Navigate to={"/"}/>
+        }, {
+            path: "/profile/:username",
+            element: user
+                ? <OtherUsersProfile/>
+                : <Navigate to={"/"}/>
+        }, {
+            path: "/community/:id",
+            element: user
+                ? <CommunityProfile/>
+                : <Navigate to={"/"}/>
+        }, {
+            path: "/notifications",
+            element: <SmNotifications/>
+        }
+    ];
+
     return (
         <QueryClientProvider client={queryClient}>
             <Routes>
-                <Route path="/" element={< Login />}/>
-                <Route path="/register" element={< Register />}/>
-                <Route path="/forgot-password" element={< ForgotPassword />}/>
-                <Route path="/reset-password/:id/:token" element={< ResetPassword />}/>
-                <Route
-                    path="/home"
-                    element={user
-                    ? <Home/>
-                    : <Navigate to={"/"}/>}/>
-                <Route
-                    path={`/profile/${user
-                    ?.username}`}
-                    element={user
-                    ? <Profile/>
-                    : <Navigate to={"/"}/>}/>
-                <Route
-                    path="/profile/:username"
-                    element={user
-                    ? <OtherUsersProfile/>
-                    : <Navigate to={"/"}/>}/>
-                <Route
-                    path="/community/:id"
-                    element={user
-                    ? <CommunityProfile/>
-                    : <Navigate to={"/"}/>}/>
-                <Route path="/notifications" element={< SmNotifications />}/>
+                {routes.map((route, index) => (
+                    <Route key={index} path={route.path} element={route.element} />
+                ))}
             </Routes>
         </QueryClientProvider>
     );
