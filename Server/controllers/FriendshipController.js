@@ -175,10 +175,14 @@ const AcceptFriendRequest = async(req, res) => {
         await acceptanceNotification.save();
 
         const existingConversation = await PrivateConversation.findOne({
-            members: [currentUser, recipientUserId]
-        })
-        if(!existingConversation) {
-            const newPrivateConversation = new PrivateConversation({members: [currentUser, recipientUserId]})
+            members: {
+                $all: [currentUser, recipientUserId]
+            }
+        });
+        if (!existingConversation) {
+            const newPrivateConversation = new PrivateConversation({
+                members: [currentUser, recipientUserId]
+            })
             await newPrivateConversation.save()
         }
 
@@ -204,11 +208,11 @@ const CancelFriendRequest = async(req, res) => {
                 {
                     userOne: currentUser,
                     userTwo: recipientUserId,
-                    requester: currentUser,
+                    requester: currentUser
                 }, {
                     userOne: recipientUserId,
                     userTwo: currentUser,
-                    requester: currentUser,
+                    requester: currentUser
                 }
             ]
         });
@@ -288,6 +292,16 @@ const Unfriend = async(req, res) => {
         await currentUserObj.save();
         await friendUserObj.save();
 
+        const privateConversation = await PrivateConversation.findOne({
+            members: {
+                $all: [currentUser, friendUserId]
+            }
+        })
+
+        if (privateConversation) {
+            await PrivateConversation.findByIdAndDelete(privateConversation._id)
+        }
+
         res
             .status(200)
             .json({message: "Friend removed successfully"});
@@ -322,22 +336,26 @@ const RejectFriendRequest = async(req, res) => {
 
         if (!existingFriendship) 
             return res.status(400).json({message: "Friendship doesn't exist"});
-
-        if(existingFriendship.status === "accepted") {
-            return res.status(400).json({message: "You can't reject an accepted friendship"})
-        }
-
-        if(existingFriendship.status === "rejected") {
-            return res.status(400).json("You can't reject a rejected friendship")
-        }
         
+        if (existingFriendship.status === "accepted") {
+            return res
+                .status(400)
+                .json({message: "You can't reject an accepted friendship"})
+        }
+
+        if (existingFriendship.status === "rejected") {
+            return res
+                .status(400)
+                .json("You can't reject a rejected friendship")
+        }
+
         await existingFriendship.updateOne({status: "rejected"});
 
         const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
 
         if (!existingNotification) 
             return res.status(400).json({message: "Notification not found"});
-
+        
         existingNotification.status = "rejected";
         existingNotification.isRead = true;
         await existingNotification.save();

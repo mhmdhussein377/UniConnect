@@ -10,7 +10,6 @@ import {getRequest, postRequest} from "./../../utils/requests"
 import ShowCommunities from "./../../components/ShowCommunites"
 import ShowFriends from "./../../components/ShowFriends"
 import Member from "./../../components/Member"
-import socketIOClient from "socket.io-client"
 
 const index = () => {
 
@@ -28,10 +27,12 @@ const index = () => {
             response && setUser(user)
             response && setFriends(user.friends)
         }
-        getUser()
+        username !== undefined && getUser()
     }, [username])
 
     const {createdCommunities, joinedCommunities} = user
+
+    console.log(username)
 
     useEffect(() => {
         const getSuggestedUsers = async() => {

@@ -61,9 +61,10 @@ const index = () => {
         const getPrivateConversations = async() => {
             try {
                 const response = await getRequest(`/privateChat/privateConversationsDetails`);
+                console.log(response, "respon")
                 response && response.sort((conv1, conv2) => {
-                    const timestamp1 = new Date(conv1.lastMessage.createdAt).getTime()
-                    const timestamp2 = new Date(conv2.lastMessage.createdAt).getTime()
+                    const timestamp1 = new Date(conv1.lastMessage?.createdAt).getTime()
+                    const timestamp2 = new Date(conv2.lastMessage?.createdAt).getTime()
 
                     return timestamp2 - timestamp1
                 })
