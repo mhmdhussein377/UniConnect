@@ -150,7 +150,7 @@ const index = () => {
                 setShowUserDetails={setShowUserDetails}/> {/* Modal to create communities */}
             {showCommunityModal && <CreateCommunityModal setCommunities={setCommunities} setShowCommunityModal={setShowCommunityModal}/>}
             {/* Modal to add members to communities */}
-            {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}
+            {showAddMembersModal && (<AddMembersModal communityId={communityId} setShowAddMembersModal={setShowAddMembersModal}/>)}
         </div>
     );
 };

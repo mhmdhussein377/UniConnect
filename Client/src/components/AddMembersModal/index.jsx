@@ -84,16 +84,8 @@ const index = ({setShowAddMembersModal, communityId}) => {
                                 invite={true}
                                 member={friend}
                                 inModal={true}/>);
-
                         })}
                 </div>
-                {/* {selectedUsers.length > 0 && (
-                    <div className=" mt-auto">
-                        <button className="bg-primary text-white px-4 py-2 rounded-md">
-                            Invite Users
-                        </button>
-                    </div>
-                )} */}
             </div>
         </div>
     );

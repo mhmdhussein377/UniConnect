@@ -12,9 +12,9 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
 
     const {user} = useContext(AuthContext)
 
-    let [isAboutOpened,
+    const [isAboutOpened,
         setIsAboutOpened] = useState(true)
-    let [isMembersListOpened,
+    const [isMembersListOpened,
         setIsMembersListOpened] = useState(true)
     const [communityInfo, setCommunityInfo] = useState(null)
 
@@ -62,7 +62,7 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
                     className="flex items-center justify-between py-4 border-t-2 border-grayHard select-none">
                     Members
                     <div className="flex items-center gap-4">
-                        {user._id === communityInfo?.creator._id && <div onClick={() => {setShowAddMembersModal(true); setOpenCommunityDetails(false)}} className="flex items-center cursor-pointer text-primary font-medium select-none">
+                        {user._id === communityInfo?.creator._id && communityInfo?.privacy === "private" && <div onClick={() => {setShowAddMembersModal(true); setOpenCommunityDetails(false)}} className="flex items-center cursor-pointer text-primary font-medium select-none">
                             <GoPlus size={20}/>
                             Add Members
                         </div>}
