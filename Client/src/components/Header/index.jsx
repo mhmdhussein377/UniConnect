@@ -25,6 +25,8 @@ const index = ({profile}) => {
         setThemeMode] = useState("light")
     const [notifications,
         setNotifications] = useState([]);
+    const [unreadNotifications,
+        setUnreadNotifications] = useState()
 
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
@@ -44,6 +46,7 @@ const index = ({profile}) => {
     const setNotificationsAsRead = async() => {
         let notificationsIds = notifications.map((notification) => notification._id);
         try {
+            setUnreadNotifications(0)
             await postRequest("/notifications/updateNotificationsStatus", {notificationsIds});
         } catch (error) {
             console.log(error);
@@ -55,16 +58,13 @@ const index = ({profile}) => {
             setShowNotifications(false);
         }
 
-        if(showNotifications) {
-            setNotificationsAsRead()
-        }
+        setNotificationsAsRead()
+
     };
 
     const handleBellClick = (event) => {
         event.stopPropagation();
-        if (showNotifications) {
-            setNotificationsAsRead()
-        }
+        setNotificationsAsRead()
         toggleNotifications();
 
         if (window.innerWidth < 740) {
@@ -101,6 +101,18 @@ const index = ({profile}) => {
             setShowNotifications(false)
         }
     })
+
+    useEffect(() => {
+        const unreadNotifications = notifications.reduce((count, noti) => {
+            if (!noti.isRead) {
+                count += 1
+            }
+            return count
+        }, 0)
+        setUnreadNotifications(unreadNotifications)
+    }, [notifications])
+
+    console.log(unreadNotifications, "unreadNotifications")
 
     return (
         <div
@@ -139,11 +151,14 @@ const index = ({profile}) => {
                         className="cursor-pointer text-[#575D65] dark:text-white"/>
                     <div className="relative w-fit flex items-center justify-center">
                         <div
-                            className="cursor-pointer select-none bell"
+                            className="cursor-pointer select-none bell relative"
                             ref={bellIconRef}
                             onClick={handleBellClick}>
                             <AiFillBell size={28} className="text-[#575D65] dark:text-white"/>
                         </div>
+                        {unreadNotifications > 0 ? <div
+                            onClick={handleBellClick}
+                            className="absolute -top-[3px] -right-[2px] rounded-full w-[17px] h-[17px] bg-primary text-white flex items-center justify-center cursor-pointer">{unreadNotifications}</div> : null}
                         {showNotifications && (
                             <Fragment>
                                 <div ref={notificationsRef}>

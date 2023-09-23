@@ -1,8 +1,7 @@
-import { postRequest } from "./requests";
+import {postRequest} from "./requests";
 
-const handleNotification = async(apiEndpoint, setNotifications, currentNotification) => {
+const handleNotification = async(apiEndpoint) => {
     try {
-        setNotifications((prev) => prev.filter((noti) => noti._id !== currentNotification));
         await postRequest(apiEndpoint);
     } catch (error) {
         console.log(error);
@@ -11,6 +10,7 @@ const handleNotification = async(apiEndpoint, setNotifications, currentNotificat
 
 export const handleRequestAction = async(e, actionType, type, sender, community, setNotifications, currentNotification) => {
     e.stopPropagation();
+    setNotifications((prev) => prev.filter((noti) => noti._id !== currentNotification));
 
     let endpoint;
 
@@ -34,5 +34,5 @@ export const handleRequestAction = async(e, actionType, type, sender, community,
             return;
     }
 
-    handleNotification(endpoint, setNotifications, currentNotification);
+    handleNotification(endpoint);
 };
