@@ -1,26 +1,41 @@
 import Logo from "./../../assets/UniConnectLogo.png";
 import SearchBar from "./../SearchBar";
 import {MdLightMode} from "react-icons/md";
-import { AiOutlineSearch } from "react-icons/ai";
-import { BsArrowLeft } from "react-icons/bs";
+import {AiOutlineSearch} from "react-icons/ai";
+import {BsArrowLeft} from "react-icons/bs";
 import {AiFillBell} from "react-icons/ai";
 import {AiFillHome} from "react-icons/ai";
 import {Link, useNavigate} from "react-router-dom";
 import Notifications from "./../Notifications";
 import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../../Context/AuthContext";
+import {getRequest} from "../../utils/requests";
+import {useQuery} from "react-query";
 
 const index = ({profile}) => {
-    
+
     const {user} = useContext(AuthContext);
     const {username} = user;
 
-    const [showNotifications, setShowNotifications] = useState(false);
-    const [showSearchSm, setShowSearchSm] = useState(false)
-    const [themeMode, setThemeMode] = useState("light")
+    const [showNotifications,
+        setShowNotifications] = useState(false);
+    const [showSearchSm,
+        setShowSearchSm] = useState(false)
+    const [themeMode,
+        setThemeMode] = useState("light")
+    const [notifications,
+        setNotifications] = useState([]);
+
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
     const navigate = useNavigate()
+
+    const getNotifications = async() => {
+        const response = await getRequest("/notifications");
+        response && setNotifications(response.notifications);
+    };
+
+    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 5000});
 
     const toggleNotifications = () => {
         setShowNotifications((prev) => !prev);
@@ -74,12 +89,15 @@ const index = ({profile}) => {
     return (
         <div
             className="h-[70px] flex items-center justify-between px-4 py-2 border-b-[2px] border-b-grayHard dark:bg-black dark:border-b-white">
-            <Link to="/home" className={`flex-[3.2] flex items-center gap-8 ${showSearchSm && "hidden"}`}>
+            <Link
+                to="/home"
+                className={`flex-[3.2] flex items-center gap-8 ${showSearchSm && "hidden"}`}>
                 <img className="w-[48px] h-[45px] object-cover" src={Logo} alt="logo"/>
             </Link>
             <div
                 className={`flex-[8.8] flex items-center justify-end ${showSearchSm && 'w-full'} sm:justify-between lg:pl-14`}>
-                <div className={`${showSearchSm && "w-full flex"} w-[60%] ${!showSearchSm && "hidden"} sm:flex items-center gap-4`}>
+                <div
+                    className={`${showSearchSm && "w-full flex"} w-[60%] ${ !showSearchSm && "hidden"} sm:flex items-center gap-4`}>
                     {profile && (
                         <Link
                             to="/home"
@@ -88,11 +106,17 @@ const index = ({profile}) => {
                             Home
                         </Link>
                     )}
-                    {showSearchSm && <BsArrowLeft onClick={() => setShowSearchSm(false)} className="cursor-pointer" size={30} />}
+                    {showSearchSm && <BsArrowLeft
+                        onClick={() => setShowSearchSm(false)}
+                        className="cursor-pointer"
+                        size={30}/>}
                     <SearchBar/>
                 </div>
                 <div className={`flex items-center gap-2.5 ${showSearchSm && "hidden"}`}>
-                    <AiOutlineSearch onClick={() => setShowSearchSm(true)} size={26} className="cursor-pointer sm:hidden text-[#575D65] dark:text-white" />
+                    <AiOutlineSearch
+                        onClick={() => setShowSearchSm(true)}
+                        size={26}
+                        className="cursor-pointer sm:hidden text-[#575D65] dark:text-white"/>
                     <MdLightMode
                         onClick={handleChangeThemeMode}
                         size={28}
@@ -108,7 +132,9 @@ const index = ({profile}) => {
                             <Fragment>
                                 <div ref={notificationsRef}>
                                     <div className="max-[740px]:hidden">
-                                        <Notifications/>
+                                        <Notifications
+                                            notifications={notifications}
+                                            setNotifications={setNotifications}/>
                                     </div>
                                 </div>
                             </Fragment>

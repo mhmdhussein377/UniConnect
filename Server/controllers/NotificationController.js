@@ -31,8 +31,8 @@ const GetNotifications = async(req, res) => {
             return res.status(404).json({message: "User not found"})
         }
 
-        const notificaions = await Notification.find({recipient: userId, isRead: false})
-        return res.status(200).json({notificaions})
+        const notifications = await Notification.find({recipient: userId, isRead: false, status: "pending"})
+        return res.status(200).json({notifications})
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });
     }
