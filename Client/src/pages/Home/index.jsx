@@ -109,8 +109,6 @@ const index = () => {
         getPrivateConversationMessages()
     }, [conversation, user._id, newMessage])
 
-    console.log(selectedConversation, 'homeeee')
-
     return (
         <div className="h-screen max-h-screen">
             <Header/>
@@ -121,13 +119,13 @@ const index = () => {
                     openSidebar={openSidebar}
                     selectedConversation={selectedConversation}
                     setSelectedConversation={setSelectedConversation}
-                    selectedCommunity={setCommunityId}
+                    setCommunityId={setCommunityId}
+                    selectedCommunity={selectedCommunity}
                     privateConversations={friends}
                     communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> 
-                {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}
@@ -149,8 +147,7 @@ const index = () => {
             <UserDetails
                 conversation={conversation}
                 showUserDetails={showUserDetails}
-                setShowUserDetails={setShowUserDetails}/>
-            {/* Modal to create communities */}
+                setShowUserDetails={setShowUserDetails}/> {/* Modal to create communities */}
             {showCommunityModal && <CreateCommunityModal setShowCommunityModal={setShowCommunityModal}/>}
             {/* Modal to add members to communities */}
             {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}

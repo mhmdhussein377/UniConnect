@@ -25,9 +25,10 @@ const index = ({
     setShowUserDetails,
     privateConversations,
     setSelectedConversation,
-    selectedCommunity,
+    setCommunityId,
     communities,
-    selectedConversation}) => {
+    selectedConversation,
+    selectedCommunity}) => {
 
     const {user} = useContext(AuthContext);
     const {username} = user
@@ -75,8 +76,6 @@ const index = ({
     useEffect(() => {
         document.addEventListener("click", handleClickOutside);
     }, []);
-
-    console.log(selectedConversation, "sidebaar")
 
     return (
         <div
@@ -132,11 +131,11 @@ const index = ({
                             <div
                                 key={index}
                                 onClick={() => {
-                                selectedCommunity(community.ID);
+                                setCommunityId(community.ID);
                                 setOpenCommunityDetails(false);
                                 setShowUserDetails(false);
                             }}>
-                                <Community {...community}/>
+                                <Community highlight={community.ID === selectedCommunity?._id} {...community}/>
                             </div>
                         )))
                         : (

@@ -37,7 +37,7 @@ const index = () => {
                 <h2>Notifications</h2>
             </div>
             <div
-                className={`sm-notifications py-6 flex flex-col gap-3 bg-[#F4F3FC] flex-1 ${notifications.length === 0 && "items-center justify-center"}`}>
+                className={`sm-notifications flex flex-col bg-[#F4F3FC] flex-1 ${notifications.length === 0 && "items-center justify-center"}`}>
                 {notifications.length > 0
                     ? (notifications.map((noti, index) => (<SmNotification {...noti} key={index} setNotifications={setNotifications}/>)))
                     : (

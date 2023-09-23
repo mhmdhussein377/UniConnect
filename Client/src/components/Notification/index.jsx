@@ -21,9 +21,9 @@ const index = ({notification, setNotifications}) => {
                     {content}
                 </div>
             </div>
-            {type
+            {!type
                 .split(" ")
-                .includes("request")
+                .includes("accepted")
                 ? <div className="flex items-center gap-4">
                         <button
                             onClick={e => handleAction(e, "accept")}

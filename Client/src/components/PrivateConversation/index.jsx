@@ -119,9 +119,9 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                         const {_id, sender, content, createdAt} = message
                         return <Message
                             key={_id}
-                            own={sender._id}
+                            own={sender?._id}
                             content={content}
-                            sender={sender.name}
+                            sender={sender?.name}
                             date={format(createdAt)}/>})}
                 </div>
                 <form
