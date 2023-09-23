@@ -90,12 +90,13 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                     className="flex items-center justify-between px-4 py-1.5 border-b-[2px] border-grayHard h-[75px]">
                     <div className="flex items-center gap-3">
                         <div
-                            className="w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center">
+                            className="relative">
                             <img
                                 onClick={() => setShowUserDetails((prev) => !prev)}
-                                className="cursor-pointer"
+                                className="cursor-pointer w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center object-cover"
                                 src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                                 alt="profile-picture"/>
+                            {conversation.member.online && <span className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>}
                         </div>
                         <div>
                             <div

@@ -19,6 +19,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setMessages(communityConversation?.chat)
     }, [communityConversation?.chat])
 
+    console.log(communityConversation, "yeessss")
+
     let onlineUsers = communityConversation
         ?.members.reduce((count, member) => {
                 if (member.online) {

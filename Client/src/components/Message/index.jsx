@@ -21,7 +21,7 @@ const index = ({own, content, sender, communitMessage, date}) => {
                     <div className={`text-[14px]`}>{date}</div>
                 </div>
                 <div
-                    className={`px-4 py-2 bg-primary text-white rounded-md ${mine
+                    className={`px-4 py-2 bg-primary text-white rounded-md max-w-full break-all ${mine
                     ? "rounded-tr-none"
                     : "rounded-tl-none"}`}>
                     {content}

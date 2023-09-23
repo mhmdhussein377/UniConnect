@@ -80,9 +80,9 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
                 {isMembersListOpened && (
                     <div
                         className="flex flex-col gap-2 w-full max-h-[300px] overflow-scroll scrollbar-hide">
-                        {communityInfo && <Member creator={true} member={communityInfo?.creator} />}
+                        {communityInfo && <Member creator={true} online={communityInfo?.creator.online} member={communityInfo?.creator} />}
                         {communityInfo?.members.map((member, index) => (
-                            <Member key={index} member={member} />
+                            <Member online={member.online} key={index} member={member} />
                         ))}
                     </div>
                 )}

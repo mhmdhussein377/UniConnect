@@ -5,7 +5,14 @@ import {AuthContext} from "../../Context/AuthContext";
 import {Link} from "react-router-dom";
 import {postRequest} from "../../utils/requests";
 
-const index = ({searched, member, creator, invite, communityId}) => {
+const index = ({
+    searched,
+    member,
+    creator,
+    invite,
+    communityId,
+    online
+}) => {
 
     const {user} = useContext(AuthContext)
     let [isInvited,
@@ -49,11 +56,20 @@ const index = ({searched, member, creator, invite, communityId}) => {
             <Link
                 to={!actualUser && `/profile/${username}`}
                 className="flex items-center gap-2 flex-1">
-                <div
+                {/* <div
                     className="rounded-full flex items-center justify-center overflow-hidden w-[45px] h-[45px]">
                     <img
                         src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                         alt="profile-picture"/>
+                </div> */}
+                <div className="relative">
+                    <img
+                        className="cursor-pointer w-[45px] h-[45px] rounded-full overflow-hidden flex items-center justify-center object-cover"
+                        src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
+                        alt="profile-picture"/> {online && (
+                        <span
+                            className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>
+                    )}
                 </div>
                 <div className="flex flex-col gap-0">
                     <div>

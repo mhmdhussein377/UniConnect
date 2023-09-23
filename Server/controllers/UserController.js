@@ -71,9 +71,7 @@ const UserData = async(req, res) => {
                     select: "username"
                 }
             })
-            .populate({path: "friends", select: "_id name username profile.profileImage"})
-
-        // const user = await User.findOne({ username });
+            .populate({path: "friends", select: "_id name username online profile.profileImage"})
 
         if (!user) {
             return res

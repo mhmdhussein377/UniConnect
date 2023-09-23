@@ -1,8 +1,7 @@
 import {MdOutlineClose} from "react-icons/md";
 import Member from "./../Member"
 import {handleCloseModal} from "./../../utils/closeModal"
-import {useContext, useEffect, useRef, useState} from "react";
-import {AuthContext} from "../../Context/AuthContext";
+import {useEffect, useRef, useState} from "react";
 import {getRequest} from "../../utils/requests"
 import {useDebounce} from "use-debounce"
 

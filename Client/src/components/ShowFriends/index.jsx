@@ -8,7 +8,7 @@ const index = ({friends, currentUser}) => {
                 <div className="font-semibold text-lg">Friends</div>
                 <div className="flex flex-col gap-4">
                     {friends.length > 0
-                        ? (friends.map((friend, index) => (<Member key={index} member={friend}/>)))
+                        ? (friends.map((friend, index) => (<Member online={friend.online} key={index} member={friend}/>)))
                         : currentUser
                             ? (
                                 <div className="flex flex-col items-center gap-1 mt-2">
