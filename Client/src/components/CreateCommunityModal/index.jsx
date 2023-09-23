@@ -5,7 +5,7 @@ import {handleChange} from "../../utils/handleChange"
 import {postRequest} from "../../utils/requests"
 import { AuthContext } from "../../Context/AuthContext";
 
-const index = ({setShowCommunityModal}) => {
+const index = ({setShowCommunityModal, setCommunities}) => {
 
     const {dispatch} = useContext(AuthContext)
 
@@ -35,6 +35,7 @@ const index = ({setShowCommunityModal}) => {
         setShowCommunityModal(false)
         const response = await postRequest("/community/create", inputs)
         const {name: communityName, privacy: communityPrivacy, _id, creator} = response
+        setCommunities(prev => [{ID: _id, name: communityName, privacy: communityPrivacy, unreadCount: 0, lastMessages: []}, ...prev])
         dispatch({type: "CREATE_COMMUNITY", payload: {name: communityName, privacy: communityPrivacy, _id, creator}})
     }
 

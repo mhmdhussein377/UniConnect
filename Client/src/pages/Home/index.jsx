@@ -148,7 +148,7 @@ const index = () => {
                 conversation={conversation}
                 showUserDetails={showUserDetails}
                 setShowUserDetails={setShowUserDetails}/> {/* Modal to create communities */}
-            {showCommunityModal && <CreateCommunityModal setShowCommunityModal={setShowCommunityModal}/>}
+            {showCommunityModal && <CreateCommunityModal setCommunities={setCommunities} setShowCommunityModal={setShowCommunityModal}/>}
             {/* Modal to add members to communities */}
             {showAddMembersModal && (<AddMembersModal setShowAddMembersModal={setShowAddMembersModal}/>)}
         </div>

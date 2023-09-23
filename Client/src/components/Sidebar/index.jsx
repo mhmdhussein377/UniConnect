@@ -127,8 +127,9 @@ const index = ({
                             </div>
                         ))}
                 {type === "community" && (communities?.length > 0
-                        ? (communities.map((community, index) => (
-                            <div
+                        ? (communities.map((community, index) => {
+                            console.log(community)
+                            return <div
                                 key={index}
                                 onClick={() => {
                                 setCommunityId(community.ID);
@@ -137,7 +138,7 @@ const index = ({
                             }}>
                                 <Community highlight={community.ID === selectedCommunity?._id} {...community}/>
                             </div>
-                        )))
+    }))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">
                                 <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
