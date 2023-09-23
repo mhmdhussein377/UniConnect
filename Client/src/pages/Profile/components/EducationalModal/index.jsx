@@ -31,7 +31,8 @@ const index = ({setShowEducationalInfoModal}) => {
         <div
             onClick={closeModal}
             className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen">
-            <div
+            <form
+                onSubmit={handleEditEducationalInfo}
                 ref={boxRef}
                 className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px]">
                 <div className="flex items-center justify-between pb-2 border-b-2">
@@ -57,13 +58,13 @@ const index = ({setShowEducationalInfoModal}) => {
                         handleChange={handleInputsChange}/>
                     <div>
                         <button
-                            onClick={handleEditEducationalInfo}
+                            type="submit"
                             className="bg-primary text-white p-2 rounded-md mt-4 font-medium">
                             Save changes
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 };
