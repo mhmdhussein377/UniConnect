@@ -2,13 +2,15 @@ const Notification = require("./../models/Notification")
 const User = require("./../models/User")
 
 const UpdateNotificationsStatus = async(req, res) => {
-    const {notifications} = req.body
+    const {notificationsIds} = req.body
 
     try {
-        await Promise.all(notifications.map(async(notificationId) => {
+        const updatedNotifications = await Promise.all(notificationsIds.map(async(notificationId) => {
             const updatedNotification = await Notification.findByIdAndUpdate(notificationId, {
                 isRead: true
             }, {new: true})
+
+            return updatedNotification
         }))
 
         res
@@ -34,7 +36,7 @@ const GetNotifications = async(req, res) => {
                 .json({message: "User not found"})
         }
 
-        const notifications = await Notification.find({recipient: userId, isRead: false, status: "pending"})
+        const notifications = await Notification.find({recipient: userId, status: "pending"})
         return res
             .status(200)
             .json({notifications})

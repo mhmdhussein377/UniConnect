@@ -9,7 +9,7 @@ import {Link, useNavigate} from "react-router-dom";
 import Notifications from "./../Notifications";
 import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../../Context/AuthContext";
-import {getRequest} from "../../utils/requests";
+import {getRequest, postRequest} from "../../utils/requests";
 import {useQuery} from "react-query";
 
 const index = ({profile}) => {
@@ -41,14 +41,30 @@ const index = ({profile}) => {
         setShowNotifications((prev) => !prev);
     };
 
+    const setNotificationsAsRead = async() => {
+        let notificationsIds = notifications.map((notification) => notification._id);
+        try {
+            await postRequest("/notifications/updateNotificationsStatus", {notificationsIds});
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const handleClickOutside = (e) => {
         if (notificationsRef.current && !notificationsRef.current.contains(e.target) && bellIconRef.current && !bellIconRef.current.contains(e.target)) {
             setShowNotifications(false);
+        }
+
+        if(showNotifications) {
+            setNotificationsAsRead()
         }
     };
 
     const handleBellClick = (event) => {
         event.stopPropagation();
+        if (showNotifications) {
+            setNotificationsAsRead()
+        }
         toggleNotifications();
 
         if (window.innerWidth < 740) {
