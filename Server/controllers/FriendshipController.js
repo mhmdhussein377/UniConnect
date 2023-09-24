@@ -152,7 +152,7 @@ const AcceptFriendRequest = async(req, res) => {
 
         await existingFriendship.updateOne({status: "accepted"})
 
-        const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
+        const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", status: "pending"});
 
         if (!existingNotification) 
             return res.status(400).json({message: "Notification not found"})
@@ -351,7 +351,7 @@ const RejectFriendRequest = async(req, res) => {
 
         await existingFriendship.updateOne({status: "rejected"});
 
-        const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", isRead: false});
+        const existingNotification = await Notification.findOne({recipient: currentUser, sender: recipientUserId, type: "friend request", status: "pending"});
 
         if (!existingNotification) 
             return res.status(400).json({message: "Notification not found"});

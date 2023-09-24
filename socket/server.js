@@ -38,9 +38,7 @@ io.on("connection", (socket) => {
             for (const [key,
                 value]of users.entries()) {
                 if (key === receiver) {
-                    io
-                        .to(value)
-                        .emit("getMessage", {sender, content});
+                    io.to(value).emit("getMessage", {sender, content});
                     break;
                 }
             }

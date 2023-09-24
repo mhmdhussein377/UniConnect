@@ -8,7 +8,7 @@ import {v4} from "uuid"
 
 const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends}) => {
 
-    const {user: currentUser} = useContext(AuthContext)
+    const {user: currentUser, dispatch} = useContext(AuthContext)
 
     const [friendship,
         setFriendship] = useState({});
@@ -103,21 +103,24 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
 
     const handleInput = (e, image) => {
 
-        const metadata = {
-            contentType: 'image/png'
-        };
-
         if (image === "profile") {
-            setProfileImg(e.target.files[0])
+            setProfileImg(e.target.files[0]);
             const imgRef = ref(imageDB, `files/${v4()}`);
 
-            uploadBytes(imgRef, profileImg, metadata).then((snapshot) => {
+            uploadBytes(imgRef, profileImg, {contentType: "image/jpg"}).then((snapshot) => {
+
+                console.log("Upload completed:", snapshot);
 
                 getDownloadURL(snapshot.ref).then(async(downloadURL) => {
                     try {
-                        await postRequest("/user/edit-profile", {profileImage: downloadURL});
+                        const response = await postRequest("/user/edit-profile", {profileImage: downloadURL});
+
+                        console.log(response, "responseeee")
+
+                        console.log(downloadURL, "downloaded");
+                        
                     } catch (error) {
-                        console.log(error)
+                        console.error("Error updating profile:", error);
                     }
                 }).catch((error) => {
                     console.error("Error getting download URL:", error);
@@ -137,10 +140,10 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                 });
             }
             // setInput(e.target.files[0]);
-            getBase64(e.target.files[0]).then((data) => {
+            getBase64(e.target.files[0]).then(async(data) => {
                 image === "cover"
                     ? coverImgRef.current.src = data
-                    : profileImgRef.current.src = data
+                    : profileImgRef.current.src = data; dispatch({type: "EDIT_PROFILE_IMAGES", payload: {profileImage: data},});
             });
 
             const reader = new FileReader();
@@ -165,8 +168,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                     ref={profileImgRef}
                     onClick={() => isCurrentUser && profilePicInputRef.current.click()}
                     className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
-                    src={user
-                    ?.profile.profileImage}
+                    src={user?.profile?.profileImage || "https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-2148215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be9518049b4ce73ba01a29d7839bc73212e6627c7fe2bd3"}
                     alt="profile-picture"/>
                 <input
                     onChange={(e) => handleInput(e, "profile")}

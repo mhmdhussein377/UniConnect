@@ -43,6 +43,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
     useEffect(() => {
         socket.current = io("http://localhost:3001")
         socket.current.on("getMessage", ({sender, content}) => {
+            console.log("message received")
             const data = {
                 sender: {
                     _id: sender

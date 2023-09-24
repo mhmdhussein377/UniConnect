@@ -29,6 +29,18 @@ const AuthReducer = (state, action) => {
                     }
                 }
             };
+        case "EDIT_PROFILE_IMAGES":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    profile: {
+                        ...state.user.profile,
+                        ...(action.payload.profileImage && {profileImage: action.payload.profileImage}),
+                        ...(action.payload.coverImage && {coverImage: action.payload.coverImage})
+                    }
+                }
+            }
         case "EDIT_LANGUAGES":
             return {
                 ...state,

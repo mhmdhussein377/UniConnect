@@ -39,14 +39,17 @@ const index = ({profile}) => {
 
     const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 5000});
 
+    console.log(notifications, "notifications")
+
     const toggleNotifications = () => {
         setShowNotifications((prev) => !prev);
     };
 
     const setNotificationsAsRead = async() => {
-        let notificationsIds = notifications.map((notification) => notification._id);
+
         try {
             setUnreadNotifications(0)
+            let notificationsIds = notifications.map((notification) => notification._id);
             await postRequest("/notifications/updateNotificationsStatus", {notificationsIds});
         } catch (error) {
             console.log(error);
@@ -54,12 +57,11 @@ const index = ({profile}) => {
     };
 
     const handleClickOutside = (e) => {
+        setNotificationsAsRead()
+
         if (notificationsRef.current && !notificationsRef.current.contains(e.target) && bellIconRef.current && !bellIconRef.current.contains(e.target)) {
             setShowNotifications(false);
         }
-
-        setNotificationsAsRead()
-
     };
 
     const handleBellClick = (event) => {
@@ -92,9 +94,9 @@ const index = ({profile}) => {
         }
     }, [themeMode])
 
-    useEffect(() => {
-        document.addEventListener("click", handleClickOutside);
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener("click", handleClickOutside);
+    // }, []);
 
     useEffect(() => {
         if (window.innerWidth < 740) {
@@ -111,8 +113,6 @@ const index = ({profile}) => {
         }, 0)
         setUnreadNotifications(unreadNotifications)
     }, [notifications])
-
-    console.log(unreadNotifications, "unreadNotifications")
 
     return (
         <div
@@ -156,9 +156,11 @@ const index = ({profile}) => {
                             onClick={handleBellClick}>
                             <AiFillBell size={28} className="text-[#575D65] dark:text-white"/>
                         </div>
-                        {unreadNotifications > 0 ? <div
-                            onClick={handleBellClick}
-                            className="absolute -top-[3px] -right-[2px] rounded-full w-[17px] h-[17px] bg-primary text-white flex items-center justify-center cursor-pointer">{unreadNotifications}</div> : null}
+                        {unreadNotifications > 0
+                            ? <div
+                                    onClick={handleBellClick}
+                                    className="absolute -top-[3px] -right-[2px] rounded-full w-[17px] h-[17px] bg-primary text-white flex items-center justify-center cursor-pointer">{unreadNotifications}</div>
+                            : null}
                         {showNotifications && (
                             <Fragment>
                                 <div ref={notificationsRef}>
