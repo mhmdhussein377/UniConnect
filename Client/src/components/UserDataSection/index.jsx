@@ -2,20 +2,25 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {HiPencil} from "react-icons/hi";
 import {getRequest, postRequest} from "../../utils/requests";
 import {AuthContext} from "../../Context/AuthContext";
-import { imageDB } from "../../utils/FirebaseConfig";
-import { ref } from "firebase/storage"
+import {imageDB} from "../../utils/FirebaseConfig";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage"
+import {v4} from "uuid"
 
 const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends}) => {
 
     const {user: currentUser} = useContext(AuthContext)
 
-    let [friendship,
+    const [friendship,
         setFriendship] = useState({});
-    let [friendshipStatus,
+    const [friendshipStatus,
         setFriendshipStatus] = useState({status: "", requester: ""});
-    let [buttonText, setButtonText] = useState("")
-    const [loading, setLoading] = useState(false);
-    const [profileImg, setProfileImg] = useState()
+    const [buttonText,
+        setButtonText] = useState("")
+    const [loading,
+        setLoading] = useState(false);
+
+    const [profileImg,
+        setProfileImg] = useState()
 
     const coverPicInputRef = useRef();
     const profilePicInputRef = useRef();
@@ -57,7 +62,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
             setButtonText("Add friend")
         }
     }, [
-        friendship?.status,
+        friendship
+            ?.status,
         currentUser._id,
         friendshipStatus.requester,
         friendshipStatus.status
@@ -76,11 +82,13 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                     ?._id}`);
             } else if (friendshipStatus.status === "pending" && friendshipStatus.requester !== currentUser._id) {
                 setFriendshipStatus({status: "accepted", requester: ""});
-                await postRequest(`/friendship/accept-friend-request/${user?._id}`);
+                await postRequest(`/friendship/accept-friend-request/${user
+                    ?._id}`);
             } else if (friendshipStatus.status === "accepted") {
                 setFriendshipStatus({status: "no friendship", requester: ""});
                 setFriends(prev => prev.filter(friend => friend._id !== currentUser._id))
-                await postRequest(`/friendship/unfriend/${user?._id}`);
+                await postRequest(`/friendship/unfriend/${user
+                    ?._id}`);
             } else if (friendshipStatus.status === "rejected") {
                 setFriendshipStatus({status: "pending", requester: currentUser._id});
                 await postRequest(`/friendship/send-friend-request/${user
@@ -94,6 +102,31 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
     }
 
     const handleInput = (e, image) => {
+
+        const metadata = {
+            contentType: 'image/png'
+        };
+
+        if (image === "profile") {
+            setProfileImg(e.target.files[0])
+            const imgRef = ref(imageDB, `files/${v4()}`);
+
+            uploadBytes(imgRef, profileImg, metadata).then((snapshot) => {
+
+                getDownloadURL(snapshot.ref).then(async(downloadURL) => {
+                    try {
+                        await postRequest("/user/edit-profile", {profileImage: downloadURL});
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }).catch((error) => {
+                    console.error("Error getting download URL:", error);
+                });
+            }).catch((error) => {
+                console.error("Error uploading file:", error);
+            });
+        }
+
         if (e.target.files.length > 0) {
             function getBase64(file) {
                 return new Promise((resolve, reject) => {
@@ -116,7 +149,6 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
             };
             reader.readAsDataURL(e.target.files[0]);
 
-            
         }
     };
 
@@ -133,7 +165,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                     ref={profileImgRef}
                     onClick={() => isCurrentUser && profilePicInputRef.current.click()}
                     className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
-                    src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
+                    src={user
+                    ?.profile.profileImage}
                     alt="profile-picture"/>
                 <input
                     onChange={(e) => handleInput(e, "profile")}
@@ -178,7 +211,12 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                                 )
                                 : null}
                     <div className="flex items-center gap-1.5">
-                        <span>{friends?.length > 0 ? friends?.length : "No"}</span> Friends
+                        <span>{friends
+                                ?.length > 0
+                                    ? friends
+                                        ?.length
+                                        : "No"}</span>
+                        Friends
                     </div>
                     {!isCurrentUser && buttonText !== "" && (
                         <div className="mt-2">

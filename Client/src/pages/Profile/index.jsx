@@ -46,8 +46,6 @@ const index = () => {
         getUser();
     }, [user.username]);
 
-    console.log(friends)
-
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>
