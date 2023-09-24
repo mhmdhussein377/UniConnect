@@ -76,6 +76,7 @@ const index = ({profile}) => {
         setThemeMode(themeMode === "light"
             ? "dark"
             : "light");
+        localStorage.setItem("theme", themeMode)
     };
 
     useEffect(() => {

@@ -103,33 +103,6 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
 
     const handleInput = (e, image) => {
 
-        if (image === "profile") {
-            setProfileImg(e.target.files[0]);
-            const imgRef = ref(imageDB, `files/${v4()}`);
-
-            uploadBytes(imgRef, profileImg, {contentType: "image/jpg"}).then((snapshot) => {
-
-                console.log("Upload completed:", snapshot);
-
-                getDownloadURL(snapshot.ref).then(async(downloadURL) => {
-                    try {
-                        const response = await postRequest("/user/edit-profile", {profileImage: downloadURL});
-
-                        console.log(response, "responseeee")
-
-                        console.log(downloadURL, "downloaded");
-                        
-                    } catch (error) {
-                        console.error("Error updating profile:", error);
-                    }
-                }).catch((error) => {
-                    console.error("Error getting download URL:", error);
-                });
-            }).catch((error) => {
-                console.error("Error uploading file:", error);
-            });
-        }
-
         if (e.target.files.length > 0) {
             function getBase64(file) {
                 return new Promise((resolve, reject) => {
@@ -143,17 +116,53 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
             getBase64(e.target.files[0]).then(async(data) => {
                 image === "cover"
                     ? coverImgRef.current.src = data
-                    : profileImgRef.current.src = data; dispatch({type: "EDIT_PROFILE_IMAGES", payload: {profileImage: data},});
+                    : profileImgRef.current.src = data;
+                dispatch({
+                    type: "EDIT_PROFILE_IMAGES",
+                    payload: {
+                        profileImage: data
+                    }
+                });
             });
 
             const reader = new FileReader();
             reader.onloadend = () => {
-                console.log(reader.result);
+                // console.log(reader.result);
             };
             reader.readAsDataURL(e.target.files[0]);
 
         }
     };
+
+    const uploadProfileImg = () => {
+        console.log(profileImg, "imageeee");
+        const imgRef = ref(imageDB, `files/${profileImg?.name}`);
+
+        uploadBytes(imgRef, profileImg).then((snapshot) => {
+
+            setProfileImg(null)
+
+            getDownloadURL(snapshot.ref).then(async(downloadURL) => {
+                try {
+                    const response = await postRequest("/user/edit-profile", {profileImage: downloadURL});
+
+                    console.log(downloadURL, "downloaded");
+                } catch (error) {
+                    console.error("Error updating profile:", error);
+                }
+            }).catch((error) => {
+                console.error("Error getting download URL:", error);
+            });
+        }).catch((error) => {
+            console.error("Error uploading file:", error);
+        });
+    }
+
+    useEffect(() => {
+        if(profileImg) {
+            uploadProfileImg()
+        }
+    }, [profileImg])
 
     return (
         <div
@@ -168,10 +177,17 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                     ref={profileImgRef}
                     onClick={() => isCurrentUser && profilePicInputRef.current.click()}
                     className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
-                    src={user?.profile?.profileImage || "https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-2148215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be9518049b4ce73ba01a29d7839bc73212e6627c7fe2bd3"}
+                    src={user
+                    ?.profile
+                        ?.profileImage || "https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-214" +
+                            "8215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be951804" +
+                                "9b4ce73ba01a29d7839bc73212e6627c7fe2bd3"}
                     alt="profile-picture"/>
                 <input
-                    onChange={(e) => handleInput(e, "profile")}
+                    onChange={(e) => {
+                    setProfileImg(e.target.files[0]);
+                    handleInput(e, "profile");
+                }}
                     ref={profilePicInputRef}
                     type="file"
                     className="hidden"/> {isCurrentUser && (
