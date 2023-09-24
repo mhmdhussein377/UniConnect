@@ -13,24 +13,23 @@ import {getRequest, postRequest} from "../../utils/requests";
 import {useQuery} from "react-query";
 
 const index = ({profile}) => {
-
     const {user} = useContext(AuthContext);
     const {username} = user;
 
     const [showNotifications,
         setShowNotifications] = useState(false);
     const [showSearchSm,
-        setShowSearchSm] = useState(false)
+        setShowSearchSm] = useState(false);
     const [themeMode,
-        setThemeMode] = useState("light")
+        setThemeMode] = useState("light");
     const [notifications,
         setNotifications] = useState([]);
     const [unreadNotifications,
-        setUnreadNotifications] = useState()
+        setUnreadNotifications] = useState();
 
     const notificationsRef = useRef(null);
     const bellIconRef = useRef(null);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const getNotifications = async() => {
         const response = await getRequest("/notifications");
@@ -39,16 +38,15 @@ const index = ({profile}) => {
 
     const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 3000});
 
-    console.log(notifications, "notifications")
+    console.log(notifications, "notifications");
 
     const toggleNotifications = () => {
         setShowNotifications((prev) => !prev);
     };
 
     const setNotificationsAsRead = async() => {
-
         try {
-            setUnreadNotifications(0)
+            setUnreadNotifications(0);
             let notificationsIds = notifications.map((notification) => notification._id);
             await postRequest("/notifications/updateNotificationsStatus", {notificationsIds});
         } catch (error) {
@@ -57,7 +55,7 @@ const index = ({profile}) => {
     };
 
     const handleClickOutside = (e) => {
-        setNotificationsAsRead()
+        setNotificationsAsRead();
 
         if (notificationsRef.current && !notificationsRef.current.contains(e.target) && bellIconRef.current && !bellIconRef.current.contains(e.target)) {
             setShowNotifications(false);
@@ -66,53 +64,66 @@ const index = ({profile}) => {
 
     const handleBellClick = (event) => {
         event.stopPropagation();
-        setNotificationsAsRead()
+        setNotificationsAsRead();
         toggleNotifications();
 
         if (window.innerWidth < 740) {
-            navigate("/notifications")
+            navigate("/notifications");
         }
     };
 
     const handleChangeThemeMode = () => {
         setThemeMode(themeMode === "light"
-            ? 'dark'
-            : "light")
-    }
+            ? "dark"
+            : "light");
+    };
 
     useEffect(() => {
         if (themeMode === "dark") {
             document
                 .documentElement
                 .classList
-                .add("dark")
+                .add("dark");
         } else {
             document
                 .documentElement
                 .classList
-                .remove("dark")
+                .remove("dark");
         }
-    }, [themeMode])
+    }, [themeMode]);
 
-    // useEffect(() => {
-    //     document.addEventListener("click", handleClickOutside);
+    // useEffect(() => {     document.addEventListener("click", handleClickOutside);
     // }, []);
 
     useEffect(() => {
         if (window.innerWidth < 740) {
-            setShowNotifications(false)
+            setShowNotifications(false);
         }
-    })
+    });
 
     useEffect(() => {
         const unreadNotifications = notifications.reduce((count, noti) => {
             if (!noti.isRead) {
-                count += 1
+                count += 1;
             }
-            return count
-        }, 0)
-        setUnreadNotifications(unreadNotifications)
-    }, [notifications])
+            return count;
+        }, 0);
+        setUnreadNotifications(unreadNotifications);
+    }, [notifications]);
+
+    useEffect(() => {
+        if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document
+                .documentElement
+                .classList
+                .add("dark");
+        } else {
+            document
+                .documentElement
+                .classList
+                .remove("dark");
+        }
+    }, [themeMode])
 
     return (
         <div
@@ -123,7 +134,7 @@ const index = ({profile}) => {
                 <img className="w-[48px] h-[45px] object-cover" src={Logo} alt="logo"/>
             </Link>
             <div
-                className={`flex-[8.8] flex items-center justify-end ${showSearchSm && 'w-full'} sm:justify-between lg:pl-14`}>
+                className={`flex-[8.8] flex items-center justify-end ${showSearchSm && "w-full"} sm:justify-between lg:pl-14`}>
                 <div
                     className={`${showSearchSm && "w-full flex"} w-[60%] ${ !showSearchSm && "hidden"} sm:flex items-center gap-4`}>
                     {profile && (
@@ -134,10 +145,10 @@ const index = ({profile}) => {
                             Home
                         </Link>
                     )}
-                    {showSearchSm && <BsArrowLeft
+                    {showSearchSm && (<BsArrowLeft
                         onClick={() => setShowSearchSm(false)}
                         className="cursor-pointer"
-                        size={30}/>}
+                        size={30}/>)}
                     <SearchBar/>
                 </div>
                 <div className={`flex items-center gap-2.5 ${showSearchSm && "hidden"}`}>
@@ -157,9 +168,13 @@ const index = ({profile}) => {
                             <AiFillBell size={28} className="text-[#575D65] dark:text-white"/>
                         </div>
                         {unreadNotifications > 0
-                            ? <div
+                            ? (
+                                <div
                                     onClick={handleBellClick}
-                                    className="absolute -top-[3px] -right-[2px] rounded-full w-[17px] h-[17px] bg-primary text-white flex items-center justify-center cursor-pointer">{unreadNotifications}</div>
+                                    className="absolute -top-[3px] -right-[2px] rounded-full w-[17px] h-[17px] bg-primary text-white flex items-center justify-center cursor-pointer">
+                                    {unreadNotifications}
+                                </div>
+                            )
                             : null}
                         {showNotifications && (
                             <Fragment>

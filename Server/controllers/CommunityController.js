@@ -466,7 +466,8 @@ const AcceptCommunityJoinRequest = async(req, res) => {
             recipient: ownerId,
             sender: requesterUserId,
             community: communityId,
-            type: "community join request"
+            type: "community join request",
+            status: "pending"
         }, {
             $set: {
                 status: "accepted",
@@ -623,7 +624,8 @@ const AcceptCommunityJoinRequests = async(req, res) => {
                 recipient: ownerId,
                 sender: requestedUser._id,
                 community: communityId,
-                type: "community join request"
+                type: "community join request",
+                status: "pending"
             }, {
                 $set: {
                     status: "accepted",
@@ -820,6 +822,7 @@ const AcceptCommunityInviteRequest = async(req, res) => {
             sender: community.creator,
             community: communityId,
             type: "community invite request",
+            status: "pending"
         }, {
             $set: {
                 isRead: true,
@@ -889,14 +892,13 @@ const RejectCommunityInviteRequest = async(req, res) => {
             sender: community.creator,
             community: communityId,
             type: "community invite request",
+            status: "pending"
         }, {
             $set: {
                 isRead: true,
                 status: "rejected"
             }
         });
-
-        console.log(existingNotification)
 
         if (!existingNotification) {
             return res
