@@ -37,7 +37,7 @@ const index = ({profile}) => {
         response && setNotifications(response.notifications);
     };
 
-    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 5000});
+    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 3000});
 
     console.log(notifications, "notifications")
 

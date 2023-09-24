@@ -384,7 +384,7 @@ const CancelCommunityJoinRequest = async(req, res) => {
                 .json({message: "You do not have a pending join request for this community"});
         }
 
-        const existingNotification = await Notification.findOneAndDelete({sender: userId, recipient: community.creator, type: "community join request", isRead: false})
+        const existingNotification = await Notification.findOneAndDelete({sender: userId, recipient: community.creator, type: "community join request", status: "pending", community: communityId})
 
         if (!existingNotification) {
             return res
@@ -396,10 +396,6 @@ const CancelCommunityJoinRequest = async(req, res) => {
             .requestedUsers
             .filter(user => user.toString() !== userId)
         await community.save()
-
-        // i have to make sure about it const userRequestIndex = user .joinedCommunities
-        //     .indexOf(communityId); if (userRequestIndex !== -1) {    user
-        // .joinedCommunities         .splice(userRequestIndex, 1); }
 
         await user.save()
 
@@ -485,7 +481,6 @@ const AcceptCommunityJoinRequest = async(req, res) => {
             type: "community join accepted",
             content: `Your join request
         for the community "${community.name}" has been accepted`,
-            status: "accepted"
         });
         await notification.save();
 
@@ -553,7 +548,7 @@ const RejectCommunityJoinRequest = async(req, res) => {
         }
         await community.save();
 
-        const existingNotification = await Notification.findOneAndDelete({sender: requestedUserId, recipient: currentUserId, type: "community join request", isRead: false});
+        const existingNotification = await Notification.findOneAndDelete({sender: requestedUserId, recipient: currentUserId, type: "community join request", status: "pending", community: communityId});
 
         if (!existingNotification) {
             return res
@@ -643,7 +638,6 @@ const AcceptCommunityJoinRequests = async(req, res) => {
                 type: "community join accepted",
                 content: `Your join request
         for the community "${community.name}" has been accepted`,
-                status: "accepted"
             });
             await notification.save();
         }
@@ -763,7 +757,7 @@ const CancelCommunityInviteRequest = async(req, res) => {
             .splice(indexOfRecipient, 1);
         await community.save()
 
-        await Notification.deleteOne({recipient: recipientUserId, community: communityId, type: "community invite request"});
+        await Notification.deleteOne({recipient: recipientUserId, community: communityId, type: "community invite request", status: "pending"});
 
         return res
             .status(200)
@@ -826,10 +820,10 @@ const AcceptCommunityInviteRequest = async(req, res) => {
             sender: community.creator,
             community: communityId,
             type: "community invite request",
-            isRead: false
         }, {
             $set: {
-                isRead: true
+                isRead: true,
+                status: "accepted"
             }
         });
 
@@ -895,10 +889,10 @@ const RejectCommunityInviteRequest = async(req, res) => {
             sender: community.creator,
             community: communityId,
             type: "community invite request",
-            isRead: false
         }, {
             $set: {
-                isRead: true
+                isRead: true,
+                status: "rejected"
             }
         });
 

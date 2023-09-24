@@ -231,7 +231,7 @@ const CancelFriendRequest = async(req, res) => {
 
         await Friendship.findByIdAndDelete(existingFriendship._id);
 
-        await Notification.findOneAndDelete({recipient: recipientUserId, sender: currentUser, type: "friend request"});
+        await Notification.findOneAndDelete({recipient: recipientUserId, sender: currentUser, type: "friend request", status: "pending"});
 
         res
             .status(200)
