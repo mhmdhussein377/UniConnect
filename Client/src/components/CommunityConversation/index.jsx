@@ -8,6 +8,7 @@ import {AiTwotoneLock} from "react-icons/ai";
 import {format} from "timeago.js";
 import {postRequest} from "../../utils/requests";
 import { AuthContext } from "../../Context/AuthContext";
+import { io } from "socket.io-client";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityConversation}) => {
     const {user} = useContext(AuthContext)
@@ -28,6 +29,26 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
             socket.current.emit("joinRoom", communityConversation?._id)
         }
     }, [communityConversation])
+
+    useEffect(() => {
+        const displayedMessages = new Set()
+        socket.current = io("http://localhost:30001")
+        socket.current.on("getGroupMessage", ({sender, senderName, content}) => {
+            const messageId = `${sender}-${content}`
+            const data = {
+                sender: {
+                    _id: sender,
+                    name: senderName
+                },
+                content: content,
+                isRead: false,
+            }
+            if(!displayedMessages.has(messageId)) {
+                displayedMessages.add(messageId)
+                setArrivalMessage(data)
+            }
+        })
+    }, [])
 
     useEffect(() => {
         if(arrivalMessage && communityConversation) {
