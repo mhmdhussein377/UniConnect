@@ -21,6 +21,8 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
 
     const [profileImg,
         setProfileImg] = useState()
+    const [coverImg,
+        setCoverImg] = useState()
 
     const coverPicInputRef = useRef();
     const profilePicInputRef = useRef();
@@ -114,15 +116,23 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
             }
             // setInput(e.target.files[0]);
             getBase64(e.target.files[0]).then(async(data) => {
-                image === "cover"
-                    ? coverImgRef.current.src = data
-                    : profileImgRef.current.src = data;
-                dispatch({
-                    type: "EDIT_PROFILE_IMAGES",
-                    payload: {
-                        profileImage: data
-                    }
-                });
+                if (image === "cover") {
+                    coverImgRef.current.src = data;
+                    dispatch({
+                        type: "EDIT_PROFILE_IMAGES",
+                        payload: {
+                            coverImage: data
+                        }
+                    });
+                } else {
+                    profileImgRef.current.src = data;
+                    dispatch({
+                        type: "EDIT_PROFILE_IMAGES",
+                        payload: {
+                            profileImage: data
+                        }
+                    });
+                }
             });
 
             const reader = new FileReader();
@@ -135,21 +145,14 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
     };
 
     const uploadProfileImg = () => {
-        console.log(profileImg, "imageeee");
-        const imgRef = ref(imageDB, `files/${profileImg?.name}`);
+        const imgRef = ref(imageDB, `files/${v4()}`);
 
         uploadBytes(imgRef, profileImg).then((snapshot) => {
 
             setProfileImg(null)
 
             getDownloadURL(snapshot.ref).then(async(downloadURL) => {
-                try {
-                    const response = await postRequest("/user/edit-profile", {profileImage: downloadURL});
-
-                    console.log(downloadURL, "downloaded");
-                } catch (error) {
-                    console.error("Error updating profile:", error);
-                }
+                await postRequest("/user/edit-profile", {profileImage: downloadURL});
             }).catch((error) => {
                 console.error("Error getting download URL:", error);
             });
@@ -158,11 +161,30 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
         });
     }
 
+    const uploadCoverImg = () => {
+        const imgRef = ref(imageDB, `files/${v4()}`);
+
+        uploadBytes(imgRef, coverImg).then((snapshot) => {
+            setProfileImg(null);
+
+            getDownloadURL(snapshot.ref).then(async(downloadURL) => {
+                await postRequest("/user/edit-profile", {coverImg: downloadURL});
+            }).catch((error) => {
+                console.error("Error getting download URL:", error);
+            });
+        }).catch((error) => {
+            console.error("Error uploading file:", error);
+        });
+    };
+
     useEffect(() => {
-        if(profileImg) {
+        if (profileImg) {
             uploadProfileImg()
         }
-    }, [profileImg])
+        if (coverImg) {
+            uploadCoverImg()
+        }
+    }, [profileImg, coverImg])
 
     return (
         <div
@@ -171,7 +193,11 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                 <img
                     ref={coverImgRef}
                     className="h-[200px] w-full object-cover rounded-md"
-                    src="https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-2148215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be9518049b4ce73ba01a29d7839bc73212e6627c7fe2bd3"
+                    src={user
+                    ?.profile
+                        ?.coverImage || "https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-214" +
+                            "8215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be951804" +
+                                "9b4ce73ba01a29d7839bc73212e6627c7fe2bd3"}
                     alt="cover-picture"/>
                 <img
                     ref={profileImgRef}
@@ -190,13 +216,16 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                 }}
                     ref={profilePicInputRef}
                     type="file"
-                    className="hidden"/> {isCurrentUser && (
+                    className="hidden"/>{" "} {isCurrentUser && (
                     <div
                         onClick={() => coverPicInputRef.current.click()}
                         className="absolute w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full top-2 right-2 cursor-pointer">
                         <HiPencil className="text-primary" size={25}/>
                         <input
-                            onChange={(e) => handleInput(e, "cover")}
+                            onChange={(e) => {
+                            setCoverImg(e.target.files[0]);
+                            handleInput(e, "cover");
+                        }}
                             ref={coverPicInputRef}
                             type="file"
                             className="hidden"/>
