@@ -33,7 +33,8 @@ io.on("connection", (socket) => {
         users.set(userId, socket.id);
     });
 
-    socket.on("sendMessage", async({sender, receiver, content}) => {
+    socket.on("sendMessage", async({sender, receiver, content, fileURL}) => {
+        console.log(fileURL, "fileeeURllllll")
         try {
             for (const [key,
                 value]of users.entries()) {
@@ -42,7 +43,7 @@ io.on("connection", (socket) => {
                         io.to(value).emit("getMessage", {sender, content});
                         break
                     }
-                    io.to(value).emit("getMessage", {sender, content, fileURL} )
+                    io.to(value).emit("getMessage", {sender, content, fileURL: fileURL} )
                     break;
                 }
             }

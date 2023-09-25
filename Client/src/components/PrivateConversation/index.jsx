@@ -40,6 +40,7 @@ const index = ({
         e.preventDefault();
 
         if (image) {
+            console.log("in first")
             handleImageUpload(image).then(async(url) => {
                 const message = {
                     sender: user._id,
@@ -48,8 +49,9 @@ const index = ({
                     fileURL: url
                 };
 
-                await postRequest("/privateChat/newPrivateMessage", message);
                 socket.current.emit("sendMessage", message);
+                setNewMessage(message)
+                await postRequest("/privateChat/newPrivateMessage", message);
             })
         }else {
             const message = {
@@ -62,19 +64,25 @@ const index = ({
             setNewMessage(message)
         }
         setMessageInput("");
+        setImage(null)
     };
 
     useEffect(() => {
         socket.current = io("http://localhost:3001")
         socket
             .current
-            .on("getMessage", ({sender, content}) => {
+            .on("getMessage", ({sender, content, fileURL}) => {
                 const data = {
                     sender: {
                         _id: sender
                     },
                     content
                 }
+                if(fileURL) {
+                    data.fileURL = fileURL
+                }
+                console.log(fileURL, "fileURLRLLRLRLRLRL in getMessage")
+                console.log(data, "dataaaa in getMessage")
                 setArrivalMessage(data)
             })
     }, [])
