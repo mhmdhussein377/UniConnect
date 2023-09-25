@@ -21,7 +21,8 @@ const index = ({
     conversation,
     messages,
     setNewMessage,
-    setConversationMessages
+    setConversationMessages,
+    setSocketMessage
 }) => {
 
     const {user} = useContext(AuthContext);
@@ -38,6 +39,10 @@ const index = ({
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
+
+        if(!image && !messageInput) {
+            return
+        }
 
         if (image && messageInput) {
             handleImageUpload(image).then(async(url) => {
@@ -78,6 +83,7 @@ const index = ({
                     .toString()
                     .trim()
             };
+
             await postRequest("/privateChat/newPrivateMessage", message);
             socket
                 .current
@@ -104,6 +110,7 @@ const index = ({
                 if(content) {
                     data.content = content
                 }
+                setSocketMessage(data)
                 setArrivalMessage(data)
             })
     }, [])
@@ -127,7 +134,7 @@ const index = ({
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight
         }
-    }, [messages])
+    })
 
     const handleImageUpload = async(image) => {
         if (image) {

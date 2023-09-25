@@ -45,6 +45,8 @@ const index = () => {
     const [newMessage,
         setNewMessage] = useState({})
 
+    const [socketMessage, setSocketMessage] = useState({})
+
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
             event.preventDefault();
@@ -69,7 +71,7 @@ const index = () => {
             setFriends(response)
         }
         getPrivateConversations()
-    }, [messages])
+    }, [messages, socketMessage])
 
     useEffect(() => {
         const getCommunities = async() => {
@@ -125,6 +127,7 @@ const index = () => {
                     setOpenSidebar={setOpenSidebar}
                     communityConversation={selectedCommunity}/>)}
                 {type === "inbox" && (<PrivateConversation
+                    setSocketMessage={setSocketMessage}
                     setOpenSidebar={setOpenSidebar}
                     setShowUserDetails={setShowUserDetails}
                     conversation={conversation}

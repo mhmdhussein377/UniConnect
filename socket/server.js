@@ -26,12 +26,22 @@ const io = require("socket.io")(server, {
 });
 
 const users = new Map()
+const rooms = new Map()
 
 io.on("connection", (socket) => {
 
     socket.on("addUser", (userId) => {
         users.set(userId, socket.id);
     });
+
+    socket.on("joinRoom", (roomName) => {
+        if(!rooms.has(roomName)) {
+            rooms.set(roomName, [socket.id])
+            socket.join(roomName)
+        }else {
+            rooms.get(roomName).push(socket.id)
+        }
+    })
 
     socket.on("sendMessage", async({sender, receiver, content, fileURL}) => {
         console.log(fileURL, "fileeeURllllll")
