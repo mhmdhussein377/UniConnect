@@ -65,6 +65,19 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("sendGroupMessage", ({sender, senderName, content, roomName}) => {
+        try {
+            if(rooms.has(roomName)) {
+                const roomUsers = rooms.get(roomName)
+                roomUsers.forEach((user) => {
+                    io.to(user).emit("getGroupMessage", {sender, senderName, content})
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
     socket.on("leaveRoom", ({roomName, userId}) => {
         if(rooms.has(roomName)) {
             rooms.get(roomName).delete(userId)
