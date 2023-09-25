@@ -43,7 +43,10 @@ io.on("connection", (socket) => {
                         io.to(value).emit("getMessage", {sender, content});
                         break
                     }
-                    io.to(value).emit("getMessage", {sender, content, fileURL: fileURL} )
+                    if(!content) {
+                        to.to(value).emit("getMessage", {sender, fileURL})
+                    }
+                    io.to(value).emit("getMessage", {sender, content, fileURL} )
                     break;
                 }
             }

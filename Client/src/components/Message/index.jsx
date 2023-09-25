@@ -35,7 +35,7 @@ const index = ({
                         className="rounded-tr-md rounded-tl-md max-h-[200px] object-cover"
                         src={fileURL}
                         alt="image"/>}
-                    <p>{content}</p>
+                    {content && <p>{content}</p>}
                 </div>
             </div>
         </div>

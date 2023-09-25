@@ -39,28 +39,49 @@ const index = ({
     const handleSendMessage = async(e) => {
         e.preventDefault();
 
-        if (image) {
-            console.log("in first")
+        if (image && messageInput) {
+            handleImageUpload(image).then(async(url) => {
+                const message = {
+                    sender: user._id,
+                    receiver: conversation
+                        ?.member._id,
+                    content: messageInput
+                        .toString()
+                        .trim(),
+                    fileURL: url
+                };
+
+                socket
+                    .current
+                    .emit("sendMessage", message);
+                setNewMessage(message)
+                await postRequest("/privateChat/newPrivateMessage", message);
+            })
+        } else if (image && !messageInput) {
             handleImageUpload(image).then(async(url) => {
                 const message = {
                     sender: user._id,
                     receiver: conversation?.member._id,
-                    content: messageInput.toString().trim(),
                     fileURL: url
                 };
 
                 socket.current.emit("sendMessage", message);
-                setNewMessage(message)
+                setNewMessage(message);
                 await postRequest("/privateChat/newPrivateMessage", message);
-            })
-        }else {
+            });
+        } else {
             const message = {
                 sender: user._id,
-                receiver: conversation?.member._id,
-                content: messageInput.toString().trim(),
+                receiver: conversation
+                    ?.member._id,
+                content: messageInput
+                    .toString()
+                    .trim()
             };
             await postRequest("/privateChat/newPrivateMessage", message);
-            socket.current.emit("sendMessage", message);
+            socket
+                .current
+                .emit("sendMessage", message);
             setNewMessage(message)
         }
         setMessageInput("");
@@ -76,13 +97,13 @@ const index = ({
                     sender: {
                         _id: sender
                     },
-                    content
                 }
-                if(fileURL) {
+                if (fileURL) {
                     data.fileURL = fileURL
                 }
-                console.log(fileURL, "fileURLRLLRLRLRLRL in getMessage")
-                console.log(data, "dataaaa in getMessage")
+                if(content) {
+                    data.content = content
+                }
                 setArrivalMessage(data)
             })
     }, [])
