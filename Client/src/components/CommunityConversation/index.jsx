@@ -3,12 +3,15 @@ import {GrAttachment} from "react-icons/gr";
 import {CgSidebarOpen} from "react-icons/cg";
 import {FiUserPlus} from "react-icons/fi";
 import Message from "./../Message"
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {AiTwotoneLock} from "react-icons/ai";
 import {format} from "timeago.js";
 import {postRequest} from "../../utils/requests";
+import { AuthContext } from "../../Context/AuthContext";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityConversation}) => {
+    const {user} = useContext(AuthContext)
+    const socket = useRef()
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -39,7 +42,15 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 .toString()
                 .trim()
         }
+
+        const groupMessage = {
+            sender: user._id,
+            senderName: user.name,
+            content: messageInput.toString().trim(),
+            roomName: communityConversation._id
+        }
         await postRequest(`/community/${communityConversation?._id}/add-message`, message)
+        socket.current.emit("sendGroupMessage", groupMessage)
         setMessageInput("")
     };
 
