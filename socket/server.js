@@ -44,7 +44,6 @@ io.on("connection", (socket) => {
     })
 
     socket.on("sendMessage", async({sender, receiver, content, fileURL}) => {
-        console.log(fileURL, "fileeeURllllll")
         try {
             for (const [key,
                 value]of users.entries()) {
@@ -55,6 +54,7 @@ io.on("connection", (socket) => {
                     }
                     if(!content) {
                         to.to(value).emit("getMessage", {sender, fileURL})
+                        break
                     }
                     io.to(value).emit("getMessage", {sender, content, fileURL} )
                     break;
@@ -64,6 +64,12 @@ io.on("connection", (socket) => {
             console.error(error);
         }
     });
+
+    socket.on("leaveRoom", ({roomName, userId}) => {
+        if(rooms.has(roomName)) {
+            rooms.get(roomName).delete(userId)
+        }
+    })
 
     socket.on("disconnectUser", (userId) => {
         for (const [key,
