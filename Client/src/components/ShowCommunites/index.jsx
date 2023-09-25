@@ -4,7 +4,7 @@ import SearchedCommunity from "./../../components/SearchedCommunity"
 
 const index = ({text, data, maxDataToShow, withoutUsername}) => {
 
-    let [showAllData,
+    const [showAllData,
         setShowAllData] = useState(false)
 
     return (

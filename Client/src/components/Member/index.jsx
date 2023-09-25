@@ -4,6 +4,7 @@ import {AiOutlineMinus} from "react-icons/ai";
 import {AuthContext} from "../../Context/AuthContext";
 import {Link} from "react-router-dom";
 import {postRequest} from "../../utils/requests";
+import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 
 const index = ({
     searched,
@@ -20,7 +21,7 @@ const index = ({
     let [loading,
         setLoading] = useState(false)
 
-    const {name, username, _id} = member
+    const {name, username, _id, profile} = member
 
     const actualUser = user._id === _id
 
@@ -65,7 +66,7 @@ const index = ({
                 <div className="relative">
                     <img
                         className="cursor-pointer w-[45px] h-[45px] rounded-full overflow-hidden flex items-center justify-center object-cover"
-                        src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
+                        src={profile?.profileImage || ProfilePicture}
                         alt="profile-picture"/> {online && (
                         <span
                             className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>

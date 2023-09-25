@@ -1,13 +1,15 @@
 import { format } from "timeago.js";
 import {AuthContext} from "../../Context/AuthContext"
 import {useContext} from "react";
+import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 
 const index = ({
     highlight,
     name,
     lastMessage,
     messageNum,
-    sender
+    sender,
+    profilePicture
 }) => {
     const {user} = useContext(AuthContext);
 
@@ -18,7 +20,7 @@ const index = ({
                 <div
                     className="w-[45px] h-[45px] rounded-full flex items-center justify-center overflow-hidden">
                     <img
-                        src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
+                        src={profilePicture || ProfilePicture}
                         alt=""/>
                 </div>
                 <div className="flex flex-col justify-center h-full">

@@ -15,9 +15,9 @@ const index = () => {
 
     const {username} = useParams()
     const {user: currentUser} = useContext(AuthContext)
-    let [user,
+    const [user,
         setUser] = useState({})
-    let [suggestedUsers, setSuggestedUsers] = useState([])
+    const [suggestedUsers, setSuggestedUsers] = useState([])
     const [friends, setFriends] = useState([])
 
     useEffect(() => {
@@ -32,8 +32,6 @@ const index = () => {
 
     const {createdCommunities, joinedCommunities} = user
 
-    console.log(username)
-
     useEffect(() => {
         const getSuggestedUsers = async() => {
             const response = await postRequest(`/user/suggested-users`, {
@@ -43,10 +41,7 @@ const index = () => {
             response && setSuggestedUsers(response)
         }
         getSuggestedUsers()
-    }, [user
-            ?._id])
-
-    console.log(user, "ussseeer")
+    }, [user?._id])
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -101,12 +96,8 @@ const index = () => {
                     <div className="lg:flex-[3] xl:flex-[4.5] flex flex-col gap-6">
                         <EducationalInfo
                             currentUser={user.username === currentUser.username}
-                            universtiy={user
-                            ?.profile
-                                ?.universtiy}
-                            major={user
-                            ?.profile
-                                ?.major}
+                            universtiy={user?.profile?.universtiy}
+                            major={user?.profile?.major}
                             emptyHeadline="No educational background available"/>
                         {friends && <ShowFriends friends={friends || []}/>} 
                         {suggestedUsers.length > 0 && <div

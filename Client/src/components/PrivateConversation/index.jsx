@@ -10,6 +10,7 @@ import {postRequest} from "./../../utils/requests";
 import {AuthContext} from "./../../Context/AuthContext";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
+import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 
 const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setNewMessage,setConversationMessages}) => {
 
@@ -17,7 +18,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
     const socket = useRef();
     const chatRef = useRef();
 
-    let [messageInput,
+    const [messageInput,
         setMessageInput] = useState("");
     const [arrivalMessage,
         setArrivalMessage] = useState({});
@@ -55,9 +56,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
     }, [])
 
     useEffect(() => {
-        socket
-            .current
-            .emit("addUser", user._id);
+        socket.current.emit("addUser", user._id);
     }, []);
 
     useEffect(() => {
@@ -71,8 +70,6 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
             chatRef.current.scrollTop = chatRef.current.scrollHeight
         }
     }, [messages])
-
-    console.log(messages, "messaaagesss")
 
     return !conversation
         ? (
@@ -95,8 +92,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                             <img
                                 onClick={() => setShowUserDetails((prev) => !prev)}
                                 className="cursor-pointer w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center object-cover"
-                                src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
-                                alt="profile-picture"/>
+                                src={conversation?.member?.profile?.profileImage || ProfilePicture}/>
                             {conversation.member.online && <span className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>}
                         </div>
                         <div>
@@ -124,6 +120,7 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                             own={sender?._id}
                             content={content}
                             sender={sender?.name}
+                            profilePicture={sender?.profile?.profileImage}
                             date={format(timestamps)}/>})}
                 </div>
                 <form

@@ -9,9 +9,9 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
 
     const {dispatch} = useContext(AuthContext)
 
-    let [input,
+    const [input,
         setInput] = useState("")
-    let [isDisabled,
+    const [isDisabled,
         setIsDisabled] = useState(true)
     const boxRef = useRef()
     const navigate = useNavigate()

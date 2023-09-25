@@ -9,9 +9,9 @@ const index = ({setShowCommunityModal, setCommunities}) => {
 
     const {dispatch} = useContext(AuthContext)
 
-    let [inputs,
+    const [inputs,
         setInputs] = useState({})
-    let [error,
+    const [error,
         setErrors] = useState({})
     const boxRef = useRef()
 

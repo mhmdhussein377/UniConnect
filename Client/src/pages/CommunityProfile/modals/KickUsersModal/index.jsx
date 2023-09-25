@@ -6,20 +6,13 @@ import {postRequest} from "../../../../utils/requests";
 
 const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
 
-    let [selectedMembers,
-        setSelectedMembers] = useState([])
-    const [isDisabled,
-        setIsDisabled] = useState(true)
+    const [selectedMembers, setSelectedMembers] = useState([])
+    const [isDisabled, setIsDisabled] = useState(true)
     const boxRef = useRef()
 
     useEffect(() => {
-        selectedMembers
-            ?.length > 0
-                ? setIsDisabled(false)
-                : setIsDisabled(true)
+        selectedMembers?.length > 0 ? setIsDisabled(false) : setIsDisabled(true)
     }, [selectedMembers])
-
-    console.log(members, "membeeers")
 
     const handleKickUsers = async() => {
         setMembers(prev => prev.filter(member => !selectedMembers.includes(member._id)))
@@ -34,10 +27,7 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
         if (isSelected) {
             setSelectedMembers((prevSelectedMembers) => prevSelectedMembers.filter((selectedMember) => selectedMember !== _id));
         } else {
-            setSelectedMembers((prevSelectedMembers) => [
-                ...prevSelectedMembers,
-                _id
-            ]);
+            setSelectedMembers((prevSelectedMembers) => [...prevSelectedMembers, _id]);
         }
     }
     

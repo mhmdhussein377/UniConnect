@@ -7,13 +7,13 @@ import {useDebounce} from "use-debounce"
 
 const index = ({setShowAddMembersModal, communityId}) => {
 
-    let [friends,
+    const [friends,
         setFriends] = useState([])
-    let [searchedUsers,
+    const [searchedUsers,
         setSearchedUsers] = useState([])
-    let [searchTerm,
+    const [searchTerm,
         setSearchTerm] = useState("")
-    let [debouncedValue] = useDebounce(searchTerm, 500)
+    const [debouncedValue] = useDebounce(searchTerm, 500)
     const boxRef = useRef()
 
     useEffect(() => {

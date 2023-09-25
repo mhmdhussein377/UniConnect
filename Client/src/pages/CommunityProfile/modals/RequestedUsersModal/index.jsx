@@ -6,34 +6,26 @@ import {postRequest} from "../../../../utils/requests";
 
 const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, communityId}) => {
 
-    let [selectedUsers,
+    const [selectedUsers,
         setSelectedUsers] = useState([])
     const [isDisabled,
         setIsDisabled] = useState(true)
     const boxRef = useRef()
 
     useEffect(() => {
-        selectedUsers
-            ?.length > 0
-                ? setIsDisabled(false)
-                : setIsDisabled(true);
+        selectedUsers?.length > 0 ? setIsDisabled(false) : setIsDisabled(true);
     }, [selectedUsers]);
 
     const handleAcceptRequestedUsers = async() => {
         setCommunity(prev => ({
             ...prev,
-            members: [
-                ...prev.members,
-                ...selectedUsers
-            ],
-            requestedUsers: prev
-                .requestedUsers
-                .filter(user => !selectedUsers.includes(user._id))
+            members: [...prev.members, ...selectedUsers],
+            requestedUsers: prev.requestedUsers.filter(user => !selectedUsers.includes(user._id))
         }))
         setShowRequestedUsersModal(false)
         setUsers(prev => prev.filter(user => !selectedUsers.includes(user)))
 
-        const response = await postRequest(`/community/accept-community-join-requests/${communityId}`, {
+        await postRequest(`/community/accept-community-join-requests/${communityId}`, {
             requestedUsersIds: selectedUsers.map((user) => user._id)
         });
     }

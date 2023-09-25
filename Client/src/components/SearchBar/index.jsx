@@ -11,10 +11,10 @@ const index = () => {
 
     const {user: currentUser} = useContext(AuthContext)
 
-    let [searchTerm,
+    const [searchTerm,
         setSearchTerm] = useState("");
-    let [debouncedValue] = useDebounce(searchTerm, 500);
-    let [result,
+    const [debouncedValue] = useDebounce(searchTerm, 500);
+    const [result,
         setResult] = useState([])
 
     useEffect(() => {

@@ -6,9 +6,9 @@ import {postRequest} from "./../../../../utils/requests";
 
 const index = ({setShowUpdateCommunityModal, setCommunity, name, description, privacy, _id}) => {
 
-    let [inputs,
+    const [inputs,
         setInputs] = useState({name, description, privacy})
-    let [error,
+    const [error,
         setErrors] = useState({})
     const boxRef = useRef()
 

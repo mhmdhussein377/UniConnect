@@ -5,6 +5,7 @@ import {AuthContext} from "../../Context/AuthContext";
 import {imageDB} from "../../utils/FirebaseConfig";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage"
 import {v4} from "uuid"
+import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 
 const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends}) => {
 
@@ -183,11 +184,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                     ref={profileImgRef}
                     onClick={() => isCurrentUser && profilePicInputRef.current.click()}
                     className={`absolute w-[160px] h-[160px] rounded-full object-cover -bottom-[25%] left-[5%] border-[5px] border-white ${isCurrentUser && "cursor-pointer"}`}
-                    src={user
-                    ?.profile
-                        ?.profileImage || "https://img.freepik.com/free-photo/landscape-lake-surrounded-by-mountains_23-214" +
-                            "8215162.jpg?w=1060&t=st=1693667013~exp=1693667613~hmac=cbe76fdbc4c315a22be951804" +
-                                "9b4ce73ba01a29d7839bc73212e6627c7fe2bd3"}
+                    src={user?.profile?.profileImage || ProfilePicture}
                     alt="profile-picture"/>
                 <input
                     onChange={(e) => {

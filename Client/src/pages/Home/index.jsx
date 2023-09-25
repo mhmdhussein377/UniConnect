@@ -59,43 +59,30 @@ const index = () => {
 
     useEffect(() => {
         const getPrivateConversations = async() => {
-            try {
-                const response = await getRequest(`/privateChat/privateConversationsDetails`);
-                console.log(response, "respon")
-                response && response.sort((conv1, conv2) => {
-                    const timestamp1 = new Date(conv1.lastMessage?.createdAt).getTime()
-                    const timestamp2 = new Date(conv2.lastMessage?.createdAt).getTime()
+            const response = await getRequest(`/privateChat/privateConversationsDetails`);
+            response && response.sort((conv1, conv2) => {
+                const timestamp1 = new Date(conv1.lastMessage?.createdAt).getTime()
+                const timestamp2 = new Date(conv2.lastMessage?.createdAt).getTime()
 
-                    return timestamp2 - timestamp1
-                })
-                setFriends(response)
-            } catch (error) {
-                console.log(error)
-            }
+                return timestamp2 - timestamp1
+            })
+            setFriends(response)
         }
         getPrivateConversations()
     }, [messages])
 
     useEffect(() => {
         const getCommunities = async() => {
-            try {
-                const response = await getRequest(`/community/communitiesDetails`)
-                setCommunities(response)
-            } catch (error) {
-                console.log(error)
-            }
+            const response = await getRequest(`/community/communitiesDetails`)
+            setCommunities(response)
         }
         getCommunities()
     }, [])
 
     useEffect(() => {
         const getCommunityInfo = async() => {
-            try {
-                const response = await getRequest(`/community/communityInfo/${communityId}`)
-                setSelectedCommunity(response)
-            } catch (error) {
-                console.log(error)
-            }
+            const response = await getRequest(`/community/communityInfo/${communityId}`)
+            setSelectedCommunity(response)
         }
         communityId && getCommunityInfo()
     }, [communityId])
@@ -155,9 +142,13 @@ const index = () => {
                 conversation={conversation}
                 showUserDetails={showUserDetails}
                 setShowUserDetails={setShowUserDetails}/> {/* Modal to create communities */}
-            {showCommunityModal && <CreateCommunityModal setCommunities={setCommunities} setShowCommunityModal={setShowCommunityModal}/>}
+            {showCommunityModal && <CreateCommunityModal
+                setCommunities={setCommunities}
+                setShowCommunityModal={setShowCommunityModal}/>}
             {/* Modal to add members to communities */}
-            {showAddMembersModal && (<AddMembersModal communityId={communityId} setShowAddMembersModal={setShowAddMembersModal}/>)}
+            {showAddMembersModal && (<AddMembersModal
+                communityId={communityId}
+                setShowAddMembersModal={setShowAddMembersModal}/>)}
         </div>
     );
 };

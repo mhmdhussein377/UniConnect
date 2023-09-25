@@ -11,6 +11,7 @@ import {Fragment, useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../../Context/AuthContext";
 import {getRequest, postRequest} from "../../utils/requests";
 import {useQuery} from "react-query";
+import ProfileImage from "./../../assets/ProfilePicture.jpg"
 
 const index = ({profile}) => {
     const {user} = useContext(AuthContext);
@@ -192,7 +193,7 @@ const index = ({profile}) => {
                         className="w-[40px] h-[40px] rounded-full overflow-hidden">
                         <img
                             className="w-full h-full object-cover"
-                            src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
+                            src={user?.profile?.profileImage || ProfileImage}
                             alt=""/>
                     </Link>
                 </div>

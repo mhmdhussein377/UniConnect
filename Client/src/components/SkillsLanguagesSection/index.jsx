@@ -11,7 +11,7 @@ const index = ({
     currentUser
 }) => {
 
-    let [showAllData,
+    const [showAllData,
         setShowAllData] = useState(false);
 
     return (

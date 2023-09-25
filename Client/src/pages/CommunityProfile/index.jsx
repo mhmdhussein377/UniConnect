@@ -22,28 +22,28 @@ const index = () => {
     const {id} = useParams()
     const {user, dispatch} = useContext(AuthContext)
 
-    let [community,
+    const [community,
         setCommunity] = useState({})
-    let [userStatus,
+    const [userStatus,
         setUserStatus] = useState({isCreator: false, isMember: false, isInvited: false, isRequested: false, privacy: ""})
-    let [buttonText,
+    const [buttonText,
         setButtonText] = useState("")
-    let [requesters,
+    const [requesters,
         setRequesters] = useState([])
-    let [members,
+    const [members,
         setMembers] = useState([])
-    let [loading,
+    const [loading,
         setLoading] = useState(false)
 
-    let [showUpdateCommunityModal,
+    const [showUpdateCommunityModal,
         setShowUpdateCommunityModal] = useState(false)
-    let [showAddMembersModal,
+    const [showAddMembersModal,
         setShowAddMembersModal] = useState(false)
-    let [showDeleteCommunityModal,
+    const [showDeleteCommunityModal,
         setShowDeleteCommunityModal] = useState(false)
-    let [showKickUsersModal,
+    const [showKickUsersModal,
         setShowKickUsersModal] = useState(false)
-    let [showRequestedUsersModal,
+    const [showRequestedUsersModal,
         setShowRequestedUsersModal] = useState(false)
 
     let {name, privacy, description, _id} = community

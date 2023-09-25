@@ -11,10 +11,10 @@ import {AuthContext} from "../../Context/AuthContext";
 import {postRequest} from "../../utils/requests";
 import Friend from "./../Friend";
 import Community from "./../Community";
-import {format} from "timeago.js";
 import {useNavigate} from "react-router-dom";
 import {io} from "socket.io-client";
 import {BiLogOut} from "react-icons/bi";
+import ProfileImage from "./../../assets/ProfilePicture.jpg"
 
 const index = ({
     openSidebar,
@@ -28,7 +28,8 @@ const index = ({
     setCommunityId,
     communities,
     selectedConversation,
-    selectedCommunity}) => {
+    selectedCommunity
+}) => {
 
     const {user} = useContext(AuthContext);
     const {username} = user
@@ -40,14 +41,13 @@ const index = ({
         setShowSettings] = useState(false)
 
     const handleSelectedConversation = async(index, ID) => {
-        console.log("hiiiiiiii hiii")
         setSelectedConversation(privateConversations[index])
         const data = {
             userOne: user
                 ?._id,
             userTwo: ID
         }
-        const response = await postRequest(`/privateChat/readPrivateMessage`, data)
+        await postRequest(`/privateChat/readPrivateMessage`, data)
     }
 
     const handleLogout = async() => {
@@ -55,7 +55,9 @@ const index = ({
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
         socket.current = io("http://localhost:3001");
-        socket.current.emit("disconnectUser", user._id);
+        socket
+            .current
+            .emit("disconnectUser", user._id);
         navigate("/");
     };
 
@@ -77,8 +79,6 @@ const index = ({
     useEffect(() => {
         document.addEventListener("click", handleClickOutside);
     }, []);
-
-    console.log(privateConversations, "privateee")
 
     return (
         <div
@@ -103,21 +103,26 @@ const index = ({
                 {type === "inbox" && (privateConversations
                     ?.length > 0
                         ? (privateConversations.map((conversation, index) => {
-                            const {member, lastMessage, unreadMessages, _id} = conversation
-                            return <div
-                                key={index}
-                                onClick={() => {
-                                handleSelectedConversation(index, member._id);
-                                setOpenCommunityDetails(false);
-                                setShowUserDetails(false);
-                            }}>
-                                <Friend
-                                    highlight={selectedConversation?._id === _id}
-                                    name={member.name}
-                                    lastMessage={lastMessage}
-                                    messageNum={unreadMessages}
-                                    sender={member._id}/>
-                            </div>}))
+                            const {member, lastMessage, unreadMessages, _id} = conversation;
+                            return (
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                    handleSelectedConversation(index, member._id);
+                                    setOpenCommunityDetails(false);
+                                    setShowUserDetails(false);
+                                }}>
+                                    <Friend
+                                        highlight={selectedConversation
+                                        ?._id === _id}
+                                        name={member.name}
+                                        lastMessage={lastMessage}
+                                        messageNum={unreadMessages}
+                                        sender={member._id}
+                                        profilePicture={member?.profile?.profileImage}/>
+                                </div>
+                            );
+                        }))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">
                                 <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
@@ -128,15 +133,24 @@ const index = ({
                                 </h1>
                             </div>
                         ))}
-                {type === "community" && (communities?.length > 0 ? (communities.map((community, index) => {
-                            return <div
-                                key={index}
-                                onClick={() => {
-                                setCommunityId(community.ID);
-                                setOpenCommunityDetails(false);
-                                setShowUserDetails(false)}}>
-                                <Community highlight={community.ID === selectedCommunity?._id} {...community}/>
-                            </div>}))
+                {type === "community" && (communities
+                    ?.length > 0
+                        ? (communities.map((community, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                    setCommunityId(community.ID);
+                                    setOpenCommunityDetails(false);
+                                    setShowUserDetails(false);
+                                }}>
+                                    <Community
+                                        highlight={community.ID === selectedCommunity
+                                        ?._id}
+                                        {...community}/>
+                                </div>
+                            );
+                        }))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">
                                 <div className="p-1.5 rounded-md bg-secondary bg-opacity-30">
@@ -172,13 +186,13 @@ const index = ({
                         to={`/profile/${username}`}
                         className="w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center">
                         <img
-                            src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
+                            src={user
+                            ?.profile
+                                ?.profileImage || ProfileImage}
                             alt="profile-picture"/>
                     </Link>
                     <div className="flex flex-col">
-                        <Link
-                            to={`/profile/${username}`}
-                            className="text-lg font-semibold">
+                        <Link to={`/profile/${username}`} className="text-lg font-semibold">
                             {user.name}
                         </Link>
                         <p className="text-[#737373] font-medium">{username}</p>

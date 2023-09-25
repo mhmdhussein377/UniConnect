@@ -14,8 +14,6 @@ const index = ({showUserDetails, setShowUserDetails, conversation}) => {
         setUser(conversation?.member)
     }, [conversation])
 
-    console.log(user, "userrrr")
-
     return (
         <div
             className={`absolute top-0 bg-white dark:bg-black dark:text-white community-details h-screen w-[80%] xs:w-[70%] sm:w-[55%] smd:w-[48%] md:w-[42%] lg:w-[35%] xl:w-[27%] z-50 transition-all duration-300 ease-linear border-l-[2px] ${showUserDetails
