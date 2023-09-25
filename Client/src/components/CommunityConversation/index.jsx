@@ -17,6 +17,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setMessageInput] = useState("");
     const [messages,
         setMessages] = useState([]);
+    const [arrivalMessage, setArrivalMessage] = useState({})
 
     useEffect(() => {
         setMessages(communityConversation?.chat)
@@ -27,6 +28,12 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
             socket.current.emit("joinRoom", communityConversation?._id)
         }
     }, [communityConversation])
+
+    useEffect(() => {
+        if(arrivalMessage && communityConversation) {
+            setMessages(prev => [...prev, arrivalMessage])
+        }
+    }, [arrivalMessage, communityConversation])
 
     let onlineUsers = communityConversation
         ?.members.reduce((count, member) => {
