@@ -11,17 +11,22 @@ import {AuthContext} from "./../../Context/AuthContext";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 import ProfilePicture from "./../../assets/ProfilePicture.jpg"
+import { imageDB } from "../../utils/FirebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setNewMessage,setConversationMessages}) => {
 
     const {user} = useContext(AuthContext);
     const socket = useRef();
     const chatRef = useRef();
+    const imgRef = useRef()
 
     const [messageInput,
         setMessageInput] = useState("");
     const [arrivalMessage,
         setArrivalMessage] = useState({});
+    const [image, setImage] = useState(null)
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
@@ -29,9 +34,8 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
         const message = {
             sender: user._id,
             receiver: conversation?.member._id,
-            content: messageInput
-                .toString()
-                .trim()
+            content: messageInput.toString().trim(),
+            fileURL: handleImageUpload(image)
         };
         await postRequest("/privateChat/newPrivateMessage", message);
         socket
@@ -70,6 +74,19 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
             chatRef.current.scrollTop = chatRef.current.scrollHeight
         }
     }, [messages])
+
+    const handleImageUpload = async (image) => {
+        if(image) {
+            try {
+                const imgRef = ref(imageDB, `files/${v4()}`);
+                const snapshot = await uploadBytes(imgRef, image)
+                const downloadURL = await getDownloadURL(snapshot.ref)
+                return downloadURL
+            } catch (error) {
+                console.log(`Error uploading image: `, error)
+            }
+        }
+    }
 
     return !conversation
         ? (
@@ -135,7 +152,8 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                             type="text"
                             placeholder="Send a message"/>
                         <div className="flex items-center gap-3">
-                            <GrAttachment size={25}/>
+                            <input onChange={e => setImage(e.target.files[0])} ref={imgRef} type="file" className="hidden" />
+                            <GrAttachment onClick={() => imgRef.current.click()} className="cursor-pointer" size={25}/>
                             <BsEmojiSmile size={25}/>
                         </div>
                     </div>
