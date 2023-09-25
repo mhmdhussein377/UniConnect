@@ -22,6 +22,12 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setMessages(communityConversation?.chat)
     }, [communityConversation?.chat])
 
+    useEffect(() => {
+        if(communityConversation?._id) {
+            socket.current.emit("joinRoom", communityConversation?._id)
+        }
+    }, [communityConversation])
+
     let onlineUsers = communityConversation
         ?.members.reduce((count, member) => {
                 if (member.online) {
