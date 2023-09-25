@@ -11,11 +11,18 @@ import {AuthContext} from "./../../Context/AuthContext";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 import ProfilePicture from "./../../assets/ProfilePicture.jpg"
-import { imageDB } from "../../utils/FirebaseConfig";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+import {imageDB} from "../../utils/FirebaseConfig";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {v4} from "uuid";
 
-const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setNewMessage,setConversationMessages}) => {
+const index = ({
+    setOpenSidebar,
+    setShowUserDetails,
+    conversation,
+    messages,
+    setNewMessage,
+    setConversationMessages
+}) => {
 
     const {user} = useContext(AuthContext);
     const socket = useRef();
@@ -26,57 +33,75 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
         setMessageInput] = useState("");
     const [arrivalMessage,
         setArrivalMessage] = useState({});
-    const [image, setImage] = useState(null)
+    const [image,
+        setImage] = useState(null)
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
 
-        const message = {
-            sender: user._id,
-            receiver: conversation?.member._id,
-            content: messageInput.toString().trim(),
-            fileURL: handleImageUpload(image)
-        };
-        await postRequest("/privateChat/newPrivateMessage", message);
-        socket
-            .current
-            .emit("sendMessage", message);
-        setNewMessage(message)
+        if (image) {
+            handleImageUpload(image).then(async(url) => {
+                const message = {
+                    sender: user._id,
+                    receiver: conversation?.member._id,
+                    content: messageInput.toString().trim(),
+                    fileURL: url
+                };
+
+                await postRequest("/privateChat/newPrivateMessage", message);
+                socket.current.emit("sendMessage", message);
+            })
+        }else {
+            const message = {
+                sender: user._id,
+                receiver: conversation?.member._id,
+                content: messageInput.toString().trim(),
+            };
+            await postRequest("/privateChat/newPrivateMessage", message);
+            socket.current.emit("sendMessage", message);
+            setNewMessage(message)
+        }
         setMessageInput("");
     };
 
     useEffect(() => {
         socket.current = io("http://localhost:3001")
-        socket.current.on("getMessage", ({sender, content}) => {
-            console.log("message received")
-            const data = {
-                sender: {
-                    _id: sender
-                },
-                content,
-            }
-            setArrivalMessage(data)
-        })
+        socket
+            .current
+            .on("getMessage", ({sender, content}) => {
+                const data = {
+                    sender: {
+                        _id: sender
+                    },
+                    content
+                }
+                setArrivalMessage(data)
+            })
     }, [])
 
     useEffect(() => {
-        socket.current.emit("addUser", user._id);
+        socket
+            .current
+            .emit("addUser", user._id);
     }, []);
 
     useEffect(() => {
-        if(arrivalMessage && conversation) {
-            setConversationMessages(prevMessages => [...prevMessages, arrivalMessage])
+        if (arrivalMessage && conversation) {
+            setConversationMessages(prevMessages => [
+                ...prevMessages,
+                arrivalMessage
+            ])
         }
     }, [arrivalMessage])
 
     useEffect(() => {
-        if(chatRef.current) {
+        if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight
         }
     }, [messages])
 
-    const handleImageUpload = async (image) => {
-        if(image) {
+    const handleImageUpload = async(image) => {
+        if (image) {
             try {
                 const imgRef = ref(imageDB, `files/${v4()}`);
                 const snapshot = await uploadBytes(imgRef, image)
@@ -104,13 +129,15 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                 <div
                     className="flex items-center justify-between px-4 py-1.5 border-b-[2px] border-grayHard h-[75px]">
                     <div className="flex items-center gap-3">
-                        <div
-                            className="relative">
+                        <div className="relative">
                             <img
                                 onClick={() => setShowUserDetails((prev) => !prev)}
                                 className="cursor-pointer w-[50px] h-[50px] rounded-full overflow-hidden flex items-center justify-center object-cover"
-                                src={conversation?.member?.profile?.profileImage || ProfilePicture}/>
-                            {conversation.member.online && <span className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>}
+                                src={conversation
+                                ?.member
+                                    ?.profile
+                                        ?.profileImage || ProfilePicture}/> {conversation.member.online && <span
+                                className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>}
                         </div>
                         <div>
                             <div
@@ -131,14 +158,20 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
                         ?.map((message) => {
-                        const {_id, sender, content, timestamps} = message
-                        return <Message
-                            key={_id}
-                            own={sender?._id}
-                            content={content}
-                            sender={sender?.name}
-                            profilePicture={sender?.profile?.profileImage}
-                            date={format(timestamps)}/>})}
+                            const {_id, sender, content, fileURL, timestamps} = message
+                            return <Message
+                                key={_id}
+                                own={sender
+                                ?._id}
+                                content={content}
+                                sender={sender
+                                ?.name}
+                                profilePicture={sender
+                                ?.profile
+                                    ?.profileImage}
+                                fileURL={fileURL}
+                                date={format(timestamps)}/>
+                        })}
                 </div>
                 <form
                     onSubmit={handleSendMessage}
@@ -152,8 +185,15 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                             type="text"
                             placeholder="Send a message"/>
                         <div className="flex items-center gap-3">
-                            <input onChange={e => setImage(e.target.files[0])} ref={imgRef} type="file" className="hidden" />
-                            <GrAttachment onClick={() => imgRef.current.click()} className="cursor-pointer" size={25}/>
+                            <input
+                                onChange={e => setImage(e.target.files[0])}
+                                ref={imgRef}
+                                type="file"
+                                className="hidden"/>
+                            <GrAttachment
+                                onClick={() => imgRef.current.click()}
+                                className="cursor-pointer"
+                                size={25}/>
                             <BsEmojiSmile size={25}/>
                         </div>
                     </div>

@@ -40,8 +40,9 @@ io.on("connection", (socket) => {
                 if (key === receiver) {
                     if(!fileURL) {
                         io.to(value).emit("getMessage", {sender, content});
+                        break
                     }
-                    
+                    io.to(value).emit("getMessage", {sender, content, fileURL} )
                     break;
                 }
             }

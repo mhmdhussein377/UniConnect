@@ -8,7 +8,8 @@ const index = ({
     sender,
     communitMessage,
     date,
-    profilePicture
+    profilePicture,
+    fileURL
 }) => {
     const {user} = useContext(AuthContext);
     const mine = user._id === own;
@@ -30,10 +31,10 @@ const index = ({
                     className={`flex flex-col gap-1 px-3 py-3 bg-primary text-white rounded-md max-w-full break-all ${mine
                     ? "rounded-tr-none"
                     : "rounded-tl-none"}`}>
-                    <img
+                    {fileURL && <img
                         className="rounded-tr-md rounded-tl-md max-h-[200px] object-cover"
-                        src="https://img.freepik.com/free-photo/knights-canyon-challenge-dragon-digital-painting_456031-47.jpg?w=1060&t=st=1695646354~exp=1695646954~hmac=11bdee47a0d3dd37c23c38e753fa2cd57c9750569044c78db60eceef5dc66185"
-                        alt="image"/>
+                        src={fileURL}
+                        alt="image"/>}
                     <p>{content}</p>
                 </div>
             </div>

@@ -30,7 +30,7 @@ const CreatePrivateConversation = async(req, res) => {
 };
 
 const CreatePrivateMessage = async(req, res) => {
-    const {sender, receiver, content} = req.body
+    const {sender, receiver, content, fileURL} = req.body
 
     try {
         await PrivateConversation.findOneAndUpdate({
@@ -41,7 +41,8 @@ const CreatePrivateMessage = async(req, res) => {
             $push: {
                 messages: {
                     sender,
-                    content
+                    content,
+                    fileURL: fileURL || null
                 }
             }
         });
