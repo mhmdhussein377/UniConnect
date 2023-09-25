@@ -33,12 +33,10 @@ const index = ({profile}) => {
 
     const getNotifications = async() => {
         const response = await getRequest("/notifications");
-        response && setNotifications(response.notifications);
+        response && setNotifications(response.notifications.reverse());
     };
 
     const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 3000});
-
-    console.log(notifications, "notifications");
 
     const toggleNotifications = () => {
         setShowNotifications((prev) => !prev);

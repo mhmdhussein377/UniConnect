@@ -40,13 +40,14 @@ const index = ({
         setShowSettings] = useState(false)
 
     const handleSelectedConversation = async(index, ID) => {
+        console.log("hiiiiiiii hiii")
         setSelectedConversation(privateConversations[index])
         const data = {
             userOne: user
                 ?._id,
             userTwo: ID
         }
-        await postRequest(`/privateChat/readPrivateMessage`, data)
+        const response = await postRequest(`/privateChat/readPrivateMessage`, data)
     }
 
     const handleLogout = async() => {
@@ -76,6 +77,8 @@ const index = ({
     useEffect(() => {
         document.addEventListener("click", handleClickOutside);
     }, []);
+
+    console.log(privateConversations, "privateee")
 
     return (
         <div
@@ -113,8 +116,7 @@ const index = ({
                                     name={member.name}
                                     lastMessage={lastMessage}
                                     messageNum={unreadMessages}
-                                    sender={member._id}
-                                    date={format(member.createdAt)}/>
+                                    sender={member._id}/>
                             </div>}))
                         : (
                             <div className="h-full flex gap-4 items-center justify-center p-4">

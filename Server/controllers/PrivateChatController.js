@@ -65,7 +65,7 @@ const ReadPrivateMessage = async(req, res) => {
     try {
         const data = await PrivateConversation.findOneAndUpdate({
             members: {
-                $in: [userOne, userTwo]
+                $all: [userOne, userTwo]
             }
         }, {
             $set: {

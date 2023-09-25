@@ -144,45 +144,25 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
         }
     };
 
-    const uploadProfileImg = () => {
-        const imgRef = ref(imageDB, `files/${v4()}`);
-
-        uploadBytes(imgRef, profileImg).then((snapshot) => {
-
-            setProfileImg(null)
-
-            getDownloadURL(snapshot.ref).then(async(downloadURL) => {
-                await postRequest("/user/edit-profile", {profileImage: downloadURL});
-            }).catch((error) => {
-                console.error("Error getting download URL:", error);
-            });
-        }).catch((error) => {
-            console.error("Error uploading file:", error);
-        });
+    const handleImageUpload = async (image, imageKey) => {
+        if(image) {
+            try {
+                const imgRef = ref(imageDB, `files/${v4()}`);
+                const snapshot = await uploadBytes(imgRef, image)
+                const downloadURL = await getDownloadURL(snapshot.ref)
+                await postRequest(`/user/edit-profile`, {[imageKey]: downloadURL})
+            } catch (error) {
+                console.log(`Error uploading ${imageKey} image: `, error)
+            }
+        }
     }
-
-    const uploadCoverImg = () => {
-        const imgRef = ref(imageDB, `files/${v4()}`);
-
-        uploadBytes(imgRef, coverImg).then((snapshot) => {
-            setProfileImg(null);
-
-            getDownloadURL(snapshot.ref).then(async(downloadURL) => {
-                await postRequest("/user/edit-profile", {coverImg: downloadURL});
-            }).catch((error) => {
-                console.error("Error getting download URL:", error);
-            });
-        }).catch((error) => {
-            console.error("Error uploading file:", error);
-        });
-    };
 
     useEffect(() => {
         if (profileImg) {
-            uploadProfileImg()
+            handleImageUpload(profileImg, "profileImage")
         }
         if (coverImg) {
-            uploadCoverImg()
+            handleImageUpload(coverImg, "coverImage")
         }
     }, [profileImg, coverImg])
 

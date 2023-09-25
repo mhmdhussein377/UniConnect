@@ -13,7 +13,7 @@ const index = () => {
 
     const getNotifications = async() => {
         const response = await getRequest("/notifications");
-        response && setNotifications(response.notifications);
+        response && setNotifications(response.notifications.reverse());
     };
 
     const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 5000});

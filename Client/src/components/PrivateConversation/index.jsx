@@ -49,8 +49,6 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                     _id: sender
                 },
                 content,
-                isRead: false,
-                // createdAt: format(Date.now())
             }
             setArrivalMessage(data)
         })
@@ -73,6 +71,8 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
             chatRef.current.scrollTop = chatRef.current.scrollHeight
         }
     }, [messages])
+
+    console.log(messages, "messaaagesss")
 
     return !conversation
         ? (
@@ -118,13 +118,13 @@ const index = ({setOpenSidebar, setShowUserDetails, conversation, messages, setN
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
                         ?.map((message) => {
-                        const {_id, sender, content, createdAt} = message
+                        const {_id, sender, content, timestamps} = message
                         return <Message
                             key={_id}
                             own={sender?._id}
                             content={content}
                             sender={sender?.name}
-                            date={format(createdAt)}/>})}
+                            date={format(timestamps)}/>})}
                 </div>
                 <form
                     onSubmit={handleSendMessage}
