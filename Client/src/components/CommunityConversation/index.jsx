@@ -10,11 +10,12 @@ import {AuthContext} from "../../Context/AuthContext";
 import {postRequest} from "../../utils/requests";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
-import { v4 } from "uuid";
+import {v4} from "uuid";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityInfo, setNewGroupMessage}) => {
     const {user} = useContext(AuthContext);
     const socket = useRef();
+    const chatRef = useRef()
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -24,14 +25,24 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setArrivalMessage] = useState({});
 
     useEffect(() => {
-        setMessages(communityInfo?.chat);
-    }, [communityInfo?.chat]);
+        setMessages(communityInfo
+            ?.chat);
+    }, [communityInfo
+            ?.chat]);
 
     useEffect(() => {
-        if (communityInfo?._id) {
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        if (communityInfo
+            ?._id) {
             socket
                 .current
-                .emit("joinRoom", communityInfo?._id);
+                .emit("joinRoom", communityInfo
+                    ?._id);
         }
     }, [communityInfo]);
 
@@ -68,15 +79,15 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         }
     }, [arrivalMessage, communityInfo]);
 
-    let onlineUsers = communityInfo
-        ?.members
+    let onlineUsers = communityInfo?.members
             .reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
                 }
                 return count;
             }, 0);
-    if (communityInfo?.creator.online) {
+    if (communityInfo
+        ?.creator.online) {
         onlineUsers += 1;
     }
 
@@ -130,7 +141,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                             {communityInfo.name}
                         </div>
                         <div className="flex items-center">
-                            <span className="">{communityInfo?.members.length + 1}
+                            <span className="">{communityInfo
+                                    ?.members.length + 1}
                                 member</span>
                             <span>
                                 <BsDot size={25}/>
@@ -178,8 +190,10 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                                         key={index}
                                         communitMessage={true}
                                         content={message.content}
-                                        sender={message.sender?.name}
-                                        own={message.sender?._id}
+                                        sender={message.sender
+                                        ?.name}
+                                        own={message.sender
+                                        ?._id}
                                         date={format(Date.now())}/>);
                                 }
                             })}
