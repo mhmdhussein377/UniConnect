@@ -17,6 +17,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     const {user} = useContext(AuthContext);
     const socket = useRef(io("http://localhost:3001"));
     const chatRef = useRef()
+    const fileRef = useRef()
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -24,6 +25,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setMessages] = useState([]);
     const [arrivalMessage,
         setArrivalMessage] = useState(null);
+    const [file, setFile] = useState(null)
 
     useEffect(() => {
         setMessages(communityInfo
@@ -84,6 +86,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
 
     const handleSendMessage = async(e) => {
         e.preventDefault();
+
+        
 
         const message = {
             content: messageInput
@@ -200,7 +204,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                                 className="flex-1 h-[100%] px-4 border-none outline-none bg-transparent placeholder:text-[#737373] placeholder:font-medium"
                                 type="text"
                                 placeholder="Send a message"/>
-                            <GrAttachment className="cursor-pointer" size={25}/>
+                            <input ref={fileRef} type="file" className="hidden" />
+                            <GrAttachment onClick={() => fileRef.current.click()} className="cursor-pointer" size={25}/>
                             <BsEmojiSmile className="cursor-pointer" size={25}/>
                         </div>
                         <button
