@@ -139,6 +139,38 @@ const UpdateCommunity = async(req, res) => {
     }
 }
 
+const MarkMessagesAsRead = async(req, res) => {
+    try {
+        const communityId = req.params.communityId;
+        const userId = req?.user?.id
+
+        const community = await Community.findById(communityId);
+
+        if (!community) {
+            return res
+                .status(404)
+                .json({message: "Community not found"});
+        }
+
+        for (const message of community.chat) {
+            if (!message.readBy.includes(userId)) {
+                message
+                    .readBy
+                    .push(userId);
+            }
+        }
+
+        await community.save();
+
+        res.json({message: "Messages marked as read"});
+    } catch (error) {
+        console.error(error);
+        res
+            .status(500)
+            .json({message: "Server Error"});
+    }
+};
+
 const AddMembers = async(req, res) => {
     const {communityId} = req.params
     const {userIds} = req.body;
@@ -475,14 +507,8 @@ const AcceptCommunityJoinRequest = async(req, res) => {
             }
         });
 
-        const notification = new Notification({
-            recipient: requesterUserId,
-            sender: ownerId,
-            community: communityId,
-            type: "community join accepted",
-            content: `Your join request
-        for the community "${community.name}" has been accepted`,
-        });
+        const notification = new Notification({recipient: requesterUserId, sender: ownerId, community: communityId, type: "community join accepted", content: `Your join request
+        for the community "${community.name}" has been accepted`});
         await notification.save();
 
         return res
@@ -633,14 +659,8 @@ const AcceptCommunityJoinRequests = async(req, res) => {
                 }
             });
 
-            const notification = new Notification({
-                recipient: requestedUser._id,
-                sender: ownerId,
-                community: communityId,
-                type: "community join accepted",
-                content: `Your join request
-        for the community "${community.name}" has been accepted`,
-            });
+            const notification = new Notification({recipient: requestedUser._id, sender: ownerId, community: communityId, type: "community join accepted", content: `Your join request
+        for the community "${community.name}" has been accepted`});
             await notification.save();
         }
 
@@ -957,7 +977,7 @@ const GetCommunitiesDetails = async(req, res) => {
                 .status(404)
                 .json({message: "User not found"});
         }
-        
+
         const joinedCommunityDetails = await Promise.all(user.joinedCommunities.map(async(communityId) => {
             const community = await Community.findById(communityId);
             if (community) {
@@ -969,12 +989,14 @@ const GetCommunitiesDetails = async(req, res) => {
                         }
                         return count;
                     }, 0);
-                    return {
+                return {
                     ID: community._id,
                     name: community.name,
                     privacy: community.privacy,
                     unreadCount,
-                    lastMessages: community.chat.slice(-5)
+                    lastMessages: community
+                        .chat
+                        .slice(-5)
                 };
             }
             return null;
@@ -1110,5 +1132,6 @@ module.exports = {
     GetCommunities,
     GetCommunitiesDetails,
     GetCommunityDetails,
-    AddNewCommunityMessage
+    AddNewCommunityMessage,
+    MarkMessagesAsRead
 };

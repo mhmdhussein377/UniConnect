@@ -20,7 +20,8 @@ const {
     GetCommunities,
     GetCommunitiesDetails,
     GetCommunityDetails,
-    AddNewCommunityMessage
+    AddNewCommunityMessage,
+    MarkMessagesAsRead
 } = require("./../controllers/CommunityController");
 
 router.get("/communities", GetCommunities)
@@ -31,6 +32,7 @@ router.get("/communityInfo/:communityId", GetCommunityDetails)
 
 router.post("/:communityId/add-message", AddNewCommunityMessage)
 
+router.put("/community/:communityId/mark-read", MarkMessagesAsRead);
 
 router.get("/:communityId", GetCommunity)
 
