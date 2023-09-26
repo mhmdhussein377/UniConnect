@@ -142,7 +142,9 @@ const UpdateCommunity = async(req, res) => {
 const MarkMessagesAsRead = async(req, res) => {
     try {
         const communityId = req.params.communityId;
-        const userId = req?.user?.id
+        const userId = req
+            ?.user
+                ?.id
 
         const community = await Community.findById(communityId);
 
@@ -1094,7 +1096,7 @@ const AddNewCommunityMessage = async(req, res) => {
             sender: userId,
             content,
             fileURL,
-            readBy: []
+            readBy: [userId]
         }
 
         community

@@ -100,8 +100,13 @@ const index = () => {
             const response = await getRequest(`/community/communityInfo/${communityId}`)
             setSelectedCommunity(response)
         }
+        const markCommunityMessagesAsRead = async() => {
+            const response = await getRequest(`/community/${communityId}/mark-read`);
+            console.log(response)
+        }
         communityId && getCommunityInfo()
-    }, [communityId])
+        communityId && markCommunityMessagesAsRead()
+    }, [communityId, newGroupMessage])
 
     useEffect(() => {
         setConversation(selectedConversation)
@@ -119,8 +124,6 @@ const index = () => {
         getPrivateConversationMessages()
     }, [conversation, user._id, newMessage])
 
-    console.log(communities, "communities")
-
     return (
         <div className="h-screen max-h-screen">
             <Header/>
@@ -137,7 +140,8 @@ const index = () => {
                     communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> 
+                    {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}

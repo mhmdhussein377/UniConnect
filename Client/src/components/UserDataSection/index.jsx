@@ -107,6 +107,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
     const handleInput = (e, image) => {
 
         if (e.target.files.length > 0) {
+            // eslint-disable-next-line no-inner-declarations
             function getBase64(file) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();

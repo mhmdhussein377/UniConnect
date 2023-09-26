@@ -1,28 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const {
-    GetCommunity,
-    CreateCommunity,
-    DeleteCommunity,
-    UpdateCommunity,
-    AddMembers,
-    SendCommunityJoinRequest,
-    RemoveMembers,
-    SendCommunityInviteRequest,
-    AcceptCommunityJoinRequest,
-    AcceptCommunityInviteRequest,
-    LeaveCommunity,
-    CancelCommunityJoinRequest,
-    CancelCommunityInviteRequest,
-    AcceptCommunityJoinRequests,
-    RejectCommunityJoinRequest,
-    RejectCommunityInviteRequest,
-    GetCommunities,
-    GetCommunitiesDetails,
-    GetCommunityDetails,
-    AddNewCommunityMessage,
-    MarkMessagesAsRead
+  GetCommunity,
+  CreateCommunity,
+  DeleteCommunity,
+  UpdateCommunity,
+  AddMembers,
+  SendCommunityJoinRequest,
+  RemoveMembers,
+  SendCommunityInviteRequest,
+  AcceptCommunityJoinRequest,
+  AcceptCommunityInviteRequest,
+  LeaveCommunity,
+  CancelCommunityJoinRequest,
+  CancelCommunityInviteRequest,
+  AcceptCommunityJoinRequests,
+  RejectCommunityJoinRequest,
+  RejectCommunityInviteRequest,
+  GetCommunities,
+  GetCommunitiesDetails,
+  GetCommunityDetails,
+  AddNewCommunityMessage,
+  MarkMessagesAsRead,
 } = require("./../controllers/CommunityController");
+
+router.get("/:communityId/mark-read", MarkMessagesAsRead);
 
 router.get("/communities", GetCommunities)
 
@@ -31,8 +33,6 @@ router.get("/communitiesDetails", GetCommunitiesDetails)
 router.get("/communityInfo/:communityId", GetCommunityDetails)
 
 router.post("/:communityId/add-message", AddNewCommunityMessage)
-
-router.put("/community/:communityId/mark-read", MarkMessagesAsRead);
 
 router.get("/:communityId", GetCommunity)
 
@@ -65,5 +65,6 @@ router.post("/cancel-community-invite-request/:communityId/:recipientUserId", Ca
 router.post("/accept-community-invite-request/:communityId", AcceptCommunityInviteRequest);
 
 router.post("/reject-community-invite-request/:communityId", RejectCommunityInviteRequest)
+
 
 module.exports = router;

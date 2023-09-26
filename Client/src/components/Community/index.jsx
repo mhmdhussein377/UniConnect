@@ -17,8 +17,7 @@ const index = ({highlight, name, unreadCount, privacy, lastMessages}) => {
                         {name}
                     </div>
                     <p className="text-[14px] text-[#737373]">
-                        {lastMessages[0]
-                            ?.content}
+                        {lastMessages[0]?.content}
                     </p>
                 </div>
             </div>

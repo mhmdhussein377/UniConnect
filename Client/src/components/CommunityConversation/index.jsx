@@ -13,6 +13,7 @@ import {io} from "socket.io-client";
 import {v4} from "uuid";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityInfo, setNewGroupMessage}) => {
+    
     const {user} = useContext(AuthContext);
     const socket = useRef(io("http://localhost:3001"));
     const chatRef = useRef()
@@ -37,34 +38,25 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     }, [messages]);
 
     useEffect(() => {
-        // socket.current = io("http://localhost:3001")
         if (communityInfo?._id) {
             socket.current.emit("joinRoom", communityInfo?._id);
         }
     }, [communityInfo]);
 
     useEffect(() => {
-        // const displayedMessages = new Set();
         socket
             .current
             .on("getGroupMessage", ({sender, senderName, content}) => {
-                // const messageId = `${sender}-${content}`;
-                // const messageId = `${v4()}`
                 const data = {
                     sender: {
                         _id: sender,
                         name: senderName
                     },
                     content: content,
-                    isRead: false,
                     createdAt: format(Date.now())
                 };
-                // if (!displayedMessages.has(messageId)) {
-                //     displayedMessages.add(messageId);
-                //     setArrivalMessage(data);
-                // }
                 setArrivalMessage(data)
-                console.log(arrivalMessage, "arrivalllllll")
+                setNewGroupMessage(data)
             });
     }, []);
 
