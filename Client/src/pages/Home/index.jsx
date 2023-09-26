@@ -44,6 +44,7 @@ const index = () => {
         setSelectedCommunity] = useState(null)
     const [newMessage,
         setNewMessage] = useState({})
+    const [newGroupMessage, setNewGroupMessage] = useState([])
 
     const [socketMessage, setSocketMessage] = useState({})
 
@@ -106,53 +107,72 @@ const index = () => {
     }, [conversation, user._id, newMessage])
 
     return (
-        <div className="h-screen max-h-screen">
-            <Header/>
-            <div className="flex relative home-bottom dark:bg-black dark:text-white">
-                <Sidebar
-                    setType={setType}
-                    type={type}
-                    openSidebar={openSidebar}
-                    selectedConversation={selectedConversation}
-                    setSelectedConversation={setSelectedConversation}
-                    setCommunityId={setCommunityId}
-                    selectedCommunity={selectedCommunity}
-                    privateConversations={friends}
-                    communities={communities}
-                    setShowCommunityModal={setShowCommunityModal}
-                    setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
-                    setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowAddMembersModal={setShowAddMembersModal}
-                    setOpenSidebar={setOpenSidebar}
-                    communityConversation={selectedCommunity}/>)}
-                {type === "inbox" && (<PrivateConversation
-                    setSocketMessage={setSocketMessage}
-                    setOpenSidebar={setOpenSidebar}
-                    setShowUserDetails={setShowUserDetails}
-                    conversation={conversation}
-                    messages={messages}
-                    setNewMessage={setNewMessage}
-                    setConversationMessages={setMessages}/>)}
-            </div>
-            {/* Sidebar to show details about the community */}
-            <CommunityDetails
-                community={selectedCommunity}
-                setOpenCommunityDetails={setOpenCommunityDetails}
-                openCommunityDetails={openCommunityDetails}
-                setShowAddMembersModal={setShowAddMembersModal}/>{" "} {/* Sidebar to show details of the user */}
-            <UserDetails
-                conversation={conversation}
-                showUserDetails={showUserDetails}
-                setShowUserDetails={setShowUserDetails}/> {/* Modal to create communities */}
-            {showCommunityModal && <CreateCommunityModal
-                setCommunities={setCommunities}
-                setShowCommunityModal={setShowCommunityModal}/>}
-            {/* Modal to add members to communities */}
-            {showAddMembersModal && (<AddMembersModal
-                communityId={communityId}
-                setShowAddMembersModal={setShowAddMembersModal}/>)}
+      <div className="h-screen max-h-screen">
+        <Header />
+        <div className="flex relative home-bottom dark:bg-black dark:text-white">
+          <Sidebar
+            setType={setType}
+            type={type}
+            openSidebar={openSidebar}
+            selectedConversation={selectedConversation}
+            setSelectedConversation={setSelectedConversation}
+            setCommunityId={setCommunityId}
+            selectedCommunity={selectedCommunity}
+            privateConversations={friends}
+            communities={communities}
+            setShowCommunityModal={setShowCommunityModal}
+            setOpenCommunityDetails={setOpenCommunityDetails}
+            setShowUserDetails={setShowUserDetails}
+          />
+          {type === "community" && (
+            <CommunityConversation
+              setOpenCommunityDetails={setOpenCommunityDetails}
+              setShowAddMembersModal={setShowAddMembersModal}
+              setOpenSidebar={setOpenSidebar}
+              communityInfo={selectedCommunity}
+              setNewGroupMessage={setNewGroupMessage}
+            />
+          )}
+          {type === "inbox" && (
+            <PrivateConversation
+              setSocketMessage={setSocketMessage}
+              setOpenSidebar={setOpenSidebar}
+              setShowUserDetails={setShowUserDetails}
+              conversation={conversation}
+              messages={messages}
+              setNewMessage={setNewMessage}
+              setConversationMessages={setMessages}
+            />
+          )}
         </div>
+        {/* Sidebar to show details about the community */}
+        <CommunityDetails
+          community={selectedCommunity}
+          setOpenCommunityDetails={setOpenCommunityDetails}
+          openCommunityDetails={openCommunityDetails}
+          setShowAddMembersModal={setShowAddMembersModal}
+        />{" "}
+        {/* Sidebar to show details of the user */}
+        <UserDetails
+          conversation={conversation}
+          showUserDetails={showUserDetails}
+          setShowUserDetails={setShowUserDetails}
+        />{" "}
+        {/* Modal to create communities */}
+        {showCommunityModal && (
+          <CreateCommunityModal
+            setCommunities={setCommunities}
+            setShowCommunityModal={setShowCommunityModal}
+          />
+        )}
+        {/* Modal to add members to communities */}
+        {showAddMembersModal && (
+          <AddMembersModal
+            communityId={communityId}
+            setShowAddMembersModal={setShowAddMembersModal}
+          />
+        )}
+      </div>
     );
 };
 

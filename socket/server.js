@@ -19,9 +19,9 @@ mongoose
     });
 
 const io = require("socket.io")(server, {
+    pingTimeout: 60000,
     cors: {
-        origin: ["http://localhost:5173", "http://localhost:5174"],
-        methods: ["GET", "POST"]
+        origin: ["http://localhost:5173", "http://localhost:5174"]
     }
 });
 
@@ -30,16 +30,21 @@ const rooms = new Map()
 
 io.on("connection", (socket) => {
 
+    socket.sockets = io.sockets
+
     socket.on("addUser", (userId) => {
         users.set(userId, socket.id);
     });
 
     socket.on("joinRoom", (roomName) => {
-        if(!rooms.has(roomName)) {
+        console.log("joinRoom")
+        if (!rooms.has(roomName)) {
             rooms.set(roomName, [socket.id])
             socket.join(roomName)
-        }else {
-            rooms.get(roomName).push(socket.id)
+        } else {
+            rooms
+                .get(roomName)
+                .push(socket.id)
         }
     })
 
@@ -48,15 +53,21 @@ io.on("connection", (socket) => {
             for (const [key,
                 value]of users.entries()) {
                 if (key === receiver) {
-                    if(!fileURL) {
-                        io.to(value).emit("getMessage", {sender, content});
+                    if (!fileURL) {
+                        io
+                            .to(value)
+                            .emit("getMessage", {sender, content});
                         break
                     }
-                    if(!content) {
-                        to.to(value).emit("getMessage", {sender, fileURL})
+                    if (!content) {
+                        to
+                            .to(value)
+                            .emit("getMessage", {sender, fileURL})
                         break
                     }
-                    io.to(value).emit("getMessage", {sender, content, fileURL} )
+                    io
+                        .to(value)
+                        .emit("getMessage", {sender, content, fileURL})
                     break;
                 }
             }
@@ -66,11 +77,14 @@ io.on("connection", (socket) => {
     });
 
     socket.on("sendGroupMessage", ({sender, senderName, content, roomName}) => {
+        console.log("sendGMessage")
         try {
-            if(rooms.has(roomName)) {
+            if (rooms.has(roomName)) {
                 const roomUsers = rooms.get(roomName)
                 roomUsers.forEach((user) => {
-                    io.to(user).emit("getGroupMessage", {sender, senderName, content})
+                    io
+                        .to(user)
+                        .emit("getGroupMessage", {sender, senderName, content});
                 })
             }
         } catch (error) {
@@ -79,8 +93,10 @@ io.on("connection", (socket) => {
     })
 
     socket.on("leaveRoom", ({roomName, userId}) => {
-        if(rooms.has(roomName)) {
-            rooms.get(roomName).delete(userId)
+        if (rooms.has(roomName)) {
+            rooms
+                .get(roomName)
+                .delete(userId)
         }
     })
 
