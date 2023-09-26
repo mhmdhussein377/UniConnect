@@ -22,20 +22,21 @@ const index = ({
             </div>
             <div className="flex flex-col max-w-[60%]">
                 <div
-                    className={`w-full flex items-center justify-between ${mine && "flex-row-reverse"}`}>
-                    {communitMessage && <div className="font-medium">{sender}</div>}
+                    className={`w-full flex items-center justify-between gap-1.5 ${mine && "flex-row-reverse"}`}>
+                    {communitMessage && !mine && <div className="font-medium text-[14px]">{sender}</div>}
                     {!communitMessage && <div></div>}
-                    <div className={`text-[14px]`}>{date}</div>
+                    {!communitMessage && <div className={`text-[14px]`}>{date}</div>}
                 </div>
                 <div
-                    className={`flex flex-col gap-1 px-3 py-3 bg-primary text-white rounded-md max-w-full break-all ${mine
-                    ? "rounded-tr-none"
-                    : "rounded-tl-none"}`}>
+                    className={`flex flex-col px-2 py-2 rounded-md max-w-full break-all ${mine
+                    ? "rounded-tr-none bg-primary text-white"
+                    : "rounded-tl-none bg-white text-primary"}`}>
                     {fileURL && <img
                         className="rounded-tr-md rounded-tl-md max-h-[200px] object-cover"
                         src={fileURL}
                         alt="image"/>}
-                    {content && <p>{content}</p>}
+                    {content && <p className={`${fileURL && "mt-1"} mb-[3px]`}>{content}</p>}
+                    {communitMessage && <div className={`text-[12px] opacity-90`}>{date}</div>}
                 </div>
             </div>
         </div>

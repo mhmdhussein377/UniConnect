@@ -14,7 +14,7 @@ import {v4} from "uuid";
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityInfo, setNewGroupMessage}) => {
     const {user} = useContext(AuthContext);
-    const socket = useRef();
+    const socket = useRef(io("http://localhost:3001"));
     const chatRef = useRef()
 
     const [messageInput,
@@ -22,7 +22,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     const [messages,
         setMessages] = useState([]);
     const [arrivalMessage,
-        setArrivalMessage] = useState({});
+        setArrivalMessage] = useState(null);
 
     useEffect(() => {
         setMessages(communityInfo
@@ -37,23 +37,19 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     }, [messages]);
 
     useEffect(() => {
-        if (communityInfo
-            ?._id) {
-            socket
-                .current
-                .emit("joinRoom", communityInfo
-                    ?._id);
+        // socket.current = io("http://localhost:3001")
+        if (communityInfo?._id) {
+            socket.current.emit("joinRoom", communityInfo?._id);
         }
     }, [communityInfo]);
 
     useEffect(() => {
-        const displayedMessages = new Set();
-        socket.current = io("http://localhost:3001");
+        // const displayedMessages = new Set();
         socket
             .current
             .on("getGroupMessage", ({sender, senderName, content}) => {
                 // const messageId = `${sender}-${content}`;
-                const messageId = `${v4()}`
+                // const messageId = `${v4()}`
                 const data = {
                     sender: {
                         _id: sender,
@@ -63,10 +59,12 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                     isRead: false,
                     createdAt: format(Date.now())
                 };
-                if (!displayedMessages.has(messageId)) {
-                    displayedMessages.add(messageId);
-                    setArrivalMessage(data);
-                }
+                // if (!displayedMessages.has(messageId)) {
+                //     displayedMessages.add(messageId);
+                //     setArrivalMessage(data);
+                // }
+                setArrivalMessage(data)
+                console.log(arrivalMessage, "arrivalllllll")
             });
     }, []);
 
@@ -77,7 +75,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 arrivalMessage
             ]);
         }
-    }, [arrivalMessage, communityInfo]);
+        setArrivalMessage(null)
+    }, [arrivalMessage, communityInfo, messages]);
 
     let onlineUsers = communityInfo?.members
             .reduce((count, member) => {
@@ -108,12 +107,13 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 .trim(),
             roomName: communityInfo._id
         };
-        await postRequest(`/community/${communityInfo._id}/add-message`, message);
+
+        setMessageInput("");
+        setNewGroupMessage(message);
         socket
             .current
             .emit("sendGroupMessage", groupMessage);
-        setNewGroupMessage(message);
-        setMessageInput("");
+        const response = await postRequest(`/community/${communityInfo._id}/add-message`, message);
     };
 
     return !communityInfo
@@ -141,16 +141,15 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                             {communityInfo.name}
                         </div>
                         <div className="flex items-center">
-                            <span className="">{communityInfo
-                                    ?.members.length + 1}
-                                member</span>
+                            <span className="mr-1">{communityInfo?.members.length + 1}</span>
+                            <span>member</span>
                             <span>
                                 <BsDot size={25}/>
                             </span>
-                            <span className="text-[#007D76] font-medium">
+                            <span className="text-[#007D76] font-medium mr-1">
                                 {onlineUsers}
-                                online
                             </span>
+                            <span>online</span>
                         </div>
                     </div>
                     <CgSidebarOpen
@@ -190,11 +189,9 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                                         key={index}
                                         communitMessage={true}
                                         content={message.content}
-                                        sender={message.sender
-                                        ?.name}
-                                        own={message.sender
-                                        ?._id}
-                                        date={format(Date.now())}/>);
+                                        sender={message.sender?.name}
+                                        own={message.sender?._id}
+                                        date={format(message?.timestamps)}/>);
                                 }
                             })}
                     </div>

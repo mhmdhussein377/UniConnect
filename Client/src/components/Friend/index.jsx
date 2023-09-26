@@ -33,7 +33,7 @@ const index = ({
             </div>
             <div className="flex flex-col items-end justify-center min-w-[90px]">
                 {lastMessage && <p className="text-[13px] text-[#737373]">{format(lastMessage?.createdAt)}</p>}
-                {messageNum > 0 && user._id !== sender && (
+                {messageNum > 0 && (
                     <div
                         className="w-[20px] h-[20px] bg-primary rounded-full flex items-center justify-center text-white text-sm">
                         {messageNum}

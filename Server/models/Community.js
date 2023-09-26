@@ -48,6 +48,10 @@ const communitySchema = new Schema({
                 ref: "User",
                 required: true
             },
+            timestamps: {
+                type: Date,
+                default: Date.now
+            },
             content: String,
             fileURL: String,
             readBy: [

@@ -48,6 +48,7 @@ const communitySchema = new Schema({
                 ref: "User",
                 required: true
             },
+            
             content: String,
             fileURL: String
         }

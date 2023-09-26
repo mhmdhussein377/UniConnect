@@ -14,6 +14,7 @@ import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 import {imageDB} from "../../utils/FirebaseConfig";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {v4} from "uuid";
+import { hanldeImagetoBase64 } from "../../utils/handleImagetoBase64";
 
 const index = ({
     setOpenSidebar,
@@ -45,6 +46,7 @@ const index = ({
         }
 
         if (image && messageInput) {
+            console.log(hanldeImagetoBase64(image))
             handleImageUpload(image).then(async(url) => {
                 const message = {
                     sender: user._id,
@@ -53,16 +55,17 @@ const index = ({
                     content: messageInput
                         .toString()
                         .trim(),
-                    fileURL: url
+                    fileURL: url,
                 };
 
                 socket
-                    .current
-                    .emit("sendMessage", message);
+                .current
+                .emit("sendMessage", message);
                 setNewMessage(message)
                 await postRequest("/privateChat/newPrivateMessage", message);
             })
         } else if (image && !messageInput) {
+            console.log(hanldeImagetoBase64(image))
             handleImageUpload(image).then(async(url) => {
                 const message = {
                     sender: user._id,
@@ -84,11 +87,11 @@ const index = ({
                     .trim()
             };
 
-            await postRequest("/privateChat/newPrivateMessage", message);
+            setNewMessage(message)
             socket
                 .current
                 .emit("sendMessage", message);
-            setNewMessage(message)
+            await postRequest("/privateChat/newPrivateMessage", message);
         }
         setMessageInput("");
         setImage(null)
@@ -195,7 +198,7 @@ const index = ({
                     {messages
                         ?.map((message) => {
                             const {_id, sender, content, fileURL, timestamps} = message
-                            return <Message
+                            return (content || fileURL) && <Message
                                 key={_id}
                                 own={sender
                                 ?._id}

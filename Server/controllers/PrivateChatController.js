@@ -42,7 +42,7 @@ const CreatePrivateMessage = async(req, res) => {
                 messages: {
                     sender,
                     content,
-                    fileURL: fileURL || null
+                    fileURL: fileURL || null,
                 }
             }
         });
@@ -143,7 +143,7 @@ const GetPrivateConversationsDetails = async(req, res) => {
                 item
                     .messages
                     .forEach((message) => {
-                        if (!message.isRead && message.sender !== req.user.id) {
+                        if (!message.isRead && message.sender._id.toString() !== req.user.id) {
                             conversationDetails.unreadMessages += 1;
                         }
                     });

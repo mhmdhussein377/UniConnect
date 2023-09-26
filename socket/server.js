@@ -77,7 +77,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("sendGroupMessage", ({sender, senderName, content, roomName}) => {
-        console.log("sendGMessage")
         try {
             if (rooms.has(roomName)) {
                 const roomUsers = rooms.get(roomName)
