@@ -37,7 +37,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinRoom", (roomName) => {
-        console.log("joinRoom")
         if (!rooms.has(roomName)) {
             rooms.set(roomName, [socket.id])
             socket.join(roomName)
@@ -76,14 +75,14 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("sendGroupMessage", ({sender, senderName, content, roomName}) => {
+    socket.on("sendGroupMessage", ({sender, senderName, content, roomName, fileURL}) => {
         try {
             if (rooms.has(roomName)) {
                 const roomUsers = rooms.get(roomName)
                 roomUsers.forEach((user) => {
                     io
                         .to(user)
-                        .emit("getGroupMessage", {sender, senderName, content});
+                        .emit("getGroupMessage", {sender, senderName, content, fileURL});
                 })
             }
         } catch (error) {
@@ -109,6 +108,10 @@ io.on("connection", (socket) => {
             }
         }
     });
+
+    socket.on("connect_error", (error) => {
+        console.error("WebSocket connection error:", error)
+    })
 })
 
 server.listen(3001, () => {

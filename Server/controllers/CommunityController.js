@@ -1066,6 +1066,7 @@ const GetCommunityDetails = async(req, res) => {
 }
 
 const AddNewCommunityMessage = async(req, res) => {
+    console.log(req.body)
     const {communityId} = req.params
     const userId = req.user
         ?.id

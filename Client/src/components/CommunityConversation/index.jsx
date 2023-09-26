@@ -11,9 +11,10 @@ import {postRequest} from "../../utils/requests";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 import {v4} from "uuid";
+import {handleImageUpload} from "./../../utils/uploadImage"
 
 const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityInfo, setNewGroupMessage}) => {
-    
+
     const {user} = useContext(AuthContext);
     const socket = useRef(io("http://localhost:3001"));
     const chatRef = useRef()
@@ -25,7 +26,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setMessages] = useState([]);
     const [arrivalMessage,
         setArrivalMessage] = useState(null);
-    const [file, setFile] = useState(null)
+    const [file,
+        setFile] = useState(null)
 
     useEffect(() => {
         setMessages(communityInfo
@@ -40,23 +42,29 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     }, [messages]);
 
     useEffect(() => {
-        if (communityInfo?._id) {
-            socket.current.emit("joinRoom", communityInfo?._id);
+        if (communityInfo
+            ?._id) {
+            socket
+                .current
+                .emit("joinRoom", communityInfo
+                    ?._id);
         }
     }, [communityInfo]);
 
     useEffect(() => {
         socket
             .current
-            .on("getGroupMessage", ({sender, senderName, content}) => {
+            .on("getGroupMessage", ({sender, senderName, content, fileURL}) => {
                 const data = {
                     sender: {
                         _id: sender,
                         name: senderName
                     },
+                    fileURL,
                     content: content,
                     createdAt: format(Date.now())
                 };
+                console.log(data)
                 setArrivalMessage(data)
                 setNewGroupMessage(data)
             });
@@ -72,13 +80,14 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         setArrivalMessage(null)
     }, [arrivalMessage, communityInfo, messages]);
 
-    let onlineUsers = communityInfo?.members
+    let onlineUsers = communityInfo
+        ?.members
             .reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
                 }
                 return count;
-            }, 0);
+            }, 0)
     if (communityInfo
         ?.creator.online) {
         onlineUsers += 1;
@@ -87,29 +96,79 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     const handleSendMessage = async(e) => {
         e.preventDefault();
 
-        
+        if (!file && !messageInput) 
+            return
 
-        const message = {
-            content: messageInput
-                .toString()
-                .trim()
-        };
+        if (!file && messageInput) {
+            const message = {
+                content: messageInput
+                    .toString()
+                    .trim()
+            };
 
-        const groupMessage = {
-            sender: user._id,
-            senderName: user.name,
-            content: messageInput
-                .toString()
-                .trim(),
-            roomName: communityInfo._id
-        };
+            const groupMessage = {
+                sender: user._id,
+                senderName: user.name,
+                content: messageInput
+                    .toString()
+                    .trim(),
+                roomName: communityInfo._id
+            };
 
-        setMessageInput("");
-        setNewGroupMessage(message);
-        socket
-            .current
-            .emit("sendGroupMessage", groupMessage);
-        const response = await postRequest(`/community/${communityInfo._id}/add-message`, message);
+            setMessageInput("");
+            setFile(null);
+            setNewGroupMessage(message);
+            socket
+                .current
+                .emit("sendGroupMessage", groupMessage);
+            await postRequest(`/community/${communityInfo._id}/add-message`, message);
+
+        } else if (file && !messageInput) {
+            handleImageUpload(file).then(async(fileURL) => {
+                let message
+                if (fileURL) {
+                    message = {
+                        fileURL
+                    };
+                }
+
+                const groupMessage = {
+                    sender: user._id,
+                    senderName: user.name,
+                    fileURL,
+                    roomName: communityInfo._id
+                };
+
+                setMessageInput("");
+                setFile(null)
+                setNewGroupMessage(message);
+                socket
+                    .current
+                    .emit("sendGroupMessage", groupMessage);
+                await postRequest(`/community/${communityInfo._id}/add-message`, message);
+            })
+        } else if (file && messageInput) {
+            let message= {}
+            let groupMessage = {}
+            message.content = messageInput.toString().trim()
+            groupMessage.content = messageInput.toString().trim()
+            setMessageInput("")
+            handleImageUpload(file).then(async(fileURL) => {
+                if(fileURL) {
+                    message.fileURL = fileURL
+                }
+
+                groupMessage.sender = user._id,
+                groupMessage.senderName = user.name,
+                groupMessage.fileURL = fileURL,
+                groupMessage.roomName = communityInfo._id
+
+                setFile(null)
+                setNewGroupMessage(message)
+                socket.current.emit("sendGroupMessage", groupMessage)
+                await postRequest(`/community/${communityInfo._id}/add-message`, message)
+            })
+        }
     };
 
     return !communityInfo
@@ -137,7 +196,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                             {communityInfo.name}
                         </div>
                         <div className="flex items-center">
-                            <span className="mr-1">{communityInfo?.members.length + 1}</span>
+                            <span className="mr-1">{communityInfo
+                                    ?.members.length + 1}</span>
                             <span>member</span>
                             <span>
                                 <BsDot size={25}/>
@@ -180,15 +240,17 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                         className="flex-grow w-full bg-[#F4F3FC] max-h-full overflow-y-scroll scrollbar-hide px-6 py-2">
                         {messages
                             ?.map((message, index) => {
-                                if (message.content) {
-                                    return (<Message
-                                        key={index}
-                                        communitMessage={true}
-                                        content={message.content}
-                                        sender={message.sender?.name}
-                                        own={message.sender?._id}
-                                        date={format(message?.timestamps)}/>);
-                                }
+                                return (<Message
+                                    key={index}
+                                    communitMessage={true}
+                                    content={message.content}
+                                    sender={message.sender
+                                    ?.name}
+                                    own={message.sender
+                                    ?._id}
+                                    fileURL={message.fileURL}
+                                    date={format(message
+                                    ?.timestamps)}/>);
                             })}
                     </div>
                 )}
@@ -204,8 +266,15 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                                 className="flex-1 h-[100%] px-4 border-none outline-none bg-transparent placeholder:text-[#737373] placeholder:font-medium"
                                 type="text"
                                 placeholder="Send a message"/>
-                            <input ref={fileRef} type="file" className="hidden" />
-                            <GrAttachment onClick={() => fileRef.current.click()} className="cursor-pointer" size={25}/>
+                            <input
+                                onChange={e => setFile(e.target.files[0])}
+                                ref={fileRef}
+                                type="file"
+                                className="hidden"/>
+                            <GrAttachment
+                                onClick={() => fileRef.current.click()}
+                                className="cursor-pointer"
+                                size={25}/>
                             <BsEmojiSmile className="cursor-pointer" size={25}/>
                         </div>
                         <button
