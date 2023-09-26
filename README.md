@@ -5,14 +5,32 @@
 <!-- project philosophy -->
 <img src="./readme/title2.svg"/>
 
-> A mobile app for ordering coffee on-the-go, making it easier for coffee lovers to get their favorite beverages without waiting in line.
+> A platform for different communities to come together and connect with each other. It offers a unique opportunity for individuals to explore new communities and connect with like-minded people
 >
-> Coffee Express aims to streamline the coffee-ordering process by providing a user-friendly platform for customers to place orders and pick up their coffee at their convenience. We believe in enhancing the coffee experience by saving time and ensuring customer satisfaction.
+> UniConnect provides the ability for students with similar interests to connect and build relationships and aims to simplify the process of connecting with students and obtaining information about the ideas that users are interested in.
 
 ### User Stories
-- As a user, I want to browse the menu, so I can find my favorite coffee drinks.
-- As a user, I want to customize my order, so I can add or remove ingredients according to my preferences.
-- As a user, I want to pay for my order through the app, so I can avoid waiting in line at the store.
+- As a student, I want to create an account so that I can login to the website.
+- As a student, I want to login so that I can access my account..
+- As a student, I want to request a forgotten password so that I can regain access to my account or secure my personal information.
+- As a student, I want to create a private/public community so that I can share ideas and experiences.
+- As a student, I want to join a community so that I can contact the community members.
+- As a student, I want to leave a community so that I can disassociate from its content and culture.
+- As a student, I want to change my communities names so that it better reflects the content of it.
+- As a student, I want to invite users to my communities so that I can grow them.
+- As a student, I want to chat with members so that I can learn and expand my knowledge.
+- As a student, I want to browse communities and members so that I discover individuals of the same mind.
+- As a student, I want to accept an invite request to a community so that I can participate with other members.
+- As a student, I want to reject an invite request so that I can focus on my current interests.
+- As a student, I want to accept private messages from users who I don’t follow so that I can receive important messages.
+- As a student, I want to reject private messages from users who I don’t follow so that I can maintain my privacy and control my communication interactions.
+- As a student, I want to delete a community so that I can remove any associated content.
+- As a student, I want to kick users from my communities so that I maintain a positive and respectful environment.
+- As a student, I want to view notifications so that I can stay informed about important updates, messages and activities relevant to my account.
+- As a student, I want to add friends so that I can stay connected with people who I have met on the platform.
+- As a student, I want to unfollow a friend so that I won’t be able to contact him/her privately.
+- As a student, I want to change my profile data so that I keep my personal information up to date.
+
 
 <br><br>
 
@@ -33,36 +51,13 @@
 
 <br><br>
 
-<!-- Implementation -->
-<img src="./readme/title4.svg"/>
-
-> Using the wireframes and mockups as a guide, we implemented the Coffee Express app with the following features:
-
-### User Screens (Mobile)
-| Login screen  | Register screen | Landing screen | Loading screen |
-| ---| ---| ---| ---|
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
-| Home screen  | Menu Screen | Order Screen | Checkout Screen |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
-
-### Admin Screens (Web)
-| Login screen  | Register screen |  Landing screen |
-| ---| ---| ---|
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
-| Home screen  | Menu Screen | Order Screen |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
-
-<br><br>
-
 <!-- Tech stack -->
 <img src="./readme/title5.svg"/>
 
-###  Coffee Express is built using the following technologies:
+###  UniConnect is built using the following technologies:
 
-- This project uses the [Flutter app development framework](https://flutter.dev/). Flutter is a cross-platform hybrid app development platform which allows us to use a single codebase for apps on mobile, desktop, and the web.
-- For persistent storage (database), the app uses the [Hive](https://hivedb.dev/) package which allows the app to create a custom storage schema and save it to a local database.
-- To send local push notifications, the app uses the [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) package which supports Android, iOS, and macOS.
-  - 🚨 Currently, notifications aren't working on macOS. This is a known issue that we are working to resolve!
+- This project uses the MERN stack. The MERN stack is a full-stack web development framework consisting of MongoDB (database), Express.js (backend framework), React (frontend library), and Node.js (runtime environment). It is used to build scalable and efficient web applications.
+- The project utilizes socket.io for real-time communication, ensuring seamless interactions with users.
 - The app uses the font ["Work Sans"](https://fonts.google.com/specimen/Work+Sans) as its main font, and the design of the app adheres to the material design guidelines.
 
 <br><br>
