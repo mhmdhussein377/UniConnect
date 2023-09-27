@@ -5,6 +5,7 @@ import {AuthContext} from "../../Context/AuthContext";
 import {Link} from "react-router-dom";
 import {postRequest} from "../../utils/requests";
 import ProfilePicture from "./../../assets/ProfilePicture.jpg"
+import InviteButton from "./InviteButton"
 
 const index = ({
     searched,
@@ -53,8 +54,9 @@ const index = ({
                 <div className="relative">
                     <img
                         className="cursor-pointer w-[45px] h-[45px] rounded-full overflow-hidden flex items-center justify-center object-cover"
-                        src={profile?.profileImage || ProfilePicture}
-                        alt="profile-picture"/> {online && (
+                        src={profile
+                        ?.profileImage || ProfilePicture}
+                        alt="profile-picture"/>{" "} {online && (
                         <span
                             className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>
                     )}
@@ -70,24 +72,20 @@ const index = ({
             </Link>
             {invite && (isInvited
                 ? (
-                    <button
-                        onClick={handleInvite}
-                        disabled={loading}
-                        className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
-                        <AiOutlineMinus/>
-                        Cancel Invite
-                    </button>
+                    <InviteButton
+                        handleInvite={handleInvite}
+                        loading={loading}
+                        icon={< AiOutlineMinus />}
+                        text="Cancel Invite"/>
                 )
                 : (
-                    <button
-                        onClick={handleInvite}
-                        disabled={loading}
-                        className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
-                        <AiOutlinePlus/>
-                        Invite
-                    </button>
+                    <InviteButton
+                        handleInvite={handleInvite}
+                        loading={loading}
+                        icon={< AiOutlinePlus />}
+                        text="Invite"/>
                 ))}
-            {searched && !actualUser && (
+            {/* {searched && !actualUser && (
                 <div>
                     {isInvited
                         ? (
@@ -105,7 +103,7 @@ const index = ({
                             </button>
                         )}
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
