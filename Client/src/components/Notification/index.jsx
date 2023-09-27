@@ -1,4 +1,5 @@
 import { handleRequestAction } from "../../utils/handleNotification";
+import NotificationButton from "./../../components/NotificationButton"
 
 const index = ({ notification, setNotifications }) => {
   const { content, sender, type, _id, community } = notification;
@@ -30,18 +31,16 @@ const index = ({ notification, setNotifications }) => {
       </div>
       {!type.split(" ").includes("accepted") ? (
         <div className="flex items-center gap-4">
-          <button
-            onClick={(e) => handleAction(e, "accept")}
-            className="bg-primary text-white px-4 py-1 rounded-md"
-          >
-            Accept
-          </button>
-          <button
-            onClick={(e) => handleAction(e, "reject")}
-            className="bg-primary text-white px-4 py-1 rounded-md"
-          >
-            Reject
-          </button>
+          <NotificationButton
+            text={"Accept"}
+            handleAction={handleAction}
+            action={"accept"}
+          />
+          <NotificationButton
+            text={"Reject"}
+            handleAction={handleAction}
+            action={"reject"}
+          />
         </div>
       ) : null}
     </div>
