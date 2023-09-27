@@ -85,13 +85,10 @@ io.on("connection", (socket) => {
 
     socket.on("sendGroupMessage", ({sender, senderName, content, roomName, fileURL}) => {
         try {
-            if (rooms.has(roomName)) {
-                const roomUsers = rooms.get(roomName)
-                roomUsers.forEach((user) => {
-                    io
-                        .to(user)
-                        .emit("getGroupMessage", {sender, senderName, content, fileURL});
-                })
+            if (roomsTest.has(roomName)) {
+                io
+                    .to(roomName)
+                    .emit("getGroupMessage", {sender, senderName, content, fileURL, roomName})
             }
         } catch (error) {
             console.log(error)
