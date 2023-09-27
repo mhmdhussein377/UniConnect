@@ -1,6 +1,4 @@
 import { format } from "timeago.js";
-import {AuthContext} from "../../Context/AuthContext"
-import {useContext} from "react";
 import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 
 const index = ({
@@ -8,7 +6,6 @@ const index = ({
     name,
     lastMessage,
     messageNum,
-    sender,
     profilePicture
 }) => {
 

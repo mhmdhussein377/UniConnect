@@ -10,7 +10,6 @@ import {AuthContext} from "../../Context/AuthContext";
 import {postRequest} from "../../utils/requests";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
-import {v4} from "uuid";
 import {handleImageUpload} from "./../../utils/uploadImage"
 
 const index = ({

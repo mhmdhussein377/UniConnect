@@ -81,14 +81,6 @@ const AuthReducer = (state, action) => {
                     joinedCommunities: state.user.joinedCommunities.filter(comm => comm._id !== action.payload)
                 }
             }
-        // case "JOIN_COMMUNITY":
-        //     return {
-        //         ...state,
-        //         user: {
-        //             ...state.user,
-        //             joinedCommunities: state.user.joinedCommunities.push(action.payload)
-        //         }
-        //     }
         case "CREATE_COMMUNITY":
             console.log(action.payload)
             return {

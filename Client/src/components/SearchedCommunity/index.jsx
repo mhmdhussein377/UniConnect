@@ -20,25 +20,6 @@ const index = ({name, privacy, id, creatorUsername, withoutUsername}) => {
                     {!withoutUsername && <div className="text-sm">Created by {creatorUsername}</div>}
                 </div>
             </div>
-            {/* <div>
-                {isJoined
-                    ? (
-                        <button
-                            onClick={() => setIsJoined(false)}
-                            className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
-                            <AiOutlineMinus/>
-                            Leave community
-                        </button>
-                    )
-                    : (
-                        <button
-                            onClick={() => setIsJoined(true)}
-                            className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
-                            <AiOutlinePlus/>
-                            Join community
-                        </button>
-                    )}
-            </div> */}
         </Link>
     );
 };

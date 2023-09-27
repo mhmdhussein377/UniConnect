@@ -92,9 +92,6 @@ const index = ({profile}) => {
         }
     }, [themeMode]);
 
-    // useEffect(() => {     document.addEventListener("click", handleClickOutside);
-    // }, []);
-
     useEffect(() => {
         if (window.innerWidth < 740) {
             setShowNotifications(false);

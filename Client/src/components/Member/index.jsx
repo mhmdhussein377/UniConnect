@@ -31,17 +31,10 @@ const index = ({
 
         try {
             if (isInvited) {
-                try {
-                    await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`);
-                } catch (error) {
-                    console.log(error)
-                }
+                await postRequest(`/community/cancel-community-invite-request/${communityId}/${_id}`);
             } else {
-                try {
-                    await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`);
-                } catch (error) {
-                    console.log(error)
-                }
+                await postRequest(`/community/send-community-invite-request/${communityId}/${_id}`);
+
             }
             setLoading(false)
         } catch (error) {
@@ -57,12 +50,6 @@ const index = ({
             <Link
                 to={!actualUser && `/profile/${username}`}
                 className="flex items-center gap-2 flex-1">
-                {/* <div
-                    className="rounded-full flex items-center justify-center overflow-hidden w-[45px] h-[45px]">
-                    <img
-                        src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
-                        alt="profile-picture"/>
-                </div> */}
                 <div className="relative">
                     <img
                         className="cursor-pointer w-[45px] h-[45px] rounded-full overflow-hidden flex items-center justify-center object-cover"

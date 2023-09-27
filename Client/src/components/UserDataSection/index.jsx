@@ -116,7 +116,6 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                     reader.onerror = (error) => reject(error);
                 });
             }
-            // setInput(e.target.files[0]);
             getBase64(e.target.files[0]).then(async(data) => {
                 if (image === "cover") {
                     coverImgRef.current.src = data;

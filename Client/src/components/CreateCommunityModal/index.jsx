@@ -35,6 +35,7 @@ const index = ({setShowCommunityModal, setCommunities}) => {
         setShowCommunityModal(false)
         const response = await postRequest("/community/create", inputs)
         const {name: communityName, privacy: communityPrivacy, _id, creator} = response
+        
         setCommunities(prev => [{ID: _id, name: communityName, privacy: communityPrivacy, unreadCount: 0, lastMessages: []}, ...prev])
         dispatch({type: "CREATE_COMMUNITY", payload: {name: communityName, privacy: communityPrivacy, _id, creator}})
     }

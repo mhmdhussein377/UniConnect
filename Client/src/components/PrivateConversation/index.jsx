@@ -14,7 +14,6 @@ import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 import {imageDB} from "../../utils/FirebaseConfig";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {v4} from "uuid";
-import {hanldeImagetoBase64} from "../../utils/handleImagetoBase64";
 
 const index = ({
     setOpenSidebar,
@@ -63,15 +62,15 @@ const index = ({
     const hanldeImagetoBase64 = (image) => {
       return new Promise((resolve, reject) => {
         if (!image) {
-          reject(new Error("Image is missing"));
-          return;
+            reject(new Error("Image is missing"));
+            return;
         }
 
-        const reader = new FileReader();
-        reader.readAsDataURL(image);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
+            const reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
     };
 
     const handleSendMessage = async(e) => {
@@ -82,7 +81,6 @@ const index = ({
         }
 
         if (image && messageInput) {
-            console.log(hanldeImagetoBase64(image))
             handleImageUpload(image).then(async(url) => {
                 const message = {
                     sender: user._id,
@@ -132,8 +130,6 @@ const index = ({
                     .toString()
                     .trim()
             };
-
-            console.log(message)
 
             setNewMessage(message)
             socket
