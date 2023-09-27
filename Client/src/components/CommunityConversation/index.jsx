@@ -23,7 +23,7 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001", {timeout: 10000}));
+    const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
     const chatRef = useRef();
     const fileRef = useRef();
 
@@ -85,24 +85,30 @@ const index = ({
     useEffect(() => {
         socket
             .current
-            .on("getGroupMessage", ({sender, senderName, content, fileURL}) => {
-                const data = {
-                    sender: {
-                        _id: sender,
-                        name: senderName
-                    },
-                    fileURL,
-                    content: content,
-                    createdAt: format(Date.now())
-                };
+            .on("getGroupMessage", ({sender, senderName, content, fileURL, roomName}) => {
+                let data = {}
+                if (roomName === communityInfo?._id && communityInfo) {
+                    data = {
+                        sender: {
+                            _id: sender,
+                            name: senderName
+                        },
+                        fileURL,
+                        content: content,
+                        roomName,
+                        createdAt: format(Date.now())
+                    };
+                }
                 setArrivalMessage(data);
                 setNewGroupMessage(data);
                 setGroupSocketMessage(data);
             });
-    }, []);
+    }, [communityInfo]);
 
     useEffect(() => {
-        if (arrivalMessage && communityInfo) {
+        if (arrivalMessage && communityInfo && communityInfo
+            ?._id && arrivalMessage
+                ?.roomName) {
             setMessages((prevMessages) => [
                 ...prevMessages,
                 arrivalMessage
@@ -111,7 +117,9 @@ const index = ({
         setArrivalMessage(null);
     }, [arrivalMessage, communityInfo, messages]);
 
-    let onlineUsers = communityInfo?.members.reduce((count, member) => {
+    let onlineUsers = communityInfo
+        ?.members
+            .reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
                 }

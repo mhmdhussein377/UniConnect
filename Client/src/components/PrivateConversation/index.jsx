@@ -27,7 +27,7 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001", {timeout: 10000}));
+    const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
     const chatRef = useRef();
     const imgRef = useRef()
 
@@ -133,6 +133,8 @@ const index = ({
                     .trim()
             };
 
+            console.log(message)
+
             setNewMessage(message)
             socket
                 .current
@@ -174,7 +176,10 @@ const index = ({
     }, []);
 
     useEffect(() => {
-        if (conversation?.member?._id === arrivalMessage?.sender?._id) {
+        console.log(conversation?.member?._id)
+        console.log(arrivalMessage?.sender?._id)
+        console.log(conversation && arrivalMessage && conversation?.member?._id === arrivalMessage?.sender?._id, "puessed");
+        if (conversation && arrivalMessage && conversation?.member?._id === arrivalMessage?.sender?._id) {
             setConversationMessages(prevMessages => [
                 ...prevMessages,
                 arrivalMessage

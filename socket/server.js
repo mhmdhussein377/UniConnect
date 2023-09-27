@@ -28,6 +28,8 @@ const io = require("socket.io")(server, {
 const users = new Map()
 const rooms = new Map()
 
+const roomsTest = new Map()
+
 io.on("connection", (socket) => {
 
     socket.sockets = io.sockets
@@ -37,18 +39,21 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinRoom", (roomName) => {
-        if (!rooms.has(roomName)) {
-            rooms.set(roomName, [socket.id])
-            socket.join(roomName)
+
+        socket.join(roomName);
+
+        if (!roomsTest.has(roomName)) {
+            roomsTest.set(roomName, new Set([socket.id]));
         } else {
-            rooms
+            roomsTest
                 .get(roomName)
-                .push(socket.id)
+                .add(socket.id);
         }
+
     })
 
     socket.on("sendMessage", async({sender, receiver, content, fileURL}) => {
-        console.log(receiver, "receiiiver")
+        console.log(receiver, sender, content, "receiiiver")
         try {
             for (const [key,
                 value]of users.entries()) {
@@ -65,7 +70,7 @@ io.on("connection", (socket) => {
                             .emit("getMessage", {sender, fileURL, receiver})
                         break
                     }
-                    if(fileURL && content) {
+                    if (fileURL && content) {
                         io
                             .to(value)
                             .emit("getMessage", {sender, receiver, content, fileURL})
@@ -91,6 +96,7 @@ io.on("connection", (socket) => {
         } catch (error) {
             console.log(error)
         }
+
     })
 
     socket.on("leaveRoom", ({roomName, userId}) => {

@@ -106,7 +106,7 @@ const index = () => {
         }
         communityId && getCommunityInfo()
         communityId && markCommunityMessagesAsRead()
-    }, [communityId, newGroupMessage])
+    }, [communityId])
 
     useEffect(() => {
         setConversation(selectedConversation)
