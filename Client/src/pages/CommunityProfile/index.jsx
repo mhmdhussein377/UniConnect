@@ -191,7 +191,7 @@ const index = () => {
                                                 className="cursor-pointer"
                                                 size={30}/>
                                         </div>
-                                        {< div > {
+                                        {buttonText &&
                                             !userStatus.isCreator && (
                                                 <button
                                                     disabled={loading}
@@ -200,7 +200,7 @@ const index = () => {
                                                     {buttonText}
                                                 </button>
                                             )
-                                        } </div>}
+                                        }
                                     </div>
                                 </div>
                             </div>

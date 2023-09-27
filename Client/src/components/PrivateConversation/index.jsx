@@ -30,27 +30,27 @@ const index = ({
     const chatRef = useRef();
     const imgRef = useRef()
 
-    // useEffect(() => {
-    //     const handleSocketTimeout = () => {
-    //         console.error("WebSocket connection timed out");
-    //     };
+    useEffect(() => {
+        const handleSocketTimeout = () => {
+            console.error("WebSocket connection timed out");
+        };
 
-    //     socket
-    //         .current
-    //         .on("connect_error", (error) => {
-    //             if (error.message === "timeout") {
-    //                 handleSocketTimeout();
-    //             } else {
-    //                 console.error("WebSocket connection error:", error);
-    //             }
-    //         });
+        socket
+            .current
+            .on("connect_error", (error) => {
+                if (error.message === "timeout") {
+                    handleSocketTimeout();
+                } else {
+                    console.error("WebSocket connection error:", error);
+                }
+            });
 
-    //     return () => {
-    //         if(socket.current && socket.current.connected) {
-    //             socket.current.close()
-    //         }
-    //     }
-    // }, []);
+        return () => {
+            if(socket.current && socket.current.connected) {
+                socket.current.close()
+            }
+        }
+    }, []);
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -151,8 +151,7 @@ const index = ({
                     },
                     receiver
                 }
-                console.log(receiver, "receiverrrr")
-                console.log(data, content, "getmESSge")
+
                 if (fileURL) {
                     data.fileURL = fileURL
                 }
@@ -172,9 +171,6 @@ const index = ({
     }, []);
 
     useEffect(() => {
-        console.log(conversation?.member?._id)
-        console.log(arrivalMessage?.sender?._id)
-        console.log(conversation && arrivalMessage && conversation?.member?._id === arrivalMessage?.sender?._id, "puessed");
         if (conversation && arrivalMessage && conversation?.member?._id === arrivalMessage?.sender?._id) {
             setConversationMessages(prevMessages => [
                 ...prevMessages,
