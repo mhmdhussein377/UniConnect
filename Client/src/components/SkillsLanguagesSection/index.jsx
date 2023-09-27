@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {HiPencil} from "react-icons/hi";
+import Button from "../ShowCommunites/UI/Button";
 
 const index = ({
     data,
@@ -44,20 +45,16 @@ const index = ({
                     <div>
                         {showAllData
                             ? (
-                                <button
-                                    onClick={() => setShowAllData((prev) => !prev)}
-                                    className="text-[16px] font-medium text-primary flex items-center gap-2">
-                                    Show less
-                                    <BsChevronUp/>
-                                </button>
+                                <Button
+                                    text={"Show less"}
+                                    icon={< BsChevronUp />}
+                                    setShowAllData={setShowAllData}/>
                             )
                             : (
-                                <button
-                                    onClick={() => setShowAllData((prev) => !prev)}
-                                    className="text-[16px] font-medium text-primary flex items-center gap-2">
-                                    Show more
-                                    <BsChevronDown/>
-                                </button>
+                                <Button
+                                    text={"Show more"}
+                                    icon={< BsChevronDown />}
+                                    setShowAllData={setShowAllData}/>
                             )}
                     </div>
                 )}
