@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import SearchedCommunity from "./../../components/SearchedCommunity"
+import Button from "./UI/Button";
 
 const index = ({text, data, maxDataToShow, withoutUsername}) => {
 
@@ -16,9 +17,7 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
             <div className="flex flex-col gap-4">
                 {data
                     .slice(0, showAllData
-                    ? data
-                        ?.length
-                        : maxDataToShow)
+                    ? data?.length : maxDataToShow)
                     .map((comm, index) => {
                         const {name, privacy, _id} = comm;
                         const {username} = comm.creator;
@@ -39,21 +38,11 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
                     <div>
                         {showAllData
                             ? (
-                                <button
-                                    onClick={() => setShowAllData((prev) => !prev)}
-                                    className="text-[16px] font-medium text-primary flex items-center gap-2">
-                                    Show less
-                                    <BsChevronUp/>
-                                </button>
+                                <Button text={"Show less"} icon={<BsChevronUp />} setShowAllData={setShowAllData} />
                             )
                             : (
-                                <button
-                                    onClick={() => setShowAllData((prev) => !prev)}
-                                    className="text-[16px] font-medium text-primary flex items-center gap-2">
-                                    Show more
-                                    <BsChevronDown/>
-                                </button>
-                            )}
+                                <Button text={"Show more"} icon={<BsChevronDown />} setShowAllData={setShowAllData} />
+                            )} 
                     </div>
                 )}
         </div>
