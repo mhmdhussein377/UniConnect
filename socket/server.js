@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("sendMessage", async({sender, receiver, content, fileURL}) => {
-        console.log(content, fileURL)
+        console.log(receiver, "receiiiver")
         try {
             for (const [key,
                 value]of users.entries()) {
@@ -56,19 +56,19 @@ io.on("connection", (socket) => {
                     if (!fileURL && content) {
                         io
                             .to(value)
-                            .emit("getMessage", {sender, content});
+                            .emit("getMessage", {sender, content, receiver});
                         break
                     }
                     if (!content && fileURL) {
                         io
                             .to(value)
-                            .emit("getMessage", {sender, fileURL})
+                            .emit("getMessage", {sender, fileURL, receiver})
                         break
                     }
                     if(fileURL && content) {
                         io
                             .to(value)
-                            .emit("getMessage", {sender, content, fileURL})
+                            .emit("getMessage", {sender, receiver, content, fileURL})
                         break;
                     }
                 }

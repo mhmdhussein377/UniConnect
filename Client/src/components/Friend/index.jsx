@@ -26,7 +26,7 @@ const index = ({
                     <div className="font-medium text-[18px]">{name}</div>
                     <p
                         className="text-sm text-[#737373] font-medium w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-                        {lastMessage?.content}
+                        {lastMessage?.content ? lastMessage?.content : "image"}
                     </p>
                 </div>
             </div>

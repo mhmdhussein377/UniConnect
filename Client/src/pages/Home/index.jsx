@@ -67,7 +67,6 @@ const index = () => {
     useEffect(() => {
         const getPrivateConversations = async() => {
             const response = await getRequest(`/privateChat/privateConversationsDetails`);
-            console.log(response, "private conv details")
             response && response.sort((conv1, conv2) => {
                 const timestamp1 = new Date(conv1.lastMessage
                     ?.createdAt).getTime()
@@ -84,7 +83,6 @@ const index = () => {
     useEffect(() => {
         const getCommunities = async() => {
             const response = await getRequest(`/community/communitiesDetails`);
-            console.log(response, "respppp private conv")
             response && response.sort((conv1, conv2) => {
                 const timestamp1 = new Date(conv1.lastMessage
                     ?.createdAt).getTime();
@@ -104,8 +102,7 @@ const index = () => {
             setSelectedCommunity(response)
         }
         const markCommunityMessagesAsRead = async() => {
-            const response = await getRequest(`/community/${communityId}/mark-read`);
-            console.log(response)
+            await getRequest(`/community/${communityId}/mark-read`);
         }
         communityId && getCommunityInfo()
         communityId && markCommunityMessagesAsRead()
@@ -119,7 +116,7 @@ const index = () => {
         const getPrivateConversationMessages = async() => {
             const data = {
                 userOne: user._id,
-                userTwo: conversation.member._id
+                userTwo: conversation?.member?._id
             }
             const response = await postRequest(`/privateChat/privateConversationMessages`, data)
             setMessages(response)
@@ -143,7 +140,8 @@ const index = () => {
                     communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> 
+                    {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}

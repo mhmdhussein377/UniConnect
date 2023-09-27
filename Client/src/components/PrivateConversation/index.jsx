@@ -31,21 +31,27 @@ const index = ({
     const chatRef = useRef();
     const imgRef = useRef()
 
-    useEffect(() => {
-        const handleSocketTimeout = () => {
-            console.error("WebSocket connection timed out");
-        };
+    // useEffect(() => {
+    //     const handleSocketTimeout = () => {
+    //         console.error("WebSocket connection timed out");
+    //     };
 
-        socket
-            .current
-            .on("connect_error", (error) => {
-                if (error.message === "timeout") {
-                    handleSocketTimeout();
-                } else {
-                    console.error("WebSocket connection error:", error);
-                }
-            });
-    }, []);
+    //     socket
+    //         .current
+    //         .on("connect_error", (error) => {
+    //             if (error.message === "timeout") {
+    //                 handleSocketTimeout();
+    //             } else {
+    //                 console.error("WebSocket connection error:", error);
+    //             }
+    //         });
+
+    //     return () => {
+    //         if(socket.current && socket.current.connected) {
+    //             socket.current.close()
+    //         }
+    //     }
+    // }, []);
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -95,20 +101,28 @@ const index = ({
                 await postRequest("/privateChat/newPrivateMessage", message);
             })
         } else if (image && !messageInput) {
-            handleImageUpload(image).then(async(url) => {
-                const message = {
-                    sender: user._id,
-                    receiver: conversation
-                        ?.member._id,
-                    fileURL: url
-                };
+            hanldeImagetoBase64(image).then(async(base64) => {
+                handleImageUpload(image).then(async(url) => {
+                    const message = {
+                        sender: user._id,
+                        receiver: conversation
+                            ?.member._id,
+                        fileURL: url
+                    };
 
-                socket
-                    .current
-                    .emit("sendMessage", message);
-                setNewMessage(message);
-                await postRequest("/privateChat/newPrivateMessage", message);
-            });
+                    const frontMessage = {
+                        sender: user._id,
+                        receiver: conversation?.member._id,
+                        fileURL: base64
+                    }
+    
+                    socket
+                        .current
+                        .emit("sendMessage", message);
+                    setNewMessage(frontMessage);
+                    await postRequest("/privateChat/newPrivateMessage", message);
+                });
+            })
         } else if(messageInput && !image) {
             const message = {
                 sender: user._id,
@@ -132,13 +146,15 @@ const index = ({
     useEffect(() => {
         socket
             .current
-            .on("getMessage", ({sender, content, fileURL}) => {
+            .on("getMessage", ({sender, content, fileURL, receiver}) => {
                 const data = {
                     sender: {
                         _id: sender
-                    }
+                    },
+                    receiver
                 }
-                console.log(data, content)
+                console.log(receiver, "receiverrrr")
+                console.log(data, content, "getmESSge")
                 if (fileURL) {
                     data.fileURL = fileURL
                 }
@@ -158,7 +174,7 @@ const index = ({
     }, []);
 
     useEffect(() => {
-        if (arrivalMessage && conversation) {
+        if (conversation?.member?._id === arrivalMessage?.sender?._id) {
             setConversationMessages(prevMessages => [
                 ...prevMessages,
                 arrivalMessage
@@ -231,7 +247,7 @@ const index = ({
                     {messages
                         ?.map((message) => {
                             const {_id, sender, content, fileURL, timestamps} = message
-                            return (content || fileURL) && <Message
+                            return (fileURL || content) && <Message
                                 key={_id}
                                 own={sender
                                 ?._id}

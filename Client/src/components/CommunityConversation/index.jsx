@@ -32,13 +32,23 @@ const index = ({
             console.error("WebSocket connection timed out")
         }
 
-        socket.current.on("connect_error", (error) => {
-            if(error.message === "timeout" ) {
-                handleSocketTimeout()
-            }else {
-                console.error("WebSocket connection error:", error)
+        socket
+            .current
+            .on("connect_error", (error) => {
+                if (error.message === "timeout") {
+                    handleSocketTimeout()
+                } else {
+                    console.error("WebSocket connection error:", error)
+                }
+            })
+
+        return () => {
+            if (socket.current && socket.current.connected) {
+                socket
+                    .current
+                    .close();
             }
-        })
+        };
     }, [])
 
     const [messageInput,
@@ -85,7 +95,6 @@ const index = ({
                     content: content,
                     createdAt: format(Date.now())
                 };
-                console.log(data);
                 setArrivalMessage(data);
                 setNewGroupMessage(data);
                 setGroupSocketMessage(data);
@@ -102,8 +111,7 @@ const index = ({
         setArrivalMessage(null);
     }, [arrivalMessage, communityInfo, messages]);
 
-    let onlineUsers = communityInfo?.members
-            .reduce((count, member) => {
+    let onlineUsers = communityInfo?.members.reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
                 }
@@ -196,8 +204,6 @@ const index = ({
             });
         }
     };
-
-    console.log(arrivalMessage, "arrival message");
 
     return !communityInfo
         ? (

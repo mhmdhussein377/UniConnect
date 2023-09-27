@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import CommunityProfile from "./pages/CommunityProfile";
 import Profile from "./pages/Profile";
 import OtherUsersProfile from "./pages/OtherUsersProfile";
-import {useContext} from "react";
+import React, {useContext} from "react";
 import {AuthContext} from "./Context/AuthContext";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
@@ -60,6 +60,7 @@ function App() {
     ];
 
     return (
+        <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <Routes>
                 {publicRoutes.map((route, index) => (<Route key={index} path={route.path} element={route.element}/>))}
@@ -68,6 +69,7 @@ function App() {
                 </Route>
             </Routes>
         </QueryClientProvider>
+        </React.StrictMode>
     );
 }
 
