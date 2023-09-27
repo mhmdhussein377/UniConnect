@@ -11,7 +11,6 @@ const index = ({
     sender,
     profilePicture
 }) => {
-    const {user} = useContext(AuthContext);
 
     return (
         <div

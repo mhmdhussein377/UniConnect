@@ -27,7 +27,7 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef();
+    const socket = useRef(io("http://localhost:3001", { timeout: 10000 }));
     const chatRef = useRef();
     const imgRef = useRef()
 
@@ -98,7 +98,6 @@ const index = ({
     };
 
     useEffect(() => {
-        socket.current = io("http://localhost:3001")
         socket
             .current
             .on("getMessage", ({sender, content, fileURL}) => {
@@ -107,6 +106,7 @@ const index = ({
                         _id: sender
                     },
                 }
+                console.log(data, content)
                 if (fileURL) {
                     data.fileURL = fileURL
                 }

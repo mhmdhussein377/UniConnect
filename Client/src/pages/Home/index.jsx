@@ -49,6 +49,8 @@ const index = () => {
 
     const [socketMessage,
         setSocketMessage] = useState({})
+    const [groupSocketMessage,
+        setGroupSocketMessage] = useState({})
 
     useEffect(() => {
         window.addEventListener("popstate", (event) => {
@@ -65,6 +67,7 @@ const index = () => {
     useEffect(() => {
         const getPrivateConversations = async() => {
             const response = await getRequest(`/privateChat/privateConversationsDetails`);
+            console.log(response, "private conv details")
             response && response.sort((conv1, conv2) => {
                 const timestamp1 = new Date(conv1.lastMessage
                     ?.createdAt).getTime()
@@ -93,7 +96,7 @@ const index = () => {
             setCommunities(response)
         }
         getCommunities()
-    }, [])
+    }, [newGroupMessage, groupSocketMessage])
 
     useEffect(() => {
         const getCommunityInfo = async() => {
@@ -140,13 +143,13 @@ const index = () => {
                     communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> 
-                    {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}
                     communityInfo={selectedCommunity}
-                    setNewGroupMessage={setNewGroupMessage}/>)}
+                    setNewGroupMessage={setNewGroupMessage}
+                    setGroupSocketMessage={setGroupSocketMessage}/>)}
                 {type === "inbox" && (<PrivateConversation
                     setSocketMessage={setSocketMessage}
                     setOpenSidebar={setOpenSidebar}

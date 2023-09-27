@@ -991,15 +991,15 @@ const GetCommunitiesDetails = async(req, res) => {
                         }
                         return count;
                     }, 0);
-                return {
-                    ID: community._id,
-                    name: community.name,
-                    privacy: community.privacy,
-                    unreadCount,
-                    lastMessages: community
-                        .chat
-                        .slice(-5)
-                };
+
+                let lastMessage
+                if (community.chat.length > 0) {
+                    lastMessage = {
+                        content: community.chat[community.chat.length - 1].content,
+                        createdAt: community.chat[community.chat.length - 1].timestamps
+                    };
+                }
+                return {ID: community._id, name: community.name, privacy: community.privacy, unreadCount, lastMessage};
             }
             return null;
         }));
@@ -1015,13 +1015,22 @@ const GetCommunitiesDetails = async(req, res) => {
                         }
                         return count;
                     }, 0);
-                const {_id, name, privacy, chat} = community
+
+                let lastMessage
+                if(community.chat.length > 0) {
+                    lastMessage = {
+                        content: community.chat[community.chat.length - 1].content,
+                        createdAt: community.chat[community.chat.length - 1].timestamps,
+                    };
+                }
+
+                const {_id, name, privacy} = community
                 return {
                     ID: _id,
                     name: name,
                     privacy: privacy,
                     unreadCount,
-                    lastMessages: chat.slice(-5)
+                    lastMessage
                 };
             }
             return null;

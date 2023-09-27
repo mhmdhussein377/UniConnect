@@ -13,12 +13,33 @@ import {io} from "socket.io-client";
 import {v4} from "uuid";
 import {handleImageUpload} from "./../../utils/uploadImage"
 
-const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar, communityInfo, setNewGroupMessage}) => {
+const index = ({
+    setOpenCommunityDetails,
+    setShowAddMembersModal,
+    setOpenSidebar,
+    communityInfo,
+    setNewGroupMessage,
+    setGroupSocketMessage
+}) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001"));
-    const chatRef = useRef()
-    const fileRef = useRef()
+    const socket = useRef(io("http://localhost:3001", {timeout: 10000}));
+    const chatRef = useRef();
+    const fileRef = useRef();
+
+    useEffect(() => {
+        const handleSocketTimeout = () => {
+            console.error("WebSocket connection timed out")
+        }
+
+        socket.current.on("connect_error", (error) => {
+            if(error.message === "timeout" ) {
+                handleSocketTimeout()
+            }else {
+                console.error("WebSocket connection error:", error)
+            }
+        })
+    }, [])
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -27,7 +48,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
     const [arrivalMessage,
         setArrivalMessage] = useState(null);
     const [file,
-        setFile] = useState(null)
+        setFile] = useState(null);
 
     useEffect(() => {
         setMessages(communityInfo
@@ -64,9 +85,10 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                     content: content,
                     createdAt: format(Date.now())
                 };
-                console.log(data)
-                setArrivalMessage(data)
-                setNewGroupMessage(data)
+                console.log(data);
+                setArrivalMessage(data);
+                setNewGroupMessage(data);
+                setGroupSocketMessage(data);
             });
     }, []);
 
@@ -77,17 +99,16 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 arrivalMessage
             ]);
         }
-        setArrivalMessage(null)
+        setArrivalMessage(null);
     }, [arrivalMessage, communityInfo, messages]);
 
-    let onlineUsers = communityInfo
-        ?.members
+    let onlineUsers = communityInfo?.members
             .reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
                 }
                 return count;
-            }, 0)
+            }, 0);
     if (communityInfo
         ?.creator.online) {
         onlineUsers += 1;
@@ -97,8 +118,8 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
         e.preventDefault();
 
         if (!file && !messageInput) 
-            return
-
+            return;
+        
         if (!file && messageInput) {
             const message = {
                 content: messageInput
@@ -122,10 +143,9 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 .current
                 .emit("sendGroupMessage", groupMessage);
             await postRequest(`/community/${communityInfo._id}/add-message`, message);
-
         } else if (file && !messageInput) {
             handleImageUpload(file).then(async(fileURL) => {
-                let message
+                let message;
                 if (fileURL) {
                     message = {
                         fileURL
@@ -140,36 +160,44 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                 };
 
                 setMessageInput("");
-                setFile(null)
+                setFile(null);
                 setNewGroupMessage(message);
                 socket
                     .current
                     .emit("sendGroupMessage", groupMessage);
                 await postRequest(`/community/${communityInfo._id}/add-message`, message);
-            })
+            });
         } else if (file && messageInput) {
-            let message= {}
-            let groupMessage = {}
-            message.content = messageInput.toString().trim()
-            groupMessage.content = messageInput.toString().trim()
-            setMessageInput("")
+            let message = {};
+            let groupMessage = {};
+            message.content = messageInput
+                .toString()
+                .trim();
+            groupMessage.content = messageInput
+                .toString()
+                .trim();
+            setMessageInput("");
             handleImageUpload(file).then(async(fileURL) => {
-                if(fileURL) {
-                    message.fileURL = fileURL
+                if (fileURL) {
+                    message.fileURL = fileURL;
                 }
 
-                groupMessage.sender = user._id,
-                groupMessage.senderName = user.name,
-                groupMessage.fileURL = fileURL,
-                groupMessage.roomName = communityInfo._id
+                (groupMessage.sender = user._id),
+                (groupMessage.senderName = user.name),
+                (groupMessage.fileURL = fileURL),
+                (groupMessage.roomName = communityInfo._id);
 
-                setFile(null)
-                setNewGroupMessage(message)
-                socket.current.emit("sendGroupMessage", groupMessage)
-                await postRequest(`/community/${communityInfo._id}/add-message`, message)
-            })
+                setFile(null);
+                setNewGroupMessage(message);
+                socket
+                    .current
+                    .emit("sendGroupMessage", groupMessage);
+                await postRequest(`/community/${communityInfo._id}/add-message`, message);
+            });
         }
     };
+
+    console.log(arrivalMessage, "arrival message");
 
     return !communityInfo
         ? (
@@ -267,7 +295,7 @@ const index = ({setOpenCommunityDetails, setShowAddMembersModal, setOpenSidebar,
                                 type="text"
                                 placeholder="Send a message"/>
                             <input
-                                onChange={e => setFile(e.target.files[0])}
+                                onChange={(e) => setFile(e.target.files[0])}
                                 ref={fileRef}
                                 type="file"
                                 className="hidden"/>
