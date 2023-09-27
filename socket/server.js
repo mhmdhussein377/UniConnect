@@ -48,26 +48,29 @@ io.on("connection", (socket) => {
     })
 
     socket.on("sendMessage", async({sender, receiver, content, fileURL}) => {
+        console.log(content, fileURL)
         try {
             for (const [key,
                 value]of users.entries()) {
                 if (key === receiver) {
-                    if (!fileURL) {
+                    if (!fileURL && content) {
                         io
                             .to(value)
                             .emit("getMessage", {sender, content});
                         break
                     }
-                    if (!content) {
-                        to
+                    if (!content && fileURL) {
+                        io
                             .to(value)
                             .emit("getMessage", {sender, fileURL})
                         break
                     }
-                    io
-                        .to(value)
-                        .emit("getMessage", {sender, content, fileURL})
-                    break;
+                    if(fileURL && content) {
+                        io
+                            .to(value)
+                            .emit("getMessage", {sender, content, fileURL})
+                        break;
+                    }
                 }
             }
         } catch (error) {

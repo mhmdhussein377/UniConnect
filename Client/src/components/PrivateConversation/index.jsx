@@ -14,7 +14,7 @@ import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 import {imageDB} from "../../utils/FirebaseConfig";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {v4} from "uuid";
-import { hanldeImagetoBase64 } from "../../utils/handleImagetoBase64";
+import {hanldeImagetoBase64} from "../../utils/handleImagetoBase64";
 
 const index = ({
     setOpenSidebar,
@@ -27,9 +27,25 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001", { timeout: 10000 }));
+    const socket = useRef(io("http://localhost:3001", {timeout: 10000}));
     const chatRef = useRef();
     const imgRef = useRef()
+
+    useEffect(() => {
+        const handleSocketTimeout = () => {
+            console.error("WebSocket connection timed out");
+        };
+
+        socket
+            .current
+            .on("connect_error", (error) => {
+                if (error.message === "timeout") {
+                    handleSocketTimeout();
+                } else {
+                    console.error("WebSocket connection error:", error);
+                }
+            });
+    }, []);
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -38,10 +54,24 @@ const index = ({
     const [image,
         setImage] = useState(null)
 
+    const hanldeImagetoBase64 = (image) => {
+      return new Promise((resolve, reject) => {
+        if (!image) {
+          reject(new Error("Image is missing"));
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(image);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    };
+
     const handleSendMessage = async(e) => {
         e.preventDefault();
 
-        if(!image && !messageInput) {
+        if (!image && !messageInput) {
             return
         }
 
@@ -55,29 +85,31 @@ const index = ({
                     content: messageInput
                         .toString()
                         .trim(),
-                    fileURL: url,
+                    fileURL: url
                 };
 
                 socket
-                .current
-                .emit("sendMessage", message);
+                    .current
+                    .emit("sendMessage", message);
                 setNewMessage(message)
                 await postRequest("/privateChat/newPrivateMessage", message);
             })
         } else if (image && !messageInput) {
-            console.log(hanldeImagetoBase64(image))
             handleImageUpload(image).then(async(url) => {
                 const message = {
                     sender: user._id,
-                    receiver: conversation?.member._id,
+                    receiver: conversation
+                        ?.member._id,
                     fileURL: url
                 };
 
-                socket.current.emit("sendMessage", message);
+                socket
+                    .current
+                    .emit("sendMessage", message);
                 setNewMessage(message);
                 await postRequest("/privateChat/newPrivateMessage", message);
             });
-        } else {
+        } else if(messageInput && !image) {
             const message = {
                 sender: user._id,
                 receiver: conversation
@@ -104,15 +136,16 @@ const index = ({
                 const data = {
                     sender: {
                         _id: sender
-                    },
+                    }
                 }
                 console.log(data, content)
                 if (fileURL) {
                     data.fileURL = fileURL
                 }
-                if(content) {
+                if (content) {
                     data.content = content
                 }
+                console.log(data, "arriveeed")
                 setSocketMessage(data)
                 setArrivalMessage(data)
             })
