@@ -18,6 +18,7 @@ import ProfileImage from "./../../assets/ProfilePicture.jpg"
 
 const index = ({
     openSidebar,
+    setOpenSidebar,
     type,
     setType,
     setShowCommunityModal,
@@ -111,6 +112,7 @@ const index = ({
                                     handleSelectedConversation(index, member._id);
                                     setOpenCommunityDetails(false);
                                     setShowUserDetails(false);
+                                    setOpenSidebar(false)
                                 }}>
                                     <Friend
                                         highlight={selectedConversation
@@ -143,6 +145,7 @@ const index = ({
                                     setCommunityId(community.ID);
                                     setOpenCommunityDetails(false);
                                     setShowUserDetails(false);
+                                    setOpenSidebar(false)
                                 }}>
                                     <Community
                                         highlight={community.ID === selectedCommunity
@@ -184,8 +187,9 @@ const index = ({
                 <div className="flex items-center gap-3 w-full">
                     <Link
                         to={`/profile/${username}`}
-                        className="w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center">
+                        className="w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center object-cover">
                         <img
+                            className="object-cover"
                             src={user
                             ?.profile
                                 ?.profileImage || ProfileImage}

@@ -132,6 +132,7 @@ const index = () => {
                     setType={setType}
                     type={type}
                     openSidebar={openSidebar}
+                    setOpenSidebar={setOpenSidebar}
                     selectedConversation={selectedConversation}
                     setSelectedConversation={setSelectedConversation}
                     setCommunityId={setCommunityId}

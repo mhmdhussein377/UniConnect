@@ -14,6 +14,7 @@ import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 import {imageDB} from "../../utils/FirebaseConfig";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {v4} from "uuid";
+import {RxHamburgerMenu} from "react-icons/rx"
 
 const index = ({
     setOpenSidebar,
@@ -46,8 +47,10 @@ const index = ({
             });
 
         return () => {
-            if(socket.current && socket.current.connected) {
-                socket.current.close()
+            if (socket.current && socket.current.connected) {
+                socket
+                    .current
+                    .close()
             }
         }
     }, []);
@@ -60,11 +63,11 @@ const index = ({
         setImage] = useState(null)
 
     const hanldeImagetoBase64 = (image) => {
-      return new Promise((resolve, reject) => {
-        if (!image) {
-            reject(new Error("Image is missing"));
-            return;
-        }
+        return new Promise((resolve, reject) => {
+            if (!image) {
+                reject(new Error("Image is missing"));
+                return;
+            }
 
             const reader = new FileReader();
             reader.readAsDataURL(image);
@@ -110,10 +113,11 @@ const index = ({
 
                     const frontMessage = {
                         sender: user._id,
-                        receiver: conversation?.member._id,
+                        receiver: conversation
+                            ?.member._id,
                         fileURL: base64
                     }
-    
+
                     socket
                         .current
                         .emit("sendMessage", message);
@@ -121,7 +125,7 @@ const index = ({
                     await postRequest("/privateChat/newPrivateMessage", message);
                 });
             })
-        } else if(messageInput && !image) {
+        } else if (messageInput && !image) {
             const message = {
                 sender: user._id,
                 receiver: conversation
@@ -171,7 +175,11 @@ const index = ({
     }, []);
 
     useEffect(() => {
-        if (conversation && arrivalMessage && conversation?.member?._id === arrivalMessage?.sender?._id) {
+        if (conversation && arrivalMessage && conversation
+            ?.member
+                ?._id === arrivalMessage
+                    ?.sender
+                        ?._id) {
             setConversationMessages(prevMessages => [
                 ...prevMessages,
                 arrivalMessage
@@ -202,6 +210,12 @@ const index = ({
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
+                    className="bg-gray-100 opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
+                    <div className="text-end w-full flex justify-end" onClick={() => setOpenSidebar(prev => !prev)}>
+                        <RxHamburgerMenu size={35}/>
+                    </div>
+                </div>
+                <div
                     className="grow h-full p-8 flex flex-col bg-gray-100 opacity-50 items-center justify-center">
                     <span className="text-center text-2xl">
                         Open a Conversation to Start Chatting
@@ -221,8 +235,10 @@ const index = ({
                                 src={conversation
                                 ?.member
                                     ?.profile
-                                        ?.profileImage || ProfilePicture}/> {conversation.member.online && <span
-                                className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>}
+                                        ?.profileImage || ProfilePicture}/>{" "} {conversation.member.online && (
+                                <span
+                                    className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>
+                            )}
                         </div>
                         <div>
                             <div
@@ -234,7 +250,7 @@ const index = ({
                         </div>
                     </div>
                     <CgSidebarOpen
-                        className="lg:hidden"
+                        className="lg:hidden cursor-pointer"
                         onClick={() => setOpenSidebar((prev) => !prev)}
                         size={30}/>
                 </div>
@@ -243,8 +259,8 @@ const index = ({
                     className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
                     {messages
                         ?.map((message) => {
-                            const {_id, sender, content, fileURL, timestamps} = message
-                            return (fileURL || content) && <Message
+                            const {_id, sender, content, fileURL, timestamps} = message;
+                            return ((fileURL || content) && (<Message
                                 key={_id}
                                 own={sender
                                 ?._id}
@@ -255,7 +271,7 @@ const index = ({
                                 ?.profile
                                     ?.profileImage}
                                 fileURL={fileURL}
-                                date={format(timestamps)}/>
+                                date={format(timestamps)}/>));
                         })}
                 </div>
                 <form
@@ -271,7 +287,7 @@ const index = ({
                             placeholder="Send a message"/>
                         <div className="flex items-center gap-3">
                             <input
-                                onChange={e => setImage(e.target.files[0])}
+                                onChange={(e) => setImage(e.target.files[0])}
                                 ref={imgRef}
                                 type="file"
                                 className="hidden"/>

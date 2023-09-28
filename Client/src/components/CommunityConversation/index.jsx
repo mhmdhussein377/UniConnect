@@ -11,6 +11,7 @@ import {postRequest} from "../../utils/requests";
 import {format} from "timeago.js";
 import {io} from "socket.io-client";
 import {handleImageUpload} from "./../../utils/uploadImage"
+import {RxHamburgerMenu} from "react-icons/rx";
 
 const index = ({
     setOpenCommunityDetails,
@@ -86,7 +87,8 @@ const index = ({
             .current
             .on("getGroupMessage", ({sender, senderName, content, fileURL, roomName}) => {
                 let data = {}
-                if (roomName === communityInfo?._id && communityInfo) {
+                if (roomName === communityInfo
+                    ?._id && communityInfo) {
                     data = {
                         sender: {
                             _id: sender,
@@ -216,6 +218,14 @@ const index = ({
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
+                    className="bg-gray-100 opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
+                    <div
+                        className="text-end w-full flex justify-end"
+                        onClick={() => setOpenSidebar((prev) => !prev)}>
+                        <RxHamburgerMenu size={35}/>
+                    </div>
+                </div>
+                <div
                     className="grow h-full p-8 flex flex-col bg-gray-100 opacity-50 items-center justify-center">
                     <span className="text-center text-2xl">
                         Open a Conversation to Start Chatting
@@ -251,7 +261,7 @@ const index = ({
                     </div>
                     <CgSidebarOpen
                         onClick={() => setOpenSidebar((prev) => !prev)}
-                        className="lg:hidden"
+                        className="lg:hidden cursor-pointer"
                         size={30}/>
                 </div>
                 {communityInfo.members.length == 0 && (
