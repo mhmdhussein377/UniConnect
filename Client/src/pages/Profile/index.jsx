@@ -14,7 +14,8 @@ import EditUserModal from './components/EditUserModal'
 import LanguagesModal from "./components/LanguagesModal"
 import SkillsModal from "./components/SkillsModal"
 import {useParams} from "react-router-dom"
-import { getRequest } from "../../utils/requests"
+import {getRequest} from "../../utils/requests"
+import axios from "axios"
 
 const index = () => {
 
@@ -31,7 +32,8 @@ const index = () => {
         setShowSkillsModal] = useState(false);
     const [joinedCommunities,
         setJoinedCommunities] = useState([])
-    const [friends, setFriends] = useState([])
+    const [friends,
+        setFriends] = useState([])
 
     let {createdCommunities} = user
     let {skills, languages, bio, university, major} = user.profile

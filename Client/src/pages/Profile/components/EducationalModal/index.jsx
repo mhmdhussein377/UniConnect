@@ -1,31 +1,56 @@
 import {GrClose} from "react-icons/gr";
-import {useContext, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import Input from "./../../../../components/Input"
 import {handleCloseModal} from "./../../../../utils/closeModal"
-import { AuthContext } from "../../../../Context/AuthContext";
+import {AuthContext} from "../../../../Context/AuthContext";
 import {postRequest} from "./../../../../utils/requests"
 import {handleChange} from "./../../../../utils/handleChange"
+import axios from "axios";
+import { useDebounce } from "use-debounce";
 
 const index = ({setShowEducationalInfoModal}) => {
 
     const {user, dispatch} = useContext(AuthContext)
     const {university, major} = user.profile
 
-    let [inputs,setInputs] = useState({university: university || "", major: major || ""})
+    const [inputs,
+        setInputs] = useState({
+            university: university || "",
+            major: major || ""
+        })
+    const [debouncedValue] = useDebounce(inputs.university, 1000);
+    const [universities, setUniversities] = useState([])
+    const [clicked, setClicked] = useState(false)
     const boxRef = useRef();
 
     const handleInputsChange = (e) => {
         handleChange(e, setInputs)
+        setClicked(false)
     };
 
     const handleEditEducationalInfo = async() => {
-        dispatch({ type: "EDIT_EDUCATIONAL_INFO", payload: inputs });
+        dispatch({type: "EDIT_EDUCATIONAL_INFO", payload: inputs});
         setShowEducationalInfoModal(false);
 
         await postRequest("/user/edit-profile", inputs)
     }
 
+    useEffect(() => {
+        if(inputs.university === "") {
+            setUniversities([])
+        }
+        const getCountries = async() => {
+            const {data} = await axios.get(`http://universities.hipolabs.com/search?name=${debouncedValue}`);
+            setUniversities(data)
+        };
+        if(debouncedValue !== university && !clicked) {
+            getCountries()
+        }
+    }, [debouncedValue]);
+
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowEducationalInfoModal);
+
+    console.log(universities, "uniiiiiis")
 
     return (
         <div
@@ -46,11 +71,21 @@ const index = ({setShowEducationalInfoModal}) => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <Input
-                        label="University"
-                        name="university"
-                        value={inputs.university}
-                        handleChange={handleInputsChange}/>
+                    <div className="relative">
+                        <Input
+                            label="University"
+                            name="university"
+                            value={inputs.university}
+                            handleChange={handleInputsChange}
+                            close={universities.length > 0}
+                            setUniversities={setUniversities}/> 
+                        {universities.length > 0 && (
+                            <div
+                                className="absolute w-full left-0 right-0 top-20 p-2 rounded-md border-2 bg-white flex flex-col gap-1 max-h-[300px] overflow-scroll scrollbar-hide">
+                                {universities.map((university, index) => (<h1 onClick={() => {setInputs(prev => ({...prev, university: university.name})); setUniversities([]); setClicked(true)}} className="cursor-pointer" key={index}>{university.name}</h1>))}
+                            </div>
+                        )}
+                    </div>
                     <Input
                         label="Major"
                         name="major"

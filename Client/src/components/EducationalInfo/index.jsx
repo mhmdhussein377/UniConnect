@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {HiPencil} from "react-icons/hi";
 
 const index = ({setShowEducationalInfoModal, currentUser, university, major, emptyHeadline}) => {
@@ -6,8 +8,9 @@ const index = ({setShowEducationalInfoModal, currentUser, university, major, emp
         <div
             className="bg-white dark:bg-black dark:text-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
             <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between font-semibold text-lg text-primary">
-                    Educational Information{" "} {currentUser && (<HiPencil
+                <div
+                    className="flex items-center justify-between font-semibold text-lg">
+                    <span className="text-primary">Educational Information</span>{" "} {currentUser && (<HiPencil
                         onClick={() => setShowEducationalInfoModal(true)}
                         className="cursor-pointer"
                         size={30}/>)}
