@@ -14,6 +14,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
     const [searchTerm,
         setSearchTerm] = useState("")
     const [debouncedValue] = useDebounce(searchTerm, 500)
+    const [loading, setLoading] = useState(false)
     const boxRef = useRef()
 
     useEffect(() => {
@@ -26,8 +27,10 @@ const index = ({setShowAddMembersModal, communityId}) => {
 
     useEffect(() => {
         const searchUsers = async() => {
+            setLoading(true)
             const response = await getRequest(`/user/search/${debouncedValue}/${communityId}`)
             response && setSearchedUsers(response.users)
+            setLoading(false)
         }
         if (debouncedValue !== "") {
             searchUsers()
@@ -87,7 +90,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
                             : (
                                 <div className="text-center h-full mt-[100px] font-medium text-xl text-primary">
                                     {debouncedValue
-                                        ? "No matching users found."
+                                        ? (loading ? "Loading..." : "No matching users found.")
                                         : "No friends to invite."}
                                 </div>
                             )}

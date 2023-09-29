@@ -37,7 +37,7 @@ const index = ({profile, getCommunities}) => {
         response && setNotifications(response.notifications);
     };
 
-    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 2000});
+    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 2500});
 
     const toggleNotifications = () => {
         setShowNotifications((prev) => !prev);
