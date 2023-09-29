@@ -34,18 +34,17 @@ const index = ({
         setSocket] = useState(null)
     const chatRef = useRef();
     const imgRef = useRef()
-    const buttonRef = useRef()
 
     // useEffect(() => {     // const handleSocketTimeout = () => {     //
     // console.error("WebSocket connection timed out");     // };     // socket //
     // .current     //     .on("connect_error", (error) => {     // if
     // (error.message === "timeout") {     //             handleSocketTimeout(); //
-    //        } else {     //             console.error("WebSocket connection
+    //       } else {     //             console.error("WebSocket connection
     // error:", error);     //         }     //     });     return () => { if
     // (socket.current && socket.current.connected) {             socket .current
-    //              .close()         }     } }, []); socket.current.on("disconnect",
-    // (reason) => {     if (reason === "io server disconnect") {
-    // socket.connect();     } });
+    //           .close()         }     } }, []); socket.current.on("disconnect",
+    // (reason) => {     if (reason === "io server disconnect") { socket.connect();
+    //    } });
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -53,8 +52,8 @@ const index = ({
         setArrivalMessage] = useState({});
     const [image,
         setImage] = useState(null)
-    const [isPicketVisible,
-        setIsPicketVisible] = useState(false)
+    const [isPickerVisible,
+        setisPickerVisible] = useState(false)
     const [currentEmoji,
         setCurrentEmoji] = useState(null)
 
@@ -93,6 +92,7 @@ const index = ({
 
                 socket.emit("sendMessage", message);
                 setNewMessage(message)
+                setisPickerVisible(false)
                 await postRequest("/privateChat/newPrivateMessage", message);
             })
         } else if (image && !messageInput) {
@@ -114,10 +114,12 @@ const index = ({
 
                     socket.emit("sendMessage", message);
                     setNewMessage(frontMessage);
+                    setisPickerVisible(false);
                     await postRequest("/privateChat/newPrivateMessage", message);
                 });
             })
         } else if (messageInput && !image) {
+            console.log("hereeee")
             const message = {
                 sender: user._id,
                 receiver: conversation
@@ -127,16 +129,20 @@ const index = ({
                     .trim()
             };
 
+            console.log(message)
+
             setNewMessage(message)
             socket.emit("sendMessage", message);
             await postRequest("/privateChat/newPrivateMessage", message);
         }
+        setisPickerVisible(false);
         setMessageInput("");
         setImage(null)
     };
 
     useEffect(() => {
         if (socket) {
+            console.log("innnnn")
             socket.on("getMessage", ({sender, content, fileURL, receiver}) => {
                 const data = {
                     sender: {
@@ -187,6 +193,8 @@ const index = ({
                 ...prevMessages,
                 arrivalMessage
             ])
+
+            console.log("mhmdddd")
         }
     }, [arrivalMessage])
 
@@ -287,16 +295,16 @@ const index = ({
                 </div>
                 <form
                     onSubmit={handleSendMessage}
-                    className={`flex items-end mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC] dark:bg-black/50 relative overflow-visible ${isPicketVisible && "h-[520px]"}`}>
+                    className={`flex items-end mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC] dark:bg-black/50 relative overflow-visible ${isPickerVisible && "h-[520px]"}`}>
                     <div
-                        className={isPicketVisible
+                        className={isPickerVisible
                         ? `block absolute top-[5px] right-6`
                         : "hidden"}>
                         <Picker
                             data={data}
                             previewPosition="none"
                             onEmojiSelect={(e) => {
-                            setCurrentEmoji(e.native)
+                            setCurrentEmoji(e.native);
                         }}/>
                     </div>
                     <div
@@ -318,7 +326,7 @@ const index = ({
                                 className="cursor-pointer"
                                 size={25}/>
                             <BsEmojiSmile
-                                onClick={() => setIsPicketVisible(!isPicketVisible)}
+                                onClick={() => setisPickerVisible(!isPickerVisible)}
                                 className="cursor-pointer"
                                 size={25}/>
                         </div>
@@ -327,7 +335,7 @@ const index = ({
                         type="submit"
                         className="h-[50px] px-4 sm:px-10 py-2 bg-primary text-white rounded-tr-md rounded-br-md flex items-center justify-center gap-3 text-base sm:text-lg font-medium">
                         <BsFillSendFill size={20}/>
-                        Send
+                        Send {image && "📷"}
                     </button>
                 </form>
             </div>

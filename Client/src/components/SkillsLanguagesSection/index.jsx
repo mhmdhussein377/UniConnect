@@ -2,6 +2,7 @@ import {useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {HiPencil} from "react-icons/hi";
 import Button from "../ShowCommunites/UI/Button";
+import Skill from "./../../pages/Profile/components/Skill"
 
 const index = ({
     data,
@@ -25,17 +26,14 @@ const index = ({
                     className="cursor-pointer"
                     size={30}/>)}
             </div>
-            <div className="flex flex-col gap-4">
+            <div
+                className="flex items-center flex-wrap gap-4 py-3.5 overflow-x-hidden">
                 {data
                     ?.length > 0
                         ? (data.slice(0, showAllData
                             ? data
                                 ?.length
-                                : maxDataToShow).map((item, index) => (
-                            <div key={index} className="pb-2 border-b border-b-3 border-b-gray-300">
-                                {item}
-                            </div>
-                        )))
+                                : maxDataToShow).map((skill, index) => <Skill key={index} skill={skill}/>))
                         : (
                             <h1 className="my-2 text-lg">{emptyHeadline}</h1>
                         )}

@@ -64,7 +64,7 @@ const index = () => {
                             setShowModal={setShowSkillsModal}
                             text="Skills"
                             data={skills}
-                            maxDataToShow={4}
+                            maxDataToShow={10}
                             currentUser={user
                             ?.usrname === username}
                             emptyHeadline="Your skills will shine here."/>
@@ -72,7 +72,7 @@ const index = () => {
                             setShowModal={setShowLanguagesModal}
                             text="Languages"
                             data={languages}
-                            maxDataToShow={4}
+                            maxDataToShow={10}
                             currentUser={user
                             ?.usrname === username}
                             emptyHeadline="Your multilingual talengts await."/> {createdCommunities

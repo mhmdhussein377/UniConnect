@@ -12,6 +12,8 @@ import {format} from "timeago.js";
 import {io} from "socket.io-client";
 import {handleImageUpload} from "./../../utils/uploadImage"
 import {RxHamburgerMenu} from "react-icons/rx";
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 
 const index = ({
     setOpenCommunityDetails,
@@ -23,30 +25,23 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001", { timeout: 60000 }));
+    const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
     const chatRef = useRef();
     const fileRef = useRef();
 
-    socket.current.on("disconnect", (reason) => {
-        if (reason === "io server disconnect") {
-            socket.connect();
-        }
-    });
+    socket
+        .current
+        .on("disconnect", (reason) => {
+            if (reason === "io server disconnect") {
+                socket.connect();
+            }
+        });
 
     useEffect(() => {
-        // const handleSocketTimeout = () => {
-        //     console.error("WebSocket connection timed out")
-        // }
-
-        // socket
-        //     .current
-        //     .on("connect_error", (error) => {
-        //         if (error.message === "timeout") {
-        //             handleSocketTimeout()
-        //         } else {
-        //             console.error("WebSocket connection error:", error)
-        //         }
-        //     })
+        // const handleSocketTimeout = () => {     console.error("WebSocket connection
+        // timed out") } socket     .current     .on("connect_error", (error) => {   if
+        // (error.message === "timeout") {             handleSocketTimeout()  } else {
+        //     console.error("WebSocket connection error:", error)     }     })
 
         return () => {
             if (socket.current && socket.current.connected) {
@@ -65,6 +60,10 @@ const index = ({
         setArrivalMessage] = useState(null);
     const [file,
         setFile] = useState(null);
+    const [isPickerVisible,
+        setisPickerVisible] = useState(false);
+    const [currentEmoji,
+        setCurrentEmoji] = useState(null);
 
     useEffect(() => {
         setMessages(communityInfo
@@ -124,8 +123,7 @@ const index = ({
         setArrivalMessage(null);
     }, [arrivalMessage, communityInfo, messages]);
 
-    let onlineUsers = communityInfo
-        ?.members
+    let onlineUsers = communityInfo?.members
             .reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
@@ -160,6 +158,7 @@ const index = ({
             };
 
             setMessageInput("");
+            setisPickerVisible(false)
             setFile(null);
             setNewGroupMessage(message);
             socket
@@ -183,6 +182,7 @@ const index = ({
                 };
 
                 setMessageInput("");
+                setisPickerVisible(false);
                 setFile(null);
                 setNewGroupMessage(message);
                 socket
@@ -200,6 +200,7 @@ const index = ({
                 .toString()
                 .trim();
             setMessageInput("");
+            setisPickerVisible(false);
             handleImageUpload(file).then(async(fileURL) => {
                 if (fileURL) {
                     message.fileURL = fileURL;
@@ -219,6 +220,12 @@ const index = ({
             });
         }
     };
+
+    useEffect(() => {
+        if (currentEmoji) {
+            setMessageInput((prev) => prev + currentEmoji);
+        }
+    }, [currentEmoji]);
 
     return !communityInfo
         ? (
@@ -294,7 +301,7 @@ const index = ({
                 {!communityInfo.members.length == 0 && (
                     <div
                         ref={chatRef}
-                        className="flex-grow w-full bg-[#F4F3FC] max-h-full overflow-y-scroll scrollbar-hide px-6 py-2">
+                        className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation relative">
                         {messages
                             ?.map((message, index) => {
                                 return (<Message
@@ -314,7 +321,18 @@ const index = ({
                 {!communityInfo.members.length == 0 && (
                     <form
                         onSubmit={handleSendMessage}
-                        className="w-full flex items-center px-6 py-5 bg-[#F4F3FC]">
+                        className={`flex items-end mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC] dark:bg-black/50 relative overflow-visible ${isPickerVisible && "h-[520px]"}`}>
+                        <div
+                            className={isPickerVisible
+                            ? `block absolute top-[5px] right-6`
+                            : "hidden"}>
+                            <Picker
+                                data={data}
+                                previewPosition="none"
+                                onEmojiSelect={(e) => {
+                                setCurrentEmoji(e.native);
+                            }}/>
+                        </div>
                         <div
                             className="flex items-center gap-4 pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white ">
                             <input
@@ -332,13 +350,16 @@ const index = ({
                                 onClick={() => fileRef.current.click()}
                                 className="cursor-pointer"
                                 size={25}/>
-                            <BsEmojiSmile className="cursor-pointer" size={25}/>
+                            <BsEmojiSmile
+                                onClick={() => setisPickerVisible(!isPickerVisible)}
+                                className="cursor-pointer"
+                                size={25}/>
                         </div>
                         <button
                             type="submit"
                             className="h-[50px] px-4 sm:px-10 py-2 bg-primary text-white rounded-tr-md rounded-br-md flex items-center justify-center gap-3 text-lg font-medium">
                             <BsFillSendFill size={20}/>
-                            Send
+                            Send {file && "📷"}
                         </button>
                     </form>
                 )}

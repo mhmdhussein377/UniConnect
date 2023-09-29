@@ -70,6 +70,7 @@ const index = ({setShowSkillsModal, skills}) => {
                                 index={index}
                                 key={index}
                                 skill={skill}
+                                remove={true}
                                 handleRemoveSkill={handleRemoveSkill}/>))}
                         </div>
                     )}
