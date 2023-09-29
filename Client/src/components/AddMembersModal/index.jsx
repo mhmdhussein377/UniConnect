@@ -69,7 +69,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
                         className="border-b-2 border-b-primary outline-none px-2 py-1.5 placeholder:text-lg"/>
                 </div>
                 <div
-                    className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide mb-5">
+                    className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide mb-5 ">
                     {searchedUsers.length > 0
                         ? searchedUsers.map((user, index) => (<Member
                             communityId={communityId}

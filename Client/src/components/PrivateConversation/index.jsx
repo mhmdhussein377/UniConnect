@@ -15,6 +15,8 @@ import {imageDB} from "../../utils/FirebaseConfig";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {v4} from "uuid";
 import {RxHamburgerMenu} from "react-icons/rx"
+import Picker from "@emoji-mart/react"
+import data from "@emoji-mart/data"
 
 const index = ({
     setOpenSidebar,
@@ -28,39 +30,22 @@ const index = ({
 
     const {user} = useContext(AuthContext);
     // const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
-    const [socket, setSocket] = useState(null)
+    const [socket,
+        setSocket] = useState(null)
     const chatRef = useRef();
     const imgRef = useRef()
+    const buttonRef = useRef()
 
-    // useEffect(() => {
-    //     // const handleSocketTimeout = () => {
-    //     //     console.error("WebSocket connection timed out");
-    //     // };
-
-    //     // socket
-    //     //     .current
-    //     //     .on("connect_error", (error) => {
-    //     //         if (error.message === "timeout") {
-    //     //             handleSocketTimeout();
-    //     //         } else {
-    //     //             console.error("WebSocket connection error:", error);
-    //     //         }
-    //     //     });
-
-    //     return () => {
-    //         if (socket.current && socket.current.connected) {
-    //             socket
-    //                 .current
-    //                 .close()
-    //         }
-    //     }
-    // }, []);
-
-    // socket.current.on("disconnect", (reason) => {
-    //     if (reason === "io server disconnect") {
-    //         socket.connect();
-    //     }
-    // });
+    // useEffect(() => {     // const handleSocketTimeout = () => {     //
+    // console.error("WebSocket connection timed out");     // };     // socket //
+    // .current     //     .on("connect_error", (error) => {     // if
+    // (error.message === "timeout") {     //             handleSocketTimeout(); //
+    //        } else {     //             console.error("WebSocket connection
+    // error:", error);     //         }     //     });     return () => { if
+    // (socket.current && socket.current.connected) {             socket .current
+    //              .close()         }     } }, []); socket.current.on("disconnect",
+    // (reason) => {     if (reason === "io server disconnect") {
+    // socket.connect();     } });
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -68,6 +53,10 @@ const index = ({
         setArrivalMessage] = useState({});
     const [image,
         setImage] = useState(null)
+    const [isPicketVisible,
+        setIsPicketVisible] = useState(false)
+    const [currentEmoji,
+        setCurrentEmoji] = useState(null)
 
     const hanldeImagetoBase64 = (image) => {
         return new Promise((resolve, reject) => {
@@ -102,8 +91,7 @@ const index = ({
                     fileURL: url
                 };
 
-                socket
-                    .emit("sendMessage", message);
+                socket.emit("sendMessage", message);
                 setNewMessage(message)
                 await postRequest("/privateChat/newPrivateMessage", message);
             })
@@ -124,8 +112,7 @@ const index = ({
                         fileURL: base64
                     }
 
-                    socket
-                        .emit("sendMessage", message);
+                    socket.emit("sendMessage", message);
                     setNewMessage(frontMessage);
                     await postRequest("/privateChat/newPrivateMessage", message);
                 });
@@ -141,8 +128,7 @@ const index = ({
             };
 
             setNewMessage(message)
-            socket
-                .emit("sendMessage", message);
+            socket.emit("sendMessage", message);
             await postRequest("/privateChat/newPrivateMessage", message);
         }
         setMessageInput("");
@@ -150,33 +136,36 @@ const index = ({
     };
 
     useEffect(() => {
-        if(socket) {
+        if (socket) {
             socket.on("getMessage", ({sender, content, fileURL, receiver}) => {
-                    const data = {
-                        sender: {
-                            _id: sender
-                        },
-                        receiver
-                    }
-    
-                    if (fileURL) {
-                        data.fileURL = fileURL
-                    }
-                    if (content) {
-                        data.content = content
-                    }
-    
-                    setSocketMessage(data)
-                    setArrivalMessage(data)
-                })
+                const data = {
+                    sender: {
+                        _id: sender
+                    },
+                    receiver
+                }
 
-                socket.emit("addUser", user._id);
+                if (fileURL) {
+                    data.fileURL = fileURL
+                }
+                if (content) {
+                    data.content = content
+                }
+
+                setSocketMessage(data)
+                setArrivalMessage(data)
+            })
+
+            socket.emit("addUser", user._id);
         }
     }, [socket])
 
     useEffect(() => {
-        const socketIO = io("http://localhost:3001", { timeout: 60000, autoConnect: false });
-        if(!socket) {
+        const socketIO = io("http://localhost:3001", {
+            timeout: 60000,
+            autoConnect: false
+        });
+        if (!socket) {
             socketIO.connect()
             setSocket(socketIO)
         }
@@ -186,10 +175,7 @@ const index = ({
         }
     }, [])
 
-    // useEffect(() => {
-    //     socket
-    //         .emit("addUser", user._id);
-    // }, []);
+    // useEffect(() => {     socket         .emit("addUser", user._id); }, []);
 
     useEffect(() => {
         if (conversation && arrivalMessage && conversation
@@ -223,12 +209,20 @@ const index = ({
         }
     }
 
+    useEffect(() => {
+        if (currentEmoji) {
+            setMessageInput(prev => prev + currentEmoji)
+        }
+    }, [currentEmoji])
+
     return !conversation
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
                     className="bg-gray-100 dark:bg-black opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
-                    <div className="text-end w-full flex justify-end" onClick={() => setOpenSidebar(prev => !prev)}>
+                    <div
+                        className="text-end w-full flex justify-end"
+                        onClick={() => setOpenSidebar((prev) => !prev)}>
                         <RxHamburgerMenu size={35}/>
                     </div>
                 </div>
@@ -273,7 +267,7 @@ const index = ({
                 </div>
                 <div
                     ref={chatRef}
-                    className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation">
+                    className="flex-1 px-6  flex flex-col bg-[#F4F3FC] dark:bg-black overflow-scroll max-h-[80vh] scrollbar-hide z-10 conversation relative">
                     {messages
                         ?.map((message) => {
                             const {_id, sender, content, fileURL, timestamps} = message;
@@ -293,7 +287,18 @@ const index = ({
                 </div>
                 <form
                     onSubmit={handleSendMessage}
-                    className="flex items-center mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC] dark:bg-black/50">
+                    className={`flex items-end mt-auto px-3 sm:px-6 py-5 bg-[#F4F3FC] dark:bg-black/50 relative overflow-visible ${isPicketVisible && "h-[520px]"}`}>
+                    <div
+                        className={isPicketVisible
+                        ? `block absolute top-[5px] right-6`
+                        : "hidden"}>
+                        <Picker
+                            data={data}
+                            previewPosition="none"
+                            onEmojiSelect={(e) => {
+                            setCurrentEmoji(e.native)
+                        }}/>
+                    </div>
                     <div
                         className="flex items-center gap-2 sm:gap-4 pr-2 sm:pr-4 flex-1 h-[50px] rounded-tl-md rounded-bl-md overflow-hidden bg-white">
                         <input
@@ -312,7 +317,10 @@ const index = ({
                                 onClick={() => imgRef.current.click()}
                                 className="cursor-pointer"
                                 size={25}/>
-                            <BsEmojiSmile size={25}/>
+                            <BsEmojiSmile
+                                onClick={() => setIsPicketVisible(!isPicketVisible)}
+                                className="cursor-pointer"
+                                size={25}/>
                         </div>
                     </div>
                     <button

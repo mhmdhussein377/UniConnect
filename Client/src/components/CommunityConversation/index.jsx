@@ -283,7 +283,7 @@ const index = ({
                         </div>
                         <div
                             onClick={() => setShowAddMembersModal(true)}
-                            className="py-3 px-4 text-2xl border-2 border-[#CECECE] rounded-md flex items-center gap-4 text-center">
+                            className="py-3 px-4 text-2xl border-2 border-[#CECECE] rounded-md flex items-center gap-4 text-center cursor-pointer">
                             <div className="border-2 p-2 rounded-md bg-primary">
                                 <FiUserPlus className="text-white" size={25}/>
                             </div>
