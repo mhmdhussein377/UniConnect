@@ -23,24 +23,30 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
+    const socket = useRef(io("http://localhost:3001", { timeout: 60000 }));
     const chatRef = useRef();
     const fileRef = useRef();
 
-    useEffect(() => {
-        const handleSocketTimeout = () => {
-            console.error("WebSocket connection timed out")
+    socket.current.on("disconnect", (reason) => {
+        if (reason === "io server disconnect") {
+            socket.connect();
         }
+    });
 
-        socket
-            .current
-            .on("connect_error", (error) => {
-                if (error.message === "timeout") {
-                    handleSocketTimeout()
-                } else {
-                    console.error("WebSocket connection error:", error)
-                }
-            })
+    useEffect(() => {
+        // const handleSocketTimeout = () => {
+        //     console.error("WebSocket connection timed out")
+        // }
+
+        // socket
+        //     .current
+        //     .on("connect_error", (error) => {
+        //         if (error.message === "timeout") {
+        //             handleSocketTimeout()
+        //         } else {
+        //             console.error("WebSocket connection error:", error)
+        //         }
+        //     })
 
         return () => {
             if (socket.current && socket.current.connected) {
@@ -218,7 +224,7 @@ const index = ({
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
-                    className="bg-gray-100 opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
+                    className="bg-gray-100 dark:bg-black opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
                     <div
                         className="text-end w-full flex justify-end"
                         onClick={() => setOpenSidebar((prev) => !prev)}>
@@ -226,7 +232,7 @@ const index = ({
                     </div>
                 </div>
                 <div
-                    className="grow h-full p-8 flex flex-col bg-gray-100 opacity-50 items-center justify-center">
+                    className="grow h-full p-8 flex flex-col bg-gray-100 dark:bg-black dark:text-white opacity-50 items-center justify-center">
                     <span className="text-center text-2xl">
                         Open a Conversation to Start Chatting
                     </span>

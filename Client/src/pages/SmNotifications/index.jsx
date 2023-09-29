@@ -13,10 +13,10 @@ const index = () => {
 
     const getNotifications = async() => {
         const response = await getRequest("/notifications");
-        response && setNotifications(response.notifications.reverse());
+        response && setNotifications(response.notifications);
     };
 
-    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 5000});
+    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 2000});
 
     const handleBackClick = () => {
         navigate(-1)

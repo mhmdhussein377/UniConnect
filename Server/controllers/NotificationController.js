@@ -36,7 +36,7 @@ const GetNotifications = async(req, res) => {
                 .json({message: "User not found"})
         }
 
-        const notifications = await Notification.find({recipient: userId, status: "pending"})
+        const notifications = await Notification.find({recipient: userId, status: "pending"}).populate("sender")
         return res
             .status(200)
             .json({notifications})
@@ -63,11 +63,11 @@ const GetUnreadNotifications = async(req, res) => {
 
         const unreadNotifications = user
             .notifications
-            .filter(noti => noti.isRead === false)
+            .filter(noti => noti.isRead === false && noti.status === "pending")
             .length
 
         return res
-            .status(400)
+            .status(200)
             .json({unreadNotifications: unreadNotifications})
     } catch (error) {
         return res

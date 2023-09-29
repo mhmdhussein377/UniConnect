@@ -13,7 +13,7 @@ import {getRequest, postRequest} from "../../utils/requests";
 import {useQuery} from "react-query";
 import ProfileImage from "./../../assets/ProfilePicture.jpg"
 
-const index = ({profile}) => {
+const index = ({profile, getCommunities}) => {
     const {user} = useContext(AuthContext);
     const {username} = user;
 
@@ -34,10 +34,10 @@ const index = ({profile}) => {
 
     const getNotifications = async() => {
         const response = await getRequest("/notifications");
-        response && setNotifications(response.notifications.reverse());
+        response && setNotifications(response.notifications);
     };
 
-    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 3000});
+    const {data, error, isLoading} = useQuery("myData", getNotifications, {refetchInterval: 2000});
 
     const toggleNotifications = () => {
         setShowNotifications((prev) => !prev);
@@ -178,6 +178,7 @@ const index = ({profile}) => {
                                 <div ref={notificationsRef}>
                                     <div className="max-[740px]:hidden">
                                         <Notifications
+                                            getCommunities={getCommunities}
                                             notifications={notifications}
                                             setNotifications={setNotifications}/>
                                     </div>

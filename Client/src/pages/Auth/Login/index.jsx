@@ -139,7 +139,7 @@ const index = () => {
                 </div>
                 <div className="flex flex-col gap-3">
                     <Button text={"Login"}/>
-                    <div className="min-w-full">
+                    <div className="flex w-full justify-center items-center">
                         <GoogleOAuthProvider
                             clientId="646754230791-n2oto0g1ubdqmlppu7fjib64rdu45qhr.apps.googleusercontent.com">
                             <GoogleLogin

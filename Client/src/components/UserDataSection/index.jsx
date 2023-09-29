@@ -30,9 +30,11 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
     const coverImgRef = useRef()
     const profileImgRef = useRef()
 
+    console.log(user, 'useeer')
+
     useEffect(() => {
         const getFrienship = async() => {
-            const response = await getRequest(`/friendship/${user.username}`);
+            const response = await getRequest(`/friendship/${user?.username}`);
             let friendship = response.friendship[0];
             setFriendship(friendship);
 

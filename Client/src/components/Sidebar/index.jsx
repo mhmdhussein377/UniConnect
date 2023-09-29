@@ -112,7 +112,7 @@ const index = ({
                                     handleSelectedConversation(index, member._id);
                                     setOpenCommunityDetails(false);
                                     setShowUserDetails(false);
-                                    setOpenSidebar(false)
+                                    setOpenSidebar(false);
                                 }}>
                                     <Friend
                                         highlight={selectedConversation
@@ -121,7 +121,9 @@ const index = ({
                                         lastMessage={lastMessage}
                                         messageNum={unreadMessages}
                                         sender={member._id}
-                                        profilePicture={member?.profile?.profileImage}/>
+                                        profilePicture={member
+                                        ?.profile
+                                            ?.profileImage}/>
                                 </div>
                             );
                         }))
@@ -145,7 +147,7 @@ const index = ({
                                     setCommunityId(community.ID);
                                     setOpenCommunityDetails(false);
                                     setShowUserDetails(false);
-                                    setOpenSidebar(false)
+                                    setOpenSidebar(false);
                                 }}>
                                     <Community
                                         highlight={community.ID === selectedCommunity
@@ -189,7 +191,7 @@ const index = ({
                         to={`/profile/${username}`}
                         className="w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center object-cover">
                         <img
-                            className="object-cover"
+                            className="object-cover w-[60px] h-[60px] rounded-full overflow-hidden flex items-center justify-center"
                             src={user
                             ?.profile
                                 ?.profileImage || ProfileImage}

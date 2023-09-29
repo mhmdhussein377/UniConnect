@@ -1,6 +1,6 @@
 import Notification from "./../Notification"
 
-const index = ({showNotifications, notifications, setNotifications}) => {
+const index = ({showNotifications, notifications, setNotifications, getCommunities}) => {
 
     return (
         <div
@@ -9,6 +9,7 @@ const index = ({showNotifications, notifications, setNotifications}) => {
                 {notifications.length > 0
                     ? (notifications.map((notification, index) => (<Notification
                         key={index}
+                        getCommunities={getCommunities}
                         notification={notification}
                         setNotifications={setNotifications}
                         showNotifications={showNotifications}/>)))

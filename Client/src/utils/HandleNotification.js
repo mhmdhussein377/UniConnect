@@ -14,16 +14,18 @@ export const handleRequestAction = async(e, actionType, type, sender, community,
 
     let endpoint;
 
+    console.log(sender)
+
     switch (type) {
         case "friend request":
             endpoint = actionType === "accept"
-                ? `/friendship/accept-friend-request/${sender}`
-                : `/friendship/reject-friend-request/${sender}`;
+                ? `/friendship/accept-friend-request/${sender._id}`
+                : `/friendship/reject-friend-request/${sender._id}`;
             break;
         case "community join request":
             endpoint = actionType === "accept"
-                ? `/community/accept-community-join-request/${community}/${sender}`
-                : `/community/reject-community-join-request/${community}/${sender}`;
+                ? `/community/accept-community-join-request/${community}/${sender._id}`
+                : `/community/reject-community-join-request/${community}/${sender._id}`;
             break;
         case "community invite request":
             endpoint = actionType === "accept"

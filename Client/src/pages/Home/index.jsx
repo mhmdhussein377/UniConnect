@@ -80,19 +80,20 @@ const index = () => {
         getPrivateConversations()
     }, [messages, socketMessage])
 
-    useEffect(() => {
-        const getCommunities = async() => {
-            const response = await getRequest(`/community/communitiesDetails`);
-            response && response.sort((conv1, conv2) => {
-                const timestamp1 = new Date(conv1.lastMessage
-                    ?.createdAt).getTime();
-                const timestamp2 = new Date(conv2.lastMessage
-                    ?.createdAt).getTime();
+    const getCommunities = async() => {
+        const response = await getRequest(`/community/communitiesDetails`);
+        response && response.sort((conv1, conv2) => {
+            const timestamp1 = new Date(conv1.lastMessage
+                ?.createdAt).getTime();
+            const timestamp2 = new Date(conv2.lastMessage
+                ?.createdAt).getTime();
 
-                return timestamp2 - timestamp1;
-            });
-            setCommunities(response)
-        }
+            return timestamp2 - timestamp1;
+        });
+        setCommunities(response);
+    };
+
+    useEffect(() => {
         getCommunities()
     }, [newGroupMessage, groupSocketMessage])
 
@@ -116,7 +117,9 @@ const index = () => {
         const getPrivateConversationMessages = async() => {
             const data = {
                 userOne: user._id,
-                userTwo: conversation?.member?._id
+                userTwo: conversation
+                    ?.member
+                        ?._id
             }
             const response = await postRequest(`/privateChat/privateConversationMessages`, data)
             setMessages(response)
@@ -126,7 +129,7 @@ const index = () => {
 
     return (
         <div className="h-screen max-h-screen">
-            <Header/>
+            <Header getCommunities={getCommunities}/>
             <div className="flex relative home-bottom dark:bg-black dark:text-white">
                 <Sidebar
                     setType={setType}
@@ -141,8 +144,7 @@ const index = () => {
                     communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> 
-                    {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}

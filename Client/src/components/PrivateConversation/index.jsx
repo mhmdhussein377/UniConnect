@@ -27,33 +27,40 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext);
-    const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
+    // const socket = useRef(io("http://localhost:3001", {timeout: 60000}));
+    const [socket, setSocket] = useState(null)
     const chatRef = useRef();
     const imgRef = useRef()
 
-    useEffect(() => {
-        const handleSocketTimeout = () => {
-            console.error("WebSocket connection timed out");
-        };
+    // useEffect(() => {
+    //     // const handleSocketTimeout = () => {
+    //     //     console.error("WebSocket connection timed out");
+    //     // };
 
-        socket
-            .current
-            .on("connect_error", (error) => {
-                if (error.message === "timeout") {
-                    handleSocketTimeout();
-                } else {
-                    console.error("WebSocket connection error:", error);
-                }
-            });
+    //     // socket
+    //     //     .current
+    //     //     .on("connect_error", (error) => {
+    //     //         if (error.message === "timeout") {
+    //     //             handleSocketTimeout();
+    //     //         } else {
+    //     //             console.error("WebSocket connection error:", error);
+    //     //         }
+    //     //     });
 
-        return () => {
-            if (socket.current && socket.current.connected) {
-                socket
-                    .current
-                    .close()
-            }
-        }
-    }, []);
+    //     return () => {
+    //         if (socket.current && socket.current.connected) {
+    //             socket
+    //                 .current
+    //                 .close()
+    //         }
+    //     }
+    // }, []);
+
+    // socket.current.on("disconnect", (reason) => {
+    //     if (reason === "io server disconnect") {
+    //         socket.connect();
+    //     }
+    // });
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -96,7 +103,6 @@ const index = ({
                 };
 
                 socket
-                    .current
                     .emit("sendMessage", message);
                 setNewMessage(message)
                 await postRequest("/privateChat/newPrivateMessage", message);
@@ -119,7 +125,6 @@ const index = ({
                     }
 
                     socket
-                        .current
                         .emit("sendMessage", message);
                     setNewMessage(frontMessage);
                     await postRequest("/privateChat/newPrivateMessage", message);
@@ -137,7 +142,6 @@ const index = ({
 
             setNewMessage(message)
             socket
-                .current
                 .emit("sendMessage", message);
             await postRequest("/privateChat/newPrivateMessage", message);
         }
@@ -146,33 +150,46 @@ const index = ({
     };
 
     useEffect(() => {
-        socket
-            .current
-            .on("getMessage", ({sender, content, fileURL, receiver}) => {
-                const data = {
-                    sender: {
-                        _id: sender
-                    },
-                    receiver
-                }
+        if(socket) {
+            socket.on("getMessage", ({sender, content, fileURL, receiver}) => {
+                    const data = {
+                        sender: {
+                            _id: sender
+                        },
+                        receiver
+                    }
+    
+                    if (fileURL) {
+                        data.fileURL = fileURL
+                    }
+                    if (content) {
+                        data.content = content
+                    }
+    
+                    setSocketMessage(data)
+                    setArrivalMessage(data)
+                })
 
-                if (fileURL) {
-                    data.fileURL = fileURL
-                }
-                if (content) {
-                    data.content = content
-                }
-                console.log(data, "arriveeed")
-                setSocketMessage(data)
-                setArrivalMessage(data)
-            })
-    }, [])
+                socket.emit("addUser", user._id);
+        }
+    }, [socket])
 
     useEffect(() => {
-        socket
-            .current
-            .emit("addUser", user._id);
-    }, []);
+        const socketIO = io("http://localhost:3001", { timeout: 60000, autoConnect: false });
+        if(!socket) {
+            socketIO.connect()
+            setSocket(socketIO)
+        }
+
+        return () => {
+            socketIO.disconnect()
+        }
+    }, [])
+
+    // useEffect(() => {
+    //     socket
+    //         .emit("addUser", user._id);
+    // }, []);
 
     useEffect(() => {
         if (conversation && arrivalMessage && conversation
@@ -210,13 +227,13 @@ const index = ({
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
-                    className="bg-gray-100 opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
+                    className="bg-gray-100 dark:bg-black opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
                     <div className="text-end w-full flex justify-end" onClick={() => setOpenSidebar(prev => !prev)}>
                         <RxHamburgerMenu size={35}/>
                     </div>
                 </div>
                 <div
-                    className="grow h-full p-8 flex flex-col bg-gray-100 opacity-50 items-center justify-center">
+                    className="grow h-full p-8 flex flex-col bg-gray-100 dark:bg-black dark:text-white opacity-50 items-center justify-center">
                     <span className="text-center text-2xl">
                         Open a Conversation to Start Chatting
                     </span>
