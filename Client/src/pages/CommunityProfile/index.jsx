@@ -72,15 +72,23 @@ const index = () => {
         getCommunity()
     }, [id, user])
 
-    const isMember = (community, user) => community.members.some(member => member._id === user._id)
+    const isMember = (community, user) => community
+        .members
+        .some(member => member._id === user._id)
 
     const isCreator = (community, user) => community.creator._id === user._id
 
-    const isInvited = (community, user) => community.invitedUsers.includes(user._id)
+    const isInvited = (community, user) => community
+        .invitedUsers
+        .includes(user._id)
 
-    const isRequested = (community, user) => community.requestedUsers.some(requestedUser => requestedUser._id === user._id)
+    const isRequested = (community, user) => community
+        .requestedUsers
+        .some(requestedUser => requestedUser._id === user._id)
 
-    const getPrivacyStatus = (community) => community.privacy === "public" ? "public" : "private";
+    const getPrivacyStatus = (community) => community.privacy === "public"
+        ? "public"
+        : "private";
 
     useEffect(() => {
         const {isMember, isInvited, isRequested, privacy} = userStatus;
@@ -185,22 +193,25 @@ const index = () => {
                                     <div className="flex flex-col justify-between gap-2.5">
                                         <div
                                             className={`w-fit ml-auto ${community
-                                            ?.creator?._id === user?._id? "visible" : "invisible"}`}>
+                                            ?.creator
+                                                ?._id === user
+                                                    ?._id
+                                                        ? "visible"
+                                                        : "invisible"}`}>
                                             <HiPencil
                                                 onClick={() => setShowUpdateCommunityModal(true)}
                                                 className="cursor-pointer"
                                                 size={30}/>
                                         </div>
-                                        {buttonText &&
-                                            !userStatus.isCreator && (
-                                                <button
-                                                    disabled={loading}
-                                                    onClick={handleJoinLeaveCommunity}
-                                                    className="bg-primary text-white px-2 py-1.5 rounded-md">
-                                                    {buttonText}
-                                                </button>
-                                            )
-                                        }
+                                        {buttonText && !userStatus.isCreator && (
+                                            <button
+                                                disabled={loading}
+                                                onClick={handleJoinLeaveCommunity}
+                                                className="bg-primary text-white px-2 py-1.5 rounded-md">
+                                                {buttonText}
+                                            </button>
+                                        )
+}
                                     </div>
                                 </div>
                             </div>
@@ -211,12 +222,9 @@ const index = () => {
                         className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
                         {userStatus.isCreator && (
                             <div className="flex flex-col gap-4">
-                                {privacy === "private" && (
-                                    <div className="flex items-center gap-4">
-                                        <Button text="Invite Users" setModal={setShowAddMembersModal}/>
-                                        <Button text="Requested Users" setModal={setShowRequestedUsersModal}/>
-                                    </div>
-                                )}
+                                <div className="flex items-center gap-4">
+                                    <Button text="Invite Users" setModal={setShowAddMembersModal}/> {privacy === "private" && <Button text="Requested Users" setModal={setShowRequestedUsersModal}/>}
+                                </div>
                                 <div className="flex items-center gap-4">
                                     <Button text="Remove members" setModal={setShowKickUsersModal}/>
                                     <Button text="Delete community" setModal={setShowDeleteCommunityModal}/>
@@ -231,7 +239,10 @@ const index = () => {
                                     member={community
                                     ?.creator}/>)
                                 : null}
-                            {members?.length > 0 ? members.map((member, index) => (<Member key={index} member={member}/>)) : null}
+                            {members
+                                ?.length > 0
+                                    ? members.map((member, index) => (<Member key={index} member={member}/>))
+                                    : null}
                         </div>
                     </div>
                 </div>
