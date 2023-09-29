@@ -47,7 +47,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
         <div
             onClick={closeModal}
             className={`flex items-center justify-center absolute top-0 left-0 w-full h-screen bg-black/60 z-[20] px-4`}>
-            <div 
+            <div
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] min-h-[400px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
@@ -69,22 +69,28 @@ const index = ({setShowAddMembersModal, communityId}) => {
                         className="border-b-2 border-b-primary outline-none px-2 py-1.5 placeholder:text-lg"/>
                 </div>
                 <div
-                    className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide mb-5 ">
+                    className="flex flex-col gap-2 max-h-[300px] overflow-scroll scrollbar-hide mb-5">
                     {searchedUsers.length > 0
-                        ? searchedUsers.map((user, index) => (<Member
+                        ? (searchedUsers.map((user, index) => (<Member
                             communityId={communityId}
                             key={index}
                             invite={true}
                             member={user}
-                            inModal={true}/>))
-                        : friends.map((friend, index) => {
-                            return (<Member
+                            inModal={true}/>)))
+                        : friends.length > 0
+                            ? (friends.map((friend, index) => (<Member
                                 communityId={communityId}
                                 key={index}
                                 invite={true}
                                 member={friend}
-                                inModal={true}/>);
-                        })}
+                                inModal={true}/>)))
+                            : (
+                                <div className="text-center h-full mt-[100px] font-medium text-xl">
+                                    {debouncedValue
+                                        ? "No matching users found."
+                                        : "No friends to invite."}
+                                </div>
+                            )}
                 </div>
             </div>
         </div>
