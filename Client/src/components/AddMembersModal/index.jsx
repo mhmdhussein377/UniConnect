@@ -52,7 +52,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
                 className="bg-white w-full max-w-[550px] min-h-[400px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                        <label className="text-lg font-medium" htmlFor="add-members">
+                        <label className="text-lg font-medium text-primary" htmlFor="add-members">
                             Add members
                         </label>
                         <MdOutlineClose
@@ -85,7 +85,7 @@ const index = ({setShowAddMembersModal, communityId}) => {
                                 member={friend}
                                 inModal={true}/>)))
                             : (
-                                <div className="text-center h-full mt-[100px] font-medium text-xl">
+                                <div className="text-center h-full mt-[100px] font-medium text-xl text-primary">
                                     {debouncedValue
                                         ? "No matching users found."
                                         : "No friends to invite."}

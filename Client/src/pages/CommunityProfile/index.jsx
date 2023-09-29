@@ -170,7 +170,7 @@ const index = () => {
                                 </div>
                                 <div className="flex items-center w-full gap-3">
                                     <div className="flex justify-between flex-1 flex-col gap-2">
-                                        <div className="text-2xl font-medium">
+                                        <div className="text-2xl font-medium text-primary">
                                             {community.name}
                                         </div>
                                         <div className="flex items-center gap-1">
@@ -218,12 +218,12 @@ const index = () => {
                                     </div>
                                 )}
                                 <div className="flex items-center gap-4">
-                                    <Button text="Kick members" setModal={setShowKickUsersModal}/>
+                                    <Button text="Remove members" setModal={setShowKickUsersModal}/>
                                     <Button text="Delete community" setModal={setShowDeleteCommunityModal}/>
                                 </div>
                             </div>
                         )}
-                        <div className="font-medium text-lg">Members</div>
+                        <div className="font-medium text-lg text-primary">Members</div>
                         <div className="flex flex-col gap-2">
                             {community.creator
                                 ? (<Member

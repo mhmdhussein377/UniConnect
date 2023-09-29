@@ -41,8 +41,8 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                    <label className="text-lg font-medium" htmlFor="community-name">
-                        Kick members
+                    <label className="text-lg font-medium text-primary" htmlFor="community-name">
+                        Remove members
                     </label>
                     <MdOutlineClose
                         onClick={() => setShowKickUsersModal(false)}
@@ -63,7 +63,7 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
                         disabled={isDisabled}
                         onClick={handleKickUsers}
                         className="py-2 px-12 rounded-md bg-primary text-white font-medium">
-                        Kick
+                        Remove
                     </button>
                 </div>
             </div>

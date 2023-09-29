@@ -11,7 +11,7 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
     return (
         <div
             className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
-            <div className="text-xl font-semibold flex items-center justify-between">
+            <div className="text-xl font-semibold flex items-center justify-between text-primary">
                 {text}
             </div>
             <div className="flex flex-col gap-4">

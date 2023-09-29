@@ -38,7 +38,7 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                    <label className="text-lg font-medium" htmlFor="add-members">
+                    <label className="text-lg font-medium text-primary" htmlFor="remove-members">
                         Delete community
                     </label>
                     <MdOutlineClose
@@ -49,9 +49,10 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
                 <div className="flex flex-col gap-4">
                     <p className="">
                         Enter the name of the community "
-                        <span className="font-semibold text-lg">{communityName}</span>" to delete the community
+                        <span className="font-semibold text-lg text-primary">{communityName}</span>" to delete the community
                     </p>
                     <input
+                        id="remove-members"
                         className="border-b-2 border-b-primary outline-none px-2 py-1.5 placeholder:text-lg"
                         type="text"
                         value={input}

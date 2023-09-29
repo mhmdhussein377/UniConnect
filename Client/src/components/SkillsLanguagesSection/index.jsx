@@ -19,7 +19,7 @@ const index = ({
         <div
             className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
             <div className="text-xl font-semibold flex items-center justify-between">
-                <div>{text}</div>
+                <div className="text-primary">{text}</div>
                 {currentUser && (<HiPencil
                     onClick={() => setShowModal(true)}
                     className="cursor-pointer"

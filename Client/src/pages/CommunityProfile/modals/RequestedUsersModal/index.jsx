@@ -53,7 +53,7 @@ const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, commu
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                    <label className="text-lg font-medium" htmlFor="community-name">
+                    <label className="text-lg font-medium text-primary" htmlFor="community-name">
                         Accept requested users
                     </label>
                     <MdOutlineClose

@@ -36,7 +36,7 @@ const index = ({setShowEducationalInfoModal}) => {
                 ref={boxRef}
                 className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px]">
                 <div className="flex items-center justify-between pb-2 border-b-2">
-                    <div className="text-lg font-semibold">
+                    <div className="text-lg font-semibold text-primary">
                         Edit educational information
                     </div>
                     <div

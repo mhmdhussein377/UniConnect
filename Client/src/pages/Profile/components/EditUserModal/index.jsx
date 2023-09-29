@@ -38,7 +38,7 @@ const index = ({setShowEditUserModal}) => {
                 ref={boxRef}
                 className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[650px]">
                 <div className="flex items-center justify-between pb-2 border-b-2">
-                    <div className="text-lg font-semibold">Edit your profile data</div>
+                    <div className="text-lg font-semibold text-primary">Edit your profile data</div>
                     <div
                         onClick={() => setShowEditUserModal(false)}
                         className="bg-gray-200 w-[35px] h-[35px] flex items-center justify-center rounded-full cursor-pointer">

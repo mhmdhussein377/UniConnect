@@ -30,8 +30,6 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
     const coverImgRef = useRef()
     const profileImgRef = useRef()
 
-    console.log(user, 'useeer')
-
     useEffect(() => {
         const getFrienship = async() => {
             const response = await getRequest(`/friendship/${user?.username}`);
@@ -222,7 +220,7 @@ const index = ({setShowEditUserModal, user, isCurrentUser, setFriends, friends})
                         size={30}/>
                 </div>
                 <div className="mt-8 flex flex-col gap-1.5">
-                    <div className="text-xl font-semibold">{user
+                    <div className="text-xl font-semibold text-primary">{user
                             ?.name}</div>
                     {user
                         ?.profile
