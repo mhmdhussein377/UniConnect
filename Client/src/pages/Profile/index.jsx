@@ -7,6 +7,7 @@ import {useContext, useEffect, useState} from "react"
 import {AuthContext} from "./../../Context/AuthContext"
 import ShowCommunities from "./../../components/ShowCommunites"
 import ShowFriends from "./../../components/ShowFriends"
+import EditHobbiesModal from "./components/EditHobbiesModal"
 
 // MODALS
 import EducationalModal from './components/EducationalModal'
@@ -15,7 +16,6 @@ import LanguagesModal from "./components/LanguagesModal"
 import SkillsModal from "./components/SkillsModal"
 import {useParams} from "react-router-dom"
 import {getRequest} from "../../utils/requests"
-import axios from "axios"
 
 const index = () => {
 
@@ -28,6 +28,7 @@ const index = () => {
         setShowEditUserModal] = useState(false)
     const [showLanguagesModal,
         setShowLanguagesModal] = useState(false)
+    const [showHobbiesModal, setShowHobbiesModal] = useState(false)
     const [showSkillsModal,
         setShowSkillsModal] = useState(false);
     const [joinedCommunities,
@@ -79,14 +80,14 @@ const index = () => {
                             ?.usrname === username}
                             emptyHeadline="Your multilingual talengts await."/>
                         <SkillsLanguagesSection
-                            // setShowModal={setShowLanguagesModal}
+                            setShowModal={setShowHobbiesModal}
                             text="Hobbies"
                             data={hobbies}
                             maxDataToShow={10}
                             currentUser={user
                             ?.usrname === username}
                             emptyHeadline="No hobbies listed"/> 
-                            {createdCommunities
+                        {createdCommunities
                             ?.length > 0 && (<ShowCommunities
                                 withoutUsername={true}
                                 text={"Created communities"}
@@ -115,6 +116,7 @@ const index = () => {
             {showLanguagesModal && (<LanguagesModal
                 languages={languages}
                 setShowLanguagesModal={setShowLanguagesModal}/>)}
+            {showHobbiesModal && <EditHobbiesModal hobbies={hobbies} setShowHobbiesModal={setShowHobbiesModal} />}
             {showSkillsModal && (<SkillsModal skills={skills} setShowSkillsModal={setShowSkillsModal}/>)}
         </div>
     );
