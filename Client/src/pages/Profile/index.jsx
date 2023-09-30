@@ -28,7 +28,8 @@ const index = () => {
         setShowEditUserModal] = useState(false)
     const [showLanguagesModal,
         setShowLanguagesModal] = useState(false)
-    const [showHobbiesModal, setShowHobbiesModal] = useState(false)
+    const [showHobbiesModal,
+        setShowHobbiesModal] = useState(false)
     const [showSkillsModal,
         setShowSkillsModal] = useState(false);
     const [joinedCommunities,
@@ -37,7 +38,14 @@ const index = () => {
         setFriends] = useState([])
 
     let {createdCommunities} = user
-    let {skills, languages, bio, university, major, hobbies} = user.profile
+    let {
+        skills,
+        languages,
+        bio,
+        university,
+        major,
+        hobbies
+    } = user.profile
 
     useEffect(() => {
         const getUser = async() => {
@@ -86,8 +94,7 @@ const index = () => {
                             maxDataToShow={10}
                             currentUser={user
                             ?.usrname === username}
-                            emptyHeadline="No hobbies listed"/> 
-                        {createdCommunities
+                            emptyHeadline="Looks like hobbies are still on vacation here."/>{" "} {createdCommunities
                             ?.length > 0 && (<ShowCommunities
                                 withoutUsername={true}
                                 text={"Created communities"}
@@ -116,7 +123,7 @@ const index = () => {
             {showLanguagesModal && (<LanguagesModal
                 languages={languages}
                 setShowLanguagesModal={setShowLanguagesModal}/>)}
-            {showHobbiesModal && <EditHobbiesModal hobbies={hobbies} setShowHobbiesModal={setShowHobbiesModal} />}
+            {showHobbiesModal && (<EditHobbiesModal hobbies={hobbies} setShowHobbiesModal={setShowHobbiesModal}/>)}
             {showSkillsModal && (<SkillsModal skills={skills} setShowSkillsModal={setShowSkillsModal}/>)}
         </div>
     );

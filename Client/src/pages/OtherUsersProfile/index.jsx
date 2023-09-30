@@ -17,8 +17,10 @@ const index = () => {
     const {user: currentUser} = useContext(AuthContext)
     const [user,
         setUser] = useState({})
-    const [suggestedUsers, setSuggestedUsers] = useState([])
-    const [friends, setFriends] = useState([])
+    const [suggestedUsers,
+        setSuggestedUsers] = useState([])
+    const [friends,
+        setFriends] = useState([])
 
     useEffect(() => {
         const getUser = async() => {
@@ -41,7 +43,8 @@ const index = () => {
             response && setSuggestedUsers(response)
         }
         getSuggestedUsers()
-    }, [user?._id])
+    }, [user
+            ?._id])
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -61,26 +64,55 @@ const index = () => {
                                     data={user
                                     ?.profile
                                         ?.bio}/>}
-                        {user
-                            ?.profile
-                                ?.skills.length > 0 && (<SkillsLanguagesSection
-                                    text="Skills"
-                                    data={user
-                                    ?.profile
-                                        ?.skills}
-                                    maxDataToShow={4}
-                                    currentUser={user.username === currentUser.username}
-                                    emptyHeadline="Your skills will shine here."/>)}
-                        {user
-                            ?.profile
-                                ?.languages.length > 0 && (<SkillsLanguagesSection
-                                    text="Languages"
-                                    data={user
-                                    ?.profile
-                                        ?.languages}
-                                    maxDataToShow={4}
-                                    currentUser={user.username === currentUser.username}
-                                    emptyHeadline="Your multilingual talengts await."/>)}
+                        {< SkillsLanguagesSection
+                        text = "Skills"
+                        data = {
+                            user
+                                ?.profile
+                                    ?.skills
+                        }
+                        maxDataToShow = {
+                            10
+                        }
+                        currentUser = {
+                            false
+                        }
+                        emptyHeadline = "No skills found, but this user's got mad mysteries and hidden talents!"
+                        />}
+                        {< SkillsLanguagesSection
+                        text = "Languages"
+                        data = {
+                            user
+                                ?.profile
+                                    ?.languages
+                        }
+                        maxDataToShow = {
+                            10
+                        }
+                        currentUser = {
+                            false
+                        }
+                        emptyHeadline = "User hasn't told us what languages they speak yet."
+                        />}
+                        {< SkillsLanguagesSection
+                        text = {
+                            "Hobbies"
+                        }
+                        data = {
+                            user
+                                ?.profile
+                                    ?.hobbies
+                        }
+                        maxDataToShow = {
+                            10
+                        }
+                        currentUser = {
+                            false
+                        }
+                        emptyHeadline = {
+                            "Still exploring the hobby universe."
+                        }
+                        />}
                         {createdCommunities
                             ?.length > 0 && (<ShowCommunities
                                 withoutUsername={true}
@@ -96,19 +128,26 @@ const index = () => {
                     <div className="lg:flex-[3] xl:flex-[4.5] flex flex-col gap-6">
                         <EducationalInfo
                             currentUser={user.username === currentUser.username}
-                            universtiy={user?.profile?.universtiy}
-                            major={user?.profile?.major}
-                            emptyHeadline="No educational background available"/>
-                        {friends && <ShowFriends friends={friends || []}/>} 
-                        {suggestedUsers.length > 0 && <div
-                            className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
-                            <div className="flex flex-col gap-3">
-                                <div className="font-semibold text-lg">Suggested friends</div>
-                                <div className="flex flex-col gap-4">
-                                    {suggestedUsers.map((friend, index) => (<Member key={index} member={friend}/>))}
+                            universtiy={user
+                            ?.profile
+                                ?.universtiy}
+                            major={user
+                            ?.profile
+                                ?.major}
+                            emptyHeadline="No educational background available"/>{" "} {friends && <ShowFriends friends={friends || []}/>}
+                        {suggestedUsers.length > 0 && (
+                            <div
+                                className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
+                                <div className="flex flex-col gap-3">
+                                    <div className="font-semibold text-lg">
+                                        Suggested friends
+                                    </div>
+                                    <div className="flex flex-col gap-4">
+                                        {suggestedUsers.map((friend, index) => (<Member key={index} member={friend}/>))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>}
+                        )}
                     </div>
                 </div>
             </div>
