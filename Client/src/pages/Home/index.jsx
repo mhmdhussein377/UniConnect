@@ -127,6 +127,8 @@ const index = () => {
         getPrivateConversationMessages()
     }, [conversation, user._id, newMessage])
 
+    console.log(openSidebar, "openSidebarrrr")
+
     return (
         <div className="h-screen max-h-screen">
             <Header getCommunities={getCommunities}/>
@@ -148,6 +150,7 @@ const index = () => {
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}
+                    openSidebar={openSidebar}
                     communityInfo={selectedCommunity}
                     setNewGroupMessage={setNewGroupMessage}
                     setGroupSocketMessage={setGroupSocketMessage}/>)}
@@ -156,6 +159,7 @@ const index = () => {
                     setOpenSidebar={setOpenSidebar}
                     setShowUserDetails={setShowUserDetails}
                     conversation={conversation}
+                    openSidebar={openSidebar}
                     messages={messages}
                     setNewMessage={setNewMessage}
                     setConversationMessages={setMessages}/>)}

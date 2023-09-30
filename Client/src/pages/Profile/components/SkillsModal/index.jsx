@@ -65,7 +65,7 @@ const index = ({setShowSkillsModal, skills}) => {
                     </form>
                     {selectedSkills.length > 0 && (
                         <div
-                            className="flex items-center flex-wrap gap-4 py-3.5 max-h-[300px] overflow-y-scroll overflow-x-hidden">
+                            className="flex items-center flex-wrap gap-4 py-3.5 max-h-[300px] overflow-y-scroll overflow-x-hidden scrollbar-hide">
                             {selectedSkills.map((skill, index) => (<Skill
                                 index={index}
                                 key={index}

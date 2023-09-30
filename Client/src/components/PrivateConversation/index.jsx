@@ -25,7 +25,8 @@ const index = ({
     messages,
     setNewMessage,
     setConversationMessages,
-    setSocketMessage
+    setSocketMessage,
+    openSidebar
 }) => {
 
     const {user} = useContext(AuthContext);
@@ -39,12 +40,11 @@ const index = ({
     // console.error("WebSocket connection timed out");     // };     // socket //
     // .current     //     .on("connect_error", (error) => {     // if
     // (error.message === "timeout") {     //             handleSocketTimeout(); //
-    //       } else {     //             console.error("WebSocket connection
-    // error:", error);     //         }     //     });     return () => { if
-    // (socket.current && socket.current.connected) {             socket .current
-    //           .close()         }     } }, []); socket.current.on("disconnect",
-    // (reason) => {     if (reason === "io server disconnect") { socket.connect();
-    //    } });
+    //      } else {     //             console.error("WebSocket connection error:",
+    // error);     //         }     //     });     return () => { if (socket.current
+    // && socket.current.connected) {             socket .current           .close()
+    //         }     } }, []); socket.current.on("disconnect", (reason) => {     if
+    // (reason === "io server disconnect") { socket.connect();    } });
 
     const [messageInput,
         setMessageInput] = useState("");
@@ -227,12 +227,15 @@ const index = ({
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
-                    className="bg-gray-100 dark:bg-black opacity-50 p-4 cursor-pointer flex flex-end text-end lg:hidden">
-                    <div
-                        className="text-end w-full flex justify-end"
-                        onClick={() => setOpenSidebar((prev) => !prev)}>
-                        <RxHamburgerMenu size={35}/>
-                    </div>
+                    className={`bg-gray-100 w-full flex items-center ${openSidebar
+                    ? "justify-end"
+                    : "justify-start"} dark:bg-black opacity-50 p-4 lg:hidden`}>
+                    <RxHamburgerMenu
+                        onClick={() => setOpenSidebar(openSidebar
+                        ? false
+                        : true)}
+                        className="cursor-pointer"
+                        size={35}/>
                 </div>
                 <div
                     className="grow h-full p-8 flex flex-col bg-gray-100 dark:bg-black dark:text-white opacity-50 items-center justify-center">
