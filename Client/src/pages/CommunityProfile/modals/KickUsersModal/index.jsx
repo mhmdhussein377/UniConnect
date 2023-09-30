@@ -39,7 +39,7 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
             className="flex items-center justify-center absolute top-0 left-0 w-full h-screen bg-black/60 z-[20] px-4">
             <div
                 ref={boxRef}
-                className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4">
+                className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4 dark:bg-grayMedium">
                 <div className="flex items-center justify-between">
                     <label className="text-lg font-medium text-primary" htmlFor="community-name">
                         Remove members

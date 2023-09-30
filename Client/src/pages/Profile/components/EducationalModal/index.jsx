@@ -50,17 +50,15 @@ const index = ({setShowEducationalInfoModal}) => {
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowEducationalInfoModal);
 
-    console.log(universities, "uniiiiiis")
-
     return (
         <div
             onClick={closeModal}
-            className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen">
+            className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen dark:bg-black/60">
             <form
                 onSubmit={handleEditEducationalInfo}
                 ref={boxRef}
-                className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px]">
-                <div className="flex items-center justify-between pb-2 border-b-2">
+                className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px] dark:bg-grayMedium">
+                <div className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
                     <div className="text-lg font-semibold text-primary">
                         Edit educational information
                     </div>

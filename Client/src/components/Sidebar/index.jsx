@@ -215,13 +215,13 @@ const index = ({
                                 className="absolute -top-[100px] right-0 p-2 rounded-md bg-white settings text-xl">
                                 <Link
                                     to={`/profile/${username}`}
-                                    className="pb-2 border-b-2 flex gap-2 items-center">
+                                    className="pb-2 border-b-2 flex gap-2 items-center dark:text-black">
                                     <AiOutlineUser size={25}/>
                                     Profile
                                 </Link>
                                 <div
                                     onClick={handleLogout}
-                                    className="pt-2 flex items-center gap-2 cursor-pointer">
+                                    className="pt-2 flex items-center gap-2 cursor-pointer dark:text-black">
                                     <BiLogOut size={25}/>
                                     Logout
                                 </div>

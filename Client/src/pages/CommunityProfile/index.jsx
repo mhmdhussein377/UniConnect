@@ -165,11 +165,11 @@ const index = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>
-            <div className="bg-gray-100 py-6 h-full flex-1">
+            <div className="bg-gray-100 py-6 h-full flex-1 dark:bg-grayMedium">
                 <div
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col min-[980px]:flex-row gap-4">
                     <div className="flex-[7] flex flex-col gap-6">
-                        <div className="bg-white drop-shadow-lg rounded-md p-4 flex flex-col">
+                        <div className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col">
                             <div className="flex items-center gap-2 w-full">
                                 <div>
                                     {community.privacy === "public"
@@ -219,7 +219,7 @@ const index = () => {
                         <About data={community.description}/>
                     </div>
                     <div
-                        className="flex-[5] bg-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
+                        className="flex-[5] bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3 h-fit max-h-[500px] overflow-scroll overflow-x-hidden scrollbar-hide">
                         {userStatus.isCreator && (
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-4">

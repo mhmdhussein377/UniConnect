@@ -12,8 +12,8 @@ const index = ({name, privacy, id, creatorUsername, withoutUsername}) => {
                 <div
                     className="w-[45px] h-[45px] rounded-full flex items-center justify-center overflow-hidden bg-gray-200">
                     {privacy === "public"
-                        ? <BiHash size={25}/>
-                        : <FiLock size={25}/>}
+                        ? <BiHash className="dark:text-black" size={25}/>
+                        : <FiLock className="dark:text-black" size={25}/>}
                 </div>
                 <div>
                     <div className="font-medium">{name}</div>

@@ -29,7 +29,7 @@ export default {
         grayMedium: "#ECEFF4",
         grayHard: "#B3B8C7",
         white: "#FFFFFF",
-        black: "#000000",
+        black: "#0E0E10",
       },
     },
   },

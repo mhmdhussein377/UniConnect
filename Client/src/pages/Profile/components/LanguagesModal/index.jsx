@@ -45,11 +45,11 @@ const index = ({setShowLanguagesModal, languages}) => {
     return (
         <div
             onClick={closeModal}
-            className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen">
+            className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 dark:bg-black/60 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen">
             <div
                 ref={boxRef}
-                className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px]">
-                <div className="flex items-center justify-between pb-2 border-b-2">
+                className="flex flex-col gap-6 p-4 bg-white dark:bg-grayMedium rounded-md w-full max-w-[500px]">
+                <div className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
                     <div className="text-lg font-semibold text-primary">Edit languages</div>
                     <div
                         onClick={() => setShowLanguagesModal(false)}
@@ -64,7 +64,7 @@ const index = ({setShowLanguagesModal, languages}) => {
                         </label>
                         <div
                             onClick={() => setShowLanguagesList((prev) => !prev)}
-                            className="p-2 rounded-md border-2 flex items-center justify-between cursor-pointer select-none">
+                            className="p-2 rounded-md border-2 dark:border-black flex items-center justify-between cursor-pointer select-none">
                             Select languages
                             <div className="flex items-center justify-center">
                                 {showLanguagesList
@@ -84,7 +84,7 @@ const index = ({setShowLanguagesModal, languages}) => {
                         )}
                         <div className="flex items-center flex-wrap gap-2 mt-2">
                             {selectedLanguages.map((lang, index) => (
-                                <div className="py-1 px-4 rounded-md border-2" key={index}>
+                                <div className="py-1 px-4 rounded-md border-2 dark:border-black" key={index}>
                                     {lang}
                                 </div>
                             ))}

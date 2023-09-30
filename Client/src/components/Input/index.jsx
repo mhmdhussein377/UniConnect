@@ -17,7 +17,7 @@ const index = ({label, handleChange, value, name, close, setUniversities}) => {
                     className="p-2 rounded-md border-2 outline-none"
                     type="text"
                     value={value}/>)} */}
-                    <div className="w-full flex items-center p-2 rounded-md border-2 outline-none">
+                    <div className="w-full flex items-center p-2 rounded-md border-2 dark:border-black outline-none">
                         <input
                             id={label}
                             ref={inputRef}

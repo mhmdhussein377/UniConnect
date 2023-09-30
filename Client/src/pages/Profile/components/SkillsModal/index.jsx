@@ -42,11 +42,11 @@ const index = ({setShowSkillsModal, skills}) => {
     return (
         <div
             onClick={closeModal}
-            className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2  overflow-hidden max-h-screen">
+            className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 dark:bg-black/60 z-50 flex items-center justify-center px-2  overflow-hidden max-h-screen">
             <div
                 ref={boxRef}
-                className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[650px]">
-                <div className="flex items-center justify-between pb-2 border-b-2">
+                className="flex flex-col gap-6 p-4 bg-white dark:bg-grayMedium rounded-md w-full max-w-[650px]">
+                <div className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
                     <div className="text-lg font-semibold text-primary">Edit your skills</div>
                     <div
                         onClick={() => setShowSkillsModal(false)}
@@ -55,9 +55,9 @@ const index = ({setShowSkillsModal, skills}) => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <form onSubmit={handleAddSkill} className="flex gap-2 p-2 rounded-md border-2">
+                    <form onSubmit={handleAddSkill} className="flex gap-2 p-2 rounded-md border-2 dark:border-black">
                         <input
-                            className="placeholder:text-gray-500 font-medium flex-1 outline-none"
+                            className="placeholder:text-gray-500 font-medium flex-1 outline-none bg-transparent"
                             type="text"
                             placeholder="Add skills"
                             value={skillInput}
@@ -69,6 +69,7 @@ const index = ({setShowSkillsModal, skills}) => {
                             {selectedSkills.map((skill, index) => (<Skill
                                 index={index}
                                 key={index}
+                                inModal={true}
                                 skill={skill}
                                 remove={true}
                                 handleRemoveSkill={handleRemoveSkill}/>))}

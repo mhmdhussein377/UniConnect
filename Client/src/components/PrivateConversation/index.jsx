@@ -330,7 +330,7 @@ const index = ({
                                 size={25}/>
                             <BsEmojiSmile
                                 onClick={() => setisPickerVisible(!isPickerVisible)}
-                                className="cursor-pointer"
+                                className="cursor-pointer text-black"
                                 size={25}/>
                         </div>
                     </div>

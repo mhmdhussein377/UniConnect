@@ -251,10 +251,10 @@ const index = ({
                     <div className="flex flex-col items-center">
                         <div
                             onClick={() => setOpenCommunityDetails((prev) => !prev)}
-                            className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300 select-none">
+                            className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300 select-none dark:text-black">
                             {communityInfo.privacy === "public"
-                                ? (<BsHash size={25}/>)
-                                : (<AiTwotoneLock size={25}/>)}
+                                ? (<BsHash className="dark:text-black" size={25}/>)
+                                : (<AiTwotoneLock className="dark:text-black" size={25}/>)}
                             {communityInfo.name}
                         </div>
                         <div className="flex items-center">
@@ -267,7 +267,7 @@ const index = ({
                             <span className="text-[#007D76] font-medium mr-1">
                                 {onlineUsers}
                             </span>
-                            <span>online</span>
+                            <span className="text-[#007D76]">online</span>
                         </div>
                     </div>
                     <CgSidebarOpen
@@ -350,7 +350,7 @@ const index = ({
                                 size={25}/>
                             <BsEmojiSmile
                                 onClick={() => setisPickerVisible(!isPickerVisible)}
-                                className="cursor-pointer"
+                                className="cursor-pointer text-black"
                                 size={25}/>
                         </div>
                         <button

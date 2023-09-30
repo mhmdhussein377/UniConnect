@@ -44,7 +44,7 @@ const index = ({setShowUpdateCommunityModal, setCommunity, name, description, pr
             <form
                 onSubmit={handleCreateCommunity}
                 ref={boxRef}
-                className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4">
+                className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4 dark:bg-grayMedium">
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                         <label className="text-lg font-medium" htmlFor="community-name">
@@ -61,7 +61,7 @@ const index = ({setShowUpdateCommunityModal, setCommunity, name, description, pr
                         value={inputs.name}
                         type="text"
                         name="name"
-                        className="border-b-2 border-b-primary outline-none px-2 py-1.5"/>
+                        className="border-b-2 border-b-primary outline-none px-2 py-1.5 bg-transparent"/>
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="text-lg font-medium" htmlFor="community-desc">
@@ -73,7 +73,7 @@ const index = ({setShowUpdateCommunityModal, setCommunity, name, description, pr
                         value={inputs.description}
                         type="text"
                         name="description"
-                        className="border-b-2 border-b-primary outline-none px-2 py-1.5"/>
+                        className="border-b-2 border-b-primary outline-none px-2 py-1.5 bg-transparent"/>
                 </div>
                 <div className="flex flex-col gap-2">
                     <label htmlFor="" className="text-lg font-medium">

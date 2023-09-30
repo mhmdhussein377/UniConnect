@@ -20,7 +20,7 @@ const index = ({
                         alt=""/>
                 </div>
                 <div className="flex flex-col justify-center h-full">
-                    <div className="font-medium text-[18px]">{name}</div>
+                    <div className={`font-medium text-[18px] ${highlight && "text-primary"}`}>{name}</div>
                     <p
                         className="text-sm text-[#737373] font-medium w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
                         {lastMessage && (lastMessage?.content ? lastMessage?.content : "image")}

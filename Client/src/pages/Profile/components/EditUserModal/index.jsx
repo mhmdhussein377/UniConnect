@@ -40,14 +40,14 @@ const index = ({setShowEditUserModal}) => {
     return (
       <div
         onClick={closeModal}
-        className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen"
+        className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/40 dark:bg-black/60 z-50 flex items-center justify-center px-2 overflow-hidden max-h-screen"
       >
         <form
           onSubmit={handleEditUserInfo}
           ref={boxRef}
-          className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[650px]"
+          className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[650px] dark:bg-grayMedium"
         >
-          <div className="flex items-center justify-between pb-2 border-b-2">
+          <div className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
             <div className="text-lg font-semibold text-primary">
               Edit your profile data
             </div>
@@ -77,13 +77,13 @@ const index = ({setShowEditUserModal}) => {
               value={inputs.location}
               handleChange={handleInputChange}
             />
-            <GooglePlacesAutocomplete
+            {/* <GooglePlacesAutocomplete
               apiKey="AIzaSyDnPR28CLrGzTeXpjJtKM_Gasr79C6Yky0"
               selectProps={{
                 value,
                 onChange: setValue,
               }}
-            />
+            /> */}
             <div className="flex flex-col gap-1">
               <label className="text-md font-medium" htmlFor="about">
                 About
@@ -92,7 +92,7 @@ const index = ({setShowEditUserModal}) => {
                 id="about"
                 onChange={handleInputChange}
                 name="bio"
-                className="p-2 rounded-md border-2 outline-none scrollbar-hide h-[100px]"
+                className="p-2 rounded-md border-2 bg-transparent dark:border-black outline-none scrollbar-hide h-[100px]"
                 type="text"
                 value={inputs.bio}
               />
