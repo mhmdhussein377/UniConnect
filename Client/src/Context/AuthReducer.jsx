@@ -52,6 +52,17 @@ const AuthReducer = (state, action) => {
                     }
                 }
             };
+        case "EDIT_HOBBIES":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    profile: {
+                        ...state.user.profile,
+                        hobbies: action.payload
+                    }
+                }
+            }
         case "EDIT_USER_INFO":
             let {name, ...others} = action.payload;
             return {

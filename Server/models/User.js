@@ -41,7 +41,8 @@ const userSchema = new Schema({
         location: String,
         bio: String,
         skills: [String],
-        languages: [String]
+        languages: [String],
+        hobbies: [String],
     },
     joinedCommunities: [
         {

@@ -77,13 +77,13 @@ const index = ({setShowEditUserModal}) => {
               value={inputs.location}
               handleChange={handleInputChange}
             />
-            {/* <GooglePlacesAutocomplete
+            <GooglePlacesAutocomplete
               apiKey="AIzaSyDnPR28CLrGzTeXpjJtKM_Gasr79C6Yky0"
               selectProps={{
                 value,
                 onChange: setValue,
               }}
-            /> */}
+            />
             <div className="flex flex-col gap-1">
               <label className="text-md font-medium" htmlFor="about">
                 About

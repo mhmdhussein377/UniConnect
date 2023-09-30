@@ -36,7 +36,7 @@ const index = () => {
         setFriends] = useState([])
 
     let {createdCommunities} = user
-    let {skills, languages, bio, university, major} = user.profile
+    let {skills, languages, bio, university, major, hobbies} = user.profile
 
     useEffect(() => {
         const getUser = async() => {
@@ -77,7 +77,16 @@ const index = () => {
                             maxDataToShow={10}
                             currentUser={user
                             ?.usrname === username}
-                            emptyHeadline="Your multilingual talengts await."/> {createdCommunities
+                            emptyHeadline="Your multilingual talengts await."/>
+                        <SkillsLanguagesSection
+                            // setShowModal={setShowLanguagesModal}
+                            text="Hobbies"
+                            data={hobbies}
+                            maxDataToShow={10}
+                            currentUser={user
+                            ?.usrname === username}
+                            emptyHeadline="No hobbies listed"/> 
+                            {createdCommunities
                             ?.length > 0 && (<ShowCommunities
                                 withoutUsername={true}
                                 text={"Created communities"}

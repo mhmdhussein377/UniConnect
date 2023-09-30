@@ -15,7 +15,8 @@ const EditProfile = async(req, res) => {
             location,
             university,
             profileImage,
-            coverImage
+            coverImage,
+            hobbies
         } = req.body
 
         const updatedFields = {
@@ -28,7 +29,8 @@ const EditProfile = async(req, res) => {
             "profile.location": location,
             "profile.university": university,
             "profile.profileImage": profileImage,
-            "profile.coverImage": coverImage
+            "profile.coverImage": coverImage,
+            "profile.hobbies": hobbies
         };
 
         const user = await User.findByIdAndUpdate(userId, {
