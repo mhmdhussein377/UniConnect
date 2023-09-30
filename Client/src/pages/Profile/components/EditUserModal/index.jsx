@@ -1,7 +1,7 @@
 import {GrClose} from "react-icons/gr";
 import Input from "./../../../../components/Input"
 import {handleCloseModal} from "../../../../utils/closeModal";
-import {useContext, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {handleChange} from "../../../../utils/handleChange";
 import {postRequest} from "../../../../utils/requests";
 import {AuthContext} from "../../../../Context/AuthContext";
@@ -36,6 +36,12 @@ const index = ({setShowEditUserModal}) => {
     }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowEditUserModal);
+
+    console.log(value, "vaaalueee")
+
+    useEffect(() => {
+      console.log(value)
+    }, [value])
 
     return (
       <div

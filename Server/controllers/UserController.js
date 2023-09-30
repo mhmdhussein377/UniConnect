@@ -296,7 +296,9 @@ const SearchUsersCommunities = async(req, res) => {
 }
 
 const GetSuggestedUsers = async(req, res) => {
-    const currentUser = req?.user?.id
+    const currentUser = req
+        ?.user
+            ?.id
     const {excludedUser} = req.body
 
     try {
@@ -311,20 +313,33 @@ const GetSuggestedUsers = async(req, res) => {
             _id: {
                 $nin: [currentUser, excludedUser]
             },
-            "profile.skills": {
-                $in: user.profile.skills
-            },
-            "profile.major": {
-                $regex: new RegExp(user.profile.major, "i")
-            },
-            "profile.university": {
-                $regex: new RegExp(user.profile.university, "i")
-            }
+            $or: [
+                {
+                    "profile.skills": {
+                        $in: user.profile.skills
+                    }
+                }, {
+                    "profile.major": {
+                        $regex: new RegExp(user.profile.major, "i")
+                    }
+                }, {
+                    "profile.university": {
+                        $regex: new RegExp(user.profile.university, "i")
+                    }
+                }, {
+                    "profile.location": {
+                        $regex: new RegExp(user.profile.location, "i")
+                    }
+                }, {
+                    "profile.hobbies": {
+                        $in: user.profile.hobbies
+                    }
+                }
+            ]
         }).select("name username profile.profileImage _id");
 
         const top = 5
-        const result = suggestedUsers
-            .slice(0, top)
+        const result = suggestedUsers.slice(0, top)
 
         res
             .status(200)
