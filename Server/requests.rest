@@ -216,3 +216,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1M
 POST http://localhost:3000/api/community/cancel-community-invite-request/6500335fde9949be1480c711/64fe44232d04c0c8d719db8e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU0NDE1MmQwNGMwYzhkNzE5ZGI4YSIsImlhdCI6MTY5NDUxMTkyMCwiZXhwIjoxNjk0NTE1NTIwfQ.DfiVuNCRYVpo3zjdO7oFxOrC8jOTb_wGAqb482SZcP4
+

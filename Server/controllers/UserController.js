@@ -298,58 +298,87 @@ const SearchUsersCommunities = async(req, res) => {
 const GetSuggestedUsers = async(req, res) => {
     const currentUser = req
         ?.user
-            ?.id
-    const {excludedUser} = req.body
+            ?.id;
+    const {excludedUser} = req.body;
+
+    function calculateArrayScore(arrayA, arrayB) {
+        let score = 0;
+
+        for (const itemA of arrayA) {
+            if (arrayB.includes(itemA)) {
+                score += 1;
+            }
+        }
+
+        return score;
+    }
+
+    function calculateStringScore(stringA, stringB) {
+        if (stringA && stringB && stringA.toLowerCase() === stringB.toLowerCase()) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    function calculateScore(userA, userB) {
+        let score = 0;
+
+        score += calculateArrayScore(userA.profile.skills, userB.profile.skills);
+
+        score += calculateStringScore(userA.profile.major, userB.profile.major);
+        score += calculateStringScore(userA.profile.university, userB.profile.university);
+        score += calculateStringScore(userA.profile.location, userB.profile.location);
+        score += calculateArrayScore(userA.profile.hobbies, userB.profile.hobbies);
+        score += calculateArrayScore(userA.profile.languages, userB.profile.languages)
+
+        return score;
+    }
 
     try {
-        const user = await User.findById(currentUser)
+        const user = await User.findById(currentUser);
         if (!user) {
             return res
                 .status(400)
-                .json({message: "User not found"})
+                .json({message: "User not found"});
         }
 
-        const suggestedUsers = await User.find({
+        const suggestedUsers = await User
+            .find({
             _id: {
                 $nin: [currentUser, excludedUser]
-            },
-            $or: [
-                {
-                    "profile.skills": {
-                        $in: user.profile.skills
-                    }
-                }, {
-                    "profile.major": {
-                        $regex: new RegExp(user.profile.major, "i")
-                    }
-                }, {
-                    "profile.university": {
-                        $regex: new RegExp(user.profile.university, "i")
-                    }
-                }, {
-                    "profile.location": {
-                        $regex: new RegExp(user.profile.location, "i")
-                    }
-                }, {
-                    "profile.hobbies": {
-                        $in: user.profile.hobbies
-                    }
-                }
-            ]
-        }).select("name username profile.profileImage _id");
+            }
+        }).limit(100)
 
-        const top = 5
-        const result = suggestedUsers.slice(0, top)
+        suggestedUsers.sort((a, b) => {
+            const scoreA = calculateScore(user, a);
+
+            const scoreB = calculateScore(user, b);
+
+            return scoreB - scoreA;
+        })
+
+        const top = 5;
+        const result = suggestedUsers.slice(0, top);
+
+        const selectedUsers = result.map((user) => ({
+            name: user.name,
+            username: user.username,
+            profile: {
+                profileImage: user.profile.profileImage,
+            },
+            _id: user._id,
+        }));
 
         res
             .status(200)
-            .json(result);
+            .json(selectedUsers);
     } catch (error) {
         res
             .status(500)
             .json({error: "Internal Server Error"});
     }
-}
+};
 
 module.exports = {
     EditProfile,

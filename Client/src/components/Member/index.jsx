@@ -8,7 +8,6 @@ import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 import InviteButton from "./InviteButton"
 
 const index = ({
-    searched,
     member,
     creator,
     invite,

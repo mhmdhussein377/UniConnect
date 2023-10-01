@@ -42,9 +42,11 @@ const index = () => {
             });
             response && setSuggestedUsers(response)
         }
-        getSuggestedUsers()
+        user?._id && getSuggestedUsers()
     }, [user
             ?._id])
+
+    console.log(suggestedUsers, "suggesss")
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -139,7 +141,7 @@ const index = () => {
                             <div
                                 className="bg-white drop-shadow-lg max-w-full p-4 rounded-md h-fit flex flex-col gap-4">
                                 <div className="flex flex-col gap-3">
-                                    <div className="font-semibold text-lg">
+                                    <div className="font-semibold text-lg text-primary">
                                         Suggested friends
                                     </div>
                                     <div className="flex flex-col gap-4">
