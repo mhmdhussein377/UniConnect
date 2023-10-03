@@ -27,6 +27,7 @@
 | Login  | Signup | Private Conversation |
 | ---| ---| ---|
 | ![Landing](./readme/demo/Login.svg) | ![fsdaf](./readme/demo/Signup.svg) | ![fsdaf](./readme/demo/Private-Conversation.svg) |
+###
 | Community Conversation  | User Profile | Community Profile |
 | ---| ---| ---|
 | ![Landing](./readme/demo/Community-Conversation.svg) | ![fsdaf](./readme/demo/User-Profile.svg) | ![fsdaf](./readme/demo/Community-Profile.svg) |
@@ -41,6 +42,11 @@
 - This project uses the MERN stack. The MERN stack is a full-stack web development framework consisting of MongoDB (database), Express.js (backend framework), React (frontend library), and Node.js (runtime environment). It is used to build scalable and efficient web applications.
 - The project utilizes socket.io for real-time communication, ensuring seamless interactions with users.
 - The app uses the font ["Inter"](https://fonts.google.com/specimen/Inter) as its main font, and the design of the app adheres to the material design guidelines.
+
+<br><br>
+
+<!-- Demo -->
+<img src="./readme/demo.svg"/>
 
 <br><br>
 
