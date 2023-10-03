@@ -2,8 +2,8 @@
 
 <img src="./readme/table-of-contents.svg"/>
 
-- [Project Description](#project-description)
-- [User stories](#user-stories)
+- [Project Philosophy](#project-description)
+  - [User stories](#user-stories)
 - [Tech Stack](#tech-stack)
 - [Prototyping](#prototyping)
 - [Demo](#demo)
