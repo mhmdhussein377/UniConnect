@@ -60,6 +60,7 @@ const index = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header profile={true}/>
+            {/* #000221 */}
             <div className="bg-gray-100 py-6 h-full flex-1 dark:bg-grayMedium">
                 <div
                     className="w-full max-w-[1200px] mx-auto px-8 flex flex-col lg:flex-row gap-4">
