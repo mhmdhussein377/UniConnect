@@ -23,15 +23,13 @@
 
 > We designed UniConnect using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
 
-### Wireframes
-| Login screen  | Register screen |  Landing screen |
-| ---| ---| ---|
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
-
 ### Mockups
-| Home screen  | Menu Screen | Order Screen |
+| Login  | Signup | Private Conversation |
 | ---| ---| ---|
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| ![Landing](./readme/demo/Login.svg) | ![fsdaf](./readme/demo/Signup.svg) | ![fsdaf](./readme/demo/Private-Conversation.svg) |
+| Community Conversation  | User Profile | Community Profile |
+| ---| ---| ---|
+| ![Landing](./readme/demo/Community-Conversation.svg) | ![fsdaf](./readme/demo/User-Profile.svg) | ![fsdaf](./readme/demo/Community-Profile.svg) |
 
 <br><br>
 
