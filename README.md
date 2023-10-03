@@ -21,7 +21,7 @@
 <!-- Prototyping -->
 <img src="./readme/title3.svg"/>
 
-> We designed UniConnect using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
+> We developed UniConnect by creating wireframes and mockups, continuously refining the design to achieve an optimal layout that ensures effortless navigation and a smooth user experience.
 
 ### Mockups
 | Login  | Signup | Private Conversation |
