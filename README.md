@@ -57,7 +57,6 @@
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * npm
   ```sh
   npm install npm@latest -g
@@ -65,20 +64,36 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
+1. Ensure you have Node.js installed. We recommend using the latest version available.
 2. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/mhmdhussein377/UniConnect.git
    ```
 3. Install NPM packages
    ```sh
+   cd client
+   ```
+   ```sh
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+    ```sh
+   cd server
+   ```
+   ```sh
+   npm install
+   ```
+    ```sh
+   cd socket
+   ```
+   ```sh
+   npm install
+   ```
+4. Run the project
+   ```sh
+   cd client
+   ```
+   ```sh
+   npm run dev
    ```
 
 Now, you should be able to run UniConnect locally and explore its features.
