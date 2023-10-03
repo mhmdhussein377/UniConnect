@@ -1,14 +1,27 @@
 <img src="./readme/title1.svg"/>
 
+<img src="./readme/table-of-contents.svg"/>
+
+- [Project Description](#project-description)
+- [User stories](#user-stories)
+- [Tech Stack](#tech-stack)
+- [Prototyping](#prototyping)
+- [Demo](#demo)
+- [How to Run](#how-to-run)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+
 <br><br>
 
 <!-- project philosophy -->
+<a name="project-description"></a>
 <img src="./readme/title2.svg"/>
 
 > A platform for different communities to come together and connect with each other. It offers a unique opportunity for individuals to explore new communities and connect with like-minded people
 >
 > UniConnect provides the ability for students with similar interests to connect and build relationships and aims to simplify the process of connecting with students and obtaining information about the ideas that users are interested in.
 
+<a name="user-stories"></a>
 ### User Stories
 - As a student, I want to create a private/public community so that I can share ideas and experiences.
 - As a student, I want to join a community so that I can contact the community members.
@@ -19,6 +32,7 @@
 <br><br>
 
 <!-- Prototyping -->
+<a name="prototyping"></a>
 <img src="./readme/title3.svg"/>
 
 > We developed UniConnect by creating wireframes and mockups, continuously refining the design to achieve an optimal layout that ensures effortless navigation and a smooth user experience.
@@ -35,11 +49,13 @@
 <br><br>
 
 <!-- Demo -->
+<a name="demo"></a>
 <img src="./readme/demo.svg"/>
 
 <br><br>
 
 <!-- Tech stack -->
+<a name="tech-stack"></a>
 <img src="./readme/title5.svg"/>
 
 ###  UniConnect is built using the following technologies:
@@ -51,11 +67,13 @@
 <br><br>
 
 <!-- How to run -->
+<a name="how-to-run"></a>
 <img src="./readme/title6.svg"/>
 
 > To set up UniConnect locally, follow these steps:
 
 ### Prerequisites
+<a name="prerequisites"></a>
 
 * npm
   ```sh
@@ -63,6 +81,7 @@
   ```
 
 ### Installation
+<a name="installation"></a>
 
 1. Ensure you have Node.js installed. We recommend using the latest version available.
 2. Clone the repo
