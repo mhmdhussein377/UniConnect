@@ -4,9 +4,9 @@
 
 - [Project Philosophy](#project-description)
   - [User stories](#user-stories)
-- [Tech Stack](#tech-stack)
 - [Prototyping](#prototyping)
 - [Demo](#demo)
+- [Tech Stack](#tech-stack)
 - [How to Run](#how-to-run)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
