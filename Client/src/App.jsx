@@ -13,7 +13,7 @@ import SmNotifications from "./pages/SmNotifications";
 import NotFound from "./pages/NotFound"
 import ProtectedRoutes from "./utils/ProtectedRoutes"
 import {QueryClientProvider, QueryClient} from "react-query";
- 
+
 const queryClient = new QueryClient()
 
 function App() {
