@@ -52,6 +52,14 @@
 <a name="demo"></a>
 <img src="./readme/demo.svg"/>
 
+| Login  | Create Community | Invite Users |
+| ---| ---| ---|
+| ![Landing](./readme/demo/Sginup-Login.gif) | ![fsdaf](./readme/demo/Create-community.gif) | ![fsdaf](./readme/demo/Invite-to-community.gif) |
+###
+| Add Friend  | Private Chat | Community Chat |
+| ---| ---| ---|
+| ![Landing](./readme/demo/Add-friend.gif) | ![fsdaf](./readme/demo/Private-chat.gif) | ![fsdaf](./readme/demo/Community-chat.gif) |
+
 <br><br>
 
 <!-- Tech stack -->
