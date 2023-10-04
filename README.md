@@ -54,7 +54,7 @@
 
 | Login  | Create Community | Invite Users |
 | ---| ---| ---|
-| ![Landing](./readme/demo/Sginup-Login.gif) | ![fsdaf](./readme/demo/Create-community.gif) | ![fsdaf](./readme/demo/Invite-to-community.gif) |
+| ![Landing](./readme/demo/Signup-Login.gif) | ![fsdaf](./readme/demo/Create-community.gif) | ![fsdaf](./readme/demo/Invite-to-community.gif) |
 ###
 | Add Friend  | Private Chat | Community Chat |
 | ---| ---| ---|
