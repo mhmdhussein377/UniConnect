@@ -2,11 +2,11 @@
 
 <img src="./readme/table-of-contents.svg"/>
 
-- [Project Description](#project-description)
-- [User stories](#user-stories)
-- [Tech Stack](#tech-stack)
+- [Project Philosophy](#project-description)
+  - [User stories](#user-stories)
 - [Prototyping](#prototyping)
 - [Demo](#demo)
+- [Tech Stack](#tech-stack)
 - [How to Run](#how-to-run)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
