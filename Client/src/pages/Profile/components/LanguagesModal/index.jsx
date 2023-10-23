@@ -1,18 +1,20 @@
+import {useContext, useEffect, useRef, useState} from "react";
 import {BsChevronDown, BsChevronUp} from "react-icons/bs";
 import {GrClose} from "react-icons/gr";
 import {handleCloseModal} from "../../../../utils/closeModal";
-import {useContext, useEffect, useRef, useState} from "react";
 import {languagesData} from "./../../../../utils/LanguagesData"
 import Language from "./../Language"
-import { postRequest } from "../../../../utils/requests";
-import { AuthContext } from "../../../../Context/AuthContext";
+import {postRequest} from "../../../../utils/requests";
+import {AuthContext} from "../../../../Context/AuthContext";
 
 const index = ({setShowLanguagesModal, languages}) => {
 
-    const { dispatch } = useContext(AuthContext);
+    const {dispatch} = useContext(AuthContext);
 
-    const [selectedLanguages, setSelectedLanguages] = useState([]);
-    let [showLanguagesList, setShowLanguagesList] = useState(false);
+    const [selectedLanguages,
+        setSelectedLanguages] = useState([]);
+    let [showLanguagesList,
+        setShowLanguagesList] = useState(false);
     const boxRef = useRef();
 
     useEffect(() => {
@@ -23,14 +25,9 @@ const index = ({setShowLanguagesModal, languages}) => {
         const language = e.target.value;
         const isChecked = e.target.checked;
 
-        if(isChecked) {
-            setSelectedLanguages([
-                ...selectedLanguages,
-                language
-            ])
-        }else {
-            setSelectedLanguages(selectedLanguages.filter(lang => lang !== language))
-        }
+        setSelectedLanguages((prevLanguages) => isChecked
+            ? [...prevLanguages, language]
+            : prevLanguages.filter((lang) => lang !== language));
     }
 
     const handleEditLanguages = async() => {
@@ -49,7 +46,8 @@ const index = ({setShowLanguagesModal, languages}) => {
             <div
                 ref={boxRef}
                 className="flex flex-col gap-6 p-4 bg-white dark:bg-grayMedium rounded-md w-full max-w-[500px]">
-                <div className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
+                <div
+                    className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
                     <div className="text-lg font-semibold text-primary">Edit languages</div>
                     <div
                         onClick={() => setShowLanguagesModal(false)}
