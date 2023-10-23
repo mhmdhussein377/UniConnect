@@ -1,7 +1,7 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import {handleCloseModal} from "../../../../utils/closeModal";
 import {GrClose} from "react-icons/gr";
-import Skill from "./../Skill"
+import Skill from "../Skill"
 import { AuthContext } from "../../../../Context/AuthContext";
 import { postRequest } from "../../../../utils/requests";
 
@@ -9,8 +9,8 @@ const index = ({setShowSkillsModal, skills}) => {
 
     const { dispatch } = useContext(AuthContext);
 
-    let [selectedSkills, setSelectedSkills] = useState([]);
-    let [skillInput, setSkillInput] = useState("");
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    const [skillInput, setSkillInput] = useState("");
     const boxRef = useRef();
 
     useEffect(() => {
