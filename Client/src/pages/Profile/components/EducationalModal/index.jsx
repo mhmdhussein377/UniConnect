@@ -6,7 +6,8 @@ import {AuthContext} from "../../../../Context/AuthContext";
 import {postRequest} from "./../../../../utils/requests"
 import {handleChange} from "./../../../../utils/handleChange"
 import axios from "axios";
-import { useDebounce } from "use-debounce";
+import {useDebounce} from "use-debounce";
+import UniversityList from "./components/UniversityList";
 
 const index = ({setShowEducationalInfoModal}) => {
 
@@ -15,12 +16,14 @@ const index = ({setShowEducationalInfoModal}) => {
 
     const [inputs,
         setInputs] = useState({
-            university: university || "",
-            major: major || ""
-        })
+        university: university || "",
+        major: major || ""
+    })
     const [debouncedValue] = useDebounce(inputs.university, 1000);
-    const [universities, setUniversities] = useState([])
-    const [clicked, setClicked] = useState(false)
+    const [universities,
+        setUniversities] = useState([])
+    const [clicked,
+        setClicked] = useState(false)
     const boxRef = useRef();
 
     const handleInputsChange = (e) => {
@@ -36,14 +39,14 @@ const index = ({setShowEducationalInfoModal}) => {
     }
 
     useEffect(() => {
-        if(inputs.university === "") {
+        if (inputs.university === "") {
             setUniversities([])
         }
         const getCountries = async() => {
             const {data} = await axios.get(`http://universities.hipolabs.com/search?name=${debouncedValue}`);
             setUniversities(data)
         };
-        if(debouncedValue !== university && !clicked) {
+        if (debouncedValue !== university && !clicked) {
             getCountries()
         }
     }, [debouncedValue]);
@@ -58,7 +61,8 @@ const index = ({setShowEducationalInfoModal}) => {
                 onSubmit={handleEditEducationalInfo}
                 ref={boxRef}
                 className="flex flex-col gap-6 p-4 bg-white rounded-md w-full max-w-[500px] dark:bg-grayMedium">
-                <div className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
+                <div
+                    className="flex items-center justify-between pb-2 border-b-2 dark:border-black">
                     <div className="text-lg font-semibold text-primary">
                         Edit educational information
                     </div>
@@ -77,12 +81,11 @@ const index = ({setShowEducationalInfoModal}) => {
                             handleChange={handleInputsChange}
                             close={universities.length > 0}
                             setUniversities={setUniversities}/> 
-                        {universities.length > 0 && (
-                            <div
-                                className="absolute w-full left-0 right-0 top-20 p-2 rounded-md border-2 bg-white flex flex-col gap-1 max-h-[300px] overflow-scroll scrollbar-hide">
-                                {universities.map((university, index) => (<h1 onClick={() => {setInputs(prev => ({...prev, university: university.name})); setUniversities([]); setClicked(true)}} className="cursor-pointer" key={index}>{university.name}</h1>))}
-                            </div>
-                        )}
+                        {universities.length > 0 && (<UniversityList
+                            universities={universities}
+                            setInputs={setInputs}
+                            setUniversities={setUniversities}
+                            setClicked={setClicked}/>)}
                     </div>
                     <Input
                         label="Major"

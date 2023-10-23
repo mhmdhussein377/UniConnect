@@ -6,33 +6,33 @@ import SkillsLanguagesSection from "./../../components/SkillsLanguagesSection";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "./../../Context/AuthContext";
 import {useParams} from "react-router-dom";
-import {getRequest, postRequest} from "./../../utils/requests"
-import ShowCommunities from "./../../components/ShowCommunites"
-import ShowFriends from "./../../components/ShowFriends"
-import Member from "./../../components/Member"
+import {getRequest, postRequest} from "./../../utils/requests";
+import ShowCommunities from "./../../components/ShowCommunites";
+import ShowFriends from "./../../components/ShowFriends";
+import Member from "./../../components/Member";
 
 const index = () => {
-
-    const {username} = useParams()
-    const {user: currentUser} = useContext(AuthContext)
+    
+    const {username} = useParams();
+    const {user: currentUser} = useContext(AuthContext);
     const [user,
-        setUser] = useState({})
+        setUser] = useState({});
     const [suggestedUsers,
-        setSuggestedUsers] = useState([])
+        setSuggestedUsers] = useState([]);
     const [friends,
-        setFriends] = useState([])
+        setFriends] = useState([]);
 
     useEffect(() => {
         const getUser = async() => {
-            const response = await getRequest(`/user/${username}`)
-            const {user} = response
-            response && setUser(user)
-            response && setFriends(user.friends)
-        }
-        username !== undefined && getUser()
-    }, [username])
+            const response = await getRequest(`/user/${username}`);
+            const {user} = response;
+            response && setUser(user);
+            response && setFriends(user.friends);
+        };
+        username !== undefined && getUser();
+    }, [username]);
 
-    const {createdCommunities, joinedCommunities} = user
+    const {createdCommunities, joinedCommunities} = user;
 
     useEffect(() => {
         const getSuggestedUsers = async() => {
@@ -40,13 +40,12 @@ const index = () => {
                 excludedUser: user
                     ?._id
             });
-            response && setSuggestedUsers(response)
-        }
-        user?._id && getSuggestedUsers()
+            response && setSuggestedUsers(response);
+        };
+        user
+            ?._id && getSuggestedUsers();
     }, [user
-            ?._id])
-
-    console.log(suggestedUsers, "suggesss")
+            ?._id]);
 
     return (
         <div className="flex flex-col min-h-screen">

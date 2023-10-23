@@ -127,8 +127,6 @@ const index = () => {
         getPrivateConversationMessages()
     }, [conversation, user._id, newMessage])
 
-    console.log(openSidebar, "openSidebarrrr")
-
     return (
         <div className="h-screen max-h-screen">
             <Header getCommunities={getCommunities}/>
@@ -146,7 +144,8 @@ const index = () => {
                     communities={communities}
                     setShowCommunityModal={setShowCommunityModal}
                     setOpenCommunityDetails={setOpenCommunityDetails}
-                    setShowUserDetails={setShowUserDetails}/> {type === "community" && (<CommunityConversation
+                    setShowUserDetails={setShowUserDetails}/> 
+                {type === "community" && (<CommunityConversation
                     setOpenCommunityDetails={setOpenCommunityDetails}
                     setShowAddMembersModal={setShowAddMembersModal}
                     setOpenSidebar={setOpenSidebar}
@@ -169,11 +168,13 @@ const index = () => {
                 community={selectedCommunity}
                 setOpenCommunityDetails={setOpenCommunityDetails}
                 openCommunityDetails={openCommunityDetails}
-                setShowAddMembersModal={setShowAddMembersModal}/>{" "} {/* Sidebar to show details of the user */}
+                setShowAddMembersModal={setShowAddMembersModal}/>{" "} 
+            {/* Sidebar to show details of the user */}
             <UserDetails
                 conversation={conversation}
                 showUserDetails={showUserDetails}
-                setShowUserDetails={setShowUserDetails}/>{" "} {/* Modal to create communities */}
+                setShowUserDetails={setShowUserDetails}/>{" "} 
+            {/* Modal to create communities */}
             {showCommunityModal && (<CreateCommunityModal
                 setCommunities={setCommunities}
                 setShowCommunityModal={setShowCommunityModal}/>)}

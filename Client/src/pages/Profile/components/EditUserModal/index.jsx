@@ -37,12 +37,6 @@ const index = ({setShowEditUserModal}) => {
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowEditUserModal);
 
-    console.log(value, "vaaalueee")
-
-    useEffect(() => {
-      console.log(value)
-    }, [value])
-
     return (
       <div
         onClick={closeModal}
