@@ -19,9 +19,9 @@ const index = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("authToken")
 
-    let [inputs,
+    const [inputs,
         setInputs] = useState({});
-    let [error,
+    const [error,
         setError] = useState({});
     const navigate = useNavigate()
 

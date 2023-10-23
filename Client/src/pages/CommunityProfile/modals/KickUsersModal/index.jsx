@@ -3,15 +3,21 @@ import {handleCloseModal} from "../../../../utils/closeModal";
 import {MdOutlineClose} from "react-icons/md";
 import User from "./../../User"
 import {postRequest} from "../../../../utils/requests";
+import Button from "../components/Button";
 
 const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
 
-    const [selectedMembers, setSelectedMembers] = useState([])
-    const [isDisabled, setIsDisabled] = useState(true)
+    const [selectedMembers,
+        setSelectedMembers] = useState([])
+    const [isDisabled,
+        setIsDisabled] = useState(true)
     const boxRef = useRef()
 
     useEffect(() => {
-        selectedMembers?.length > 0 ? setIsDisabled(false) : setIsDisabled(true)
+        selectedMembers
+            ?.length > 0
+                ? setIsDisabled(false)
+                : setIsDisabled(true)
     }, [selectedMembers])
 
     const handleKickUsers = async() => {
@@ -19,7 +25,7 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
         setShowKickUsersModal(false)
         await postRequest(`/community/${communityId}/remove-members`, {usersIds: selectedMembers})
     };
-    
+
     const handleChange = (member) => {
         const {_id} = member
         const isSelected = selectedMembers.some((selectedMember) => selectedMember === _id);
@@ -27,10 +33,13 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
         if (isSelected) {
             setSelectedMembers((prevSelectedMembers) => prevSelectedMembers.filter((selectedMember) => selectedMember !== _id));
         } else {
-            setSelectedMembers((prevSelectedMembers) => [...prevSelectedMembers, _id]);
+            setSelectedMembers((prevSelectedMembers) => [
+                ...prevSelectedMembers,
+                _id
+            ]);
         }
     }
-    
+
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowKickUsersModal);
 
     return (
@@ -59,12 +68,9 @@ const index = ({setShowKickUsersModal, members, communityId, setMembers}) => {
                             selectedMembers={selectedMembers}/>))}
                 </div>
                 <div>
-                    <button
-                        disabled={isDisabled}
-                        onClick={handleKickUsers}
-                        className="py-2 px-12 rounded-md bg-primary text-white font-medium">
-                        Remove
-                    </button>
+                    <Button onClickHandler={handleKickUsers} buttonText="Remove" isDisabled={isDisabled}
+                        isSubmit={false}
+                    />
                 </div>
             </div>
         </div>

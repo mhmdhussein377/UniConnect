@@ -7,9 +7,9 @@ import {useParams, useNavigate, Link} from "react-router-dom";
 
 const index = () => {
 
-    let [password,
+    const [password,
         setPassword] = useState("");
-    let [error,
+    const [error,
         setError] = useState(false);
     const {id: userId, token} = useParams();
     const navigate = useNavigate();

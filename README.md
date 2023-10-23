@@ -52,6 +52,15 @@
 <a name="demo"></a>
 <img src="./readme/demo.svg"/>
 
+### Mockups
+| Login  | Signup | Private Conversation |
+| ---| ---| ---|
+| ![Landing](./readme/demo/Signup-Login.gif) | ![fsdaf](./readme/demo/Signup.svg) | ![fsdaf](./readme/demo/Private-Conversation.svg) |
+###
+| Community Conversation  | User Profile | Community Profile |
+| ---| ---| ---|
+| ![Landing](./readme/demo/Community-Conversation.svg) | ![fsdaf](./readme/demo/User-Profile.svg) | ![fsdaf](./readme/demo/Community-Profile.svg) |
+
 <br><br>
 
 <!-- Tech stack -->

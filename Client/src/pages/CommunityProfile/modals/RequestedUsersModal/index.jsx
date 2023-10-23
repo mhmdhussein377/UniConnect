@@ -3,6 +3,7 @@ import {handleCloseModal} from "../../../../utils/closeModal";
 import {MdOutlineClose} from "react-icons/md";
 import User from "./../../User"
 import {postRequest} from "../../../../utils/requests";
+import Button from "../components/Button";
 
 const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, communityId}) => {
 
@@ -13,14 +14,22 @@ const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, commu
     const boxRef = useRef()
 
     useEffect(() => {
-        selectedUsers?.length > 0 ? setIsDisabled(false) : setIsDisabled(true);
+        selectedUsers
+            ?.length > 0
+                ? setIsDisabled(false)
+                : setIsDisabled(true);
     }, [selectedUsers]);
 
     const handleAcceptRequestedUsers = async() => {
         setCommunity(prev => ({
             ...prev,
-            members: [...prev.members, ...selectedUsers],
-            requestedUsers: prev.requestedUsers.filter(user => !selectedUsers.includes(user._id))
+            members: [
+                ...prev.members,
+                ...selectedUsers
+            ],
+            requestedUsers: prev
+                .requestedUsers
+                .filter(user => !selectedUsers.includes(user._id))
         }))
         setShowRequestedUsersModal(false)
         setUsers(prev => prev.filter(user => !selectedUsers.includes(user)))
@@ -67,12 +76,11 @@ const index = ({setShowRequestedUsersModal, users, setUsers, setCommunity, commu
                         ?.map((member, index) => (<User key={index} member={member} handleChange={() => handleChange(member)}/>))}
                 </div>
                 <div>
-                    <button
-                        disabled={isDisabled}
-                        onClick={handleAcceptRequestedUsers}
-                        className="py-2 px-12 rounded-md bg-primary text-white font-medium">
-                        Accept requests
-                    </button>
+                    <Button
+                        onClickHandler={handleAcceptRequestedUsers}
+                        buttonText="Accept requests"
+                        isDisabled={isDisabled}
+                        isSubmit={false}/>
                 </div>
             </div>
         </div>

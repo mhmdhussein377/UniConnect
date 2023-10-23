@@ -2,8 +2,9 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {handleCloseModal} from "../../../../utils/closeModal";
 import {MdOutlineClose} from "react-icons/md";
 import {postRequest} from "../../../../utils/requests";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../../Context/AuthContext";
+import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../../../Context/AuthContext";
+import Button from "./../components/Button"
 
 const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
 
@@ -15,19 +16,19 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
         setIsDisabled] = useState(true)
     const boxRef = useRef()
     const navigate = useNavigate()
-    
+
     const handleDeleteCommunity = async() => {
         if (input === communityName) {
-            dispatch({ type: "DELETE_COMMUNITY", payload: communityId });
+            dispatch({type: "DELETE_COMMUNITY", payload: communityId});
             navigate('/home')
             await postRequest(`/community/delete/${communityId}`, {communityName});
         }
     }
-    
+
     useEffect(() => {
         setIsDisabled(input !== communityName)
     }, [input, communityName])
-    
+
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowDeleteCommunityModal);
 
     return (
@@ -49,7 +50,9 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
                 <div className="flex flex-col gap-4">
                     <p className="">
                         Enter the name of the community "
-                        <span className="font-semibold text-lg text-primary">{communityName}</span>" to delete the community
+                        <span className="font-semibold text-lg text-primary">
+                            {communityName}
+                        </span>" to delete the community
                     </p>
                     <input
                         id="remove-members"
@@ -59,12 +62,9 @@ const index = ({setShowDeleteCommunityModal, communityName, communityId}) => {
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Community name"/>
                     <div>
-                        <button
-                            disabled={isDisabled}
-                            onClick={handleDeleteCommunity}
-                            className="py-2 px-12 rounded-md bg-primary text-white font-medium">
-                            Delete
-                        </button>
+                        <Button onClickHandler={handleDeleteCommunity} buttonText="Delete" isDisabled={isDisabled}
+                            isSubmit={false}
+                        />
                     </div>
                 </div>
             </div>

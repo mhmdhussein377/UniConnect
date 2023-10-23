@@ -223,7 +223,8 @@ const index = () => {
                         {userStatus.isCreator && (
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-4">
-                                    <Button text="Invite Users" setModal={setShowAddMembersModal}/> {privacy === "private" && <Button text="Requested Users" setModal={setShowRequestedUsersModal}/>}
+                                    <Button text="Invite Users" setModal={setShowAddMembersModal}/> 
+                                    {privacy === "private" && <Button text="Requested Users" setModal={setShowRequestedUsersModal}/>}
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <Button text="Remove members" setModal={setShowKickUsersModal}/>

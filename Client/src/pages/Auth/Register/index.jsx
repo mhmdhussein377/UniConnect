@@ -87,7 +87,8 @@ const index = () => {
                         icon={< MdAlternateEmail size = {
                         27
                     }
-                    color = "C1C5C5" />}/> {error.isError && error.type === "email" && (
+                    color = "C1C5C5" />}/> 
+                    {error.isError && error.type === "email" && (
                         <p className="text-start text-danger">{error.message}</p>
                     )}
                     <Input
@@ -118,7 +119,8 @@ const index = () => {
                         minLength="8"
                         icon={< FiLock color = "C1C5C5" size = {
                         27
-                    } />}/> {error.isError && error.type === "password" && <p className="text-danger text-start">{error.message}</p>}
+                    } />}/> 
+                    {error.isError && error.type === "password" && <p className="text-danger text-start">{error.message}</p>}
                     {error.isError && error.type === "Missing fields" && (
                         <p className="text-danger text-start">{error.message}</p>
                     )}

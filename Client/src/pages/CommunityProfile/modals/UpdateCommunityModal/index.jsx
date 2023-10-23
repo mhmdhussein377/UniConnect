@@ -3,6 +3,7 @@ import {MdOutlineClose} from "react-icons/md";
 import {handleCloseModal} from "./../../../../utils/closeModal";
 import {handleChange} from "./../../../../utils/handleChange";
 import {postRequest} from "./../../../../utils/requests";
+import Button from "../components/Button";
 
 const index = ({setShowUpdateCommunityModal, setCommunity, name, description, privacy, _id}) => {
 
@@ -16,7 +17,7 @@ const index = ({setShowUpdateCommunityModal, setCommunity, name, description, pr
         handleChange(e, setInputs)
     }
 
-    const handleCreateCommunity = async(e) => {
+    const handleUpdateCommunity = async(e) => {
         e.preventDefault()
 
         const {name, description, privacy} = inputs
@@ -42,7 +43,7 @@ const index = ({setShowUpdateCommunityModal, setCommunity, name, description, pr
             onClick={closeModal}
             className="flex items-center justify-center absolute top-0 left-0 w-full h-screen bg-black/60 z-[20] px-4">
             <form
-                onSubmit={handleCreateCommunity}
+                onSubmit={handleUpdateCommunity}
                 ref={boxRef}
                 className="bg-white w-full max-w-[550px] p-4 rounded-md flex flex-col gap-4 dark:bg-grayMedium">
                 <div className="flex flex-col gap-2">
@@ -109,11 +110,7 @@ const index = ({setShowUpdateCommunityModal, setCommunity, name, description, pr
                     </div>
                     {error.isError && <p className="text-danger text-start">{error.message}</p>}
                     <div className="mt-2">
-                        <button
-                            type="submit"
-                            className="py-2 px-12 rounded-md bg-primary text-white font-medium">
-                            Update Community
-                        </button>
+                        <Button buttonText="Update Community" isSubmit={true} />
                     </div>
                 </div>
             </form>
