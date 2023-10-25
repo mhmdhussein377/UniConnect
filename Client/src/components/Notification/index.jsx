@@ -2,7 +2,7 @@ import { handleRequestAction } from "../../utils/handleNotification";
 import NotificationButton from "./../../components/NotificationButton"
 import ProfilePicture from "./../../assets/ProfilePicture.jpg"
 
-const index = ({ notification, setNotifications, getCommunities }) => {
+const index = ({ notification, setNotifications }) => {
   const { content, sender, type, _id, community } = notification;
 
   console.log(notification, "notification")

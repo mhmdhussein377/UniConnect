@@ -16,9 +16,9 @@ const index = ({
 }) => {
 
     const {user} = useContext(AuthContext)
-    let [isInvited,
+    const [isInvited,
         setIsInvited] = useState(false)
-    let [loading,
+    const [loading,
         setLoading] = useState(false)
 
     const {name, username, _id, profile} = member
@@ -38,6 +38,8 @@ const index = ({
             }
             setLoading(false)
         } catch (error) {
+            console.error(error)
+        } finally {
             setLoading(false)
         }
     }
@@ -53,12 +55,10 @@ const index = ({
                 <div className="relative">
                     <img
                         className="cursor-pointer w-[45px] h-[45px] rounded-full overflow-hidden flex items-center justify-center object-cover"
-                        src={profile
-                        ?.profileImage || ProfilePicture}
+                        src={profile?.profileImage || ProfilePicture}
                         alt="profile-picture"/>{" "} {online && (
                         <span
-                            className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>
-                    )}
+                            className="absolute w-[15px] h-[15px] bg-[limegreen] rounded-full top-0 right-0 border-2 border-white"></span>)}
                 </div>
                 <div className="flex flex-col gap-0">
                     <div>
@@ -84,25 +84,6 @@ const index = ({
                         icon={< AiOutlinePlus />}
                         text="Invite"/>
                 ))}
-            {/* {searched && !actualUser && (
-                <div>
-                    {isInvited
-                        ? (
-                            <button
-                                className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
-                                <AiOutlineMinus/>
-                                Remove friend
-                            </button>
-                        )
-                        : (
-                            <button
-                                className="bg-primary text-white py-1.5 px-3 rounded-md flex items-center gap-1 font-medium">
-                                <AiOutlinePlus/>
-                                Add friend
-                            </button>
-                        )}
-                </div>
-            )} */}
         </div>
     );
 };

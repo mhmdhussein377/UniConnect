@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import {HiPencil} from "react-icons/hi";
 
 const index = ({setShowEducationalInfoModal, currentUser, university, major, emptyHeadline}) => {

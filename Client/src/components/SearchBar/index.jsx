@@ -19,21 +19,25 @@ const index = () => {
 
     useEffect(() => {
         const searchUsers = async() => {
-            const response = await getRequest(`/user/search/${searchTerm}`);
-            let users,
-                communities = [];
-            if (response) {
-                users = response
-                    .results[0]
-                    .filter((user) => user._id !== currentUser._id);
-                communities = response.results[1];
-            }
+            try {
+                const response = await getRequest(`/user/search/${searchTerm}`);
+                
+                if (response) {
+                    const [userResults, communityResults] = response.results
 
-            if (response && (users.length > 0 || communities.length > 0)) {
-                setResult([
-                    ...users,
-                    ...communities
-                ].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)));
+                    const filteredUsers = userResults.filter((user) => user._id !== currentUser._id);
+                    const sortedResults = [...filteredUsers, communityResults].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+                    if(sortedResults.length > 0) {
+                        setResult(sortedResults)
+                    } else {
+                        setResult([])
+                    }
+                } else {
+                    setResult([])
+                }
+            } catch (error) {
+                console.error("Error while searching users:", error)
             }
         }
         if (searchTerm !== "") {

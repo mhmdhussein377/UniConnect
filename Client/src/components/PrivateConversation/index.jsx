@@ -181,8 +181,6 @@ const index = ({
         }
     }, [])
 
-    // useEffect(() => {     socket         .emit("addUser", user._id); }, []);
-
     useEffect(() => {
         if (conversation && arrivalMessage && conversation
             ?.member
@@ -193,8 +191,6 @@ const index = ({
                 ...prevMessages,
                 arrivalMessage
             ])
-
-            console.log("mhmdddd")
         }
     }, [arrivalMessage])
 
