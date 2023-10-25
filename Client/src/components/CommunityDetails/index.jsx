@@ -6,7 +6,7 @@ import {GoPlus} from "react-icons/go";
 import Member from "./../Member"
 import {Link} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
-import { AuthContext } from "../../Context/AuthContext";
+import {AuthContext} from "../../Context/AuthContext";
 
 const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembersModal, community}) => {
 
@@ -16,11 +16,29 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
         setIsAboutOpened] = useState(true)
     const [isMembersListOpened,
         setIsMembersListOpened] = useState(true)
-    const [communityInfo, setCommunityInfo] = useState(null)
+    const [communityInfo,
+        setCommunityInfo] = useState(null)
 
     useEffect(() => {
         setCommunityInfo(community)
     }, [community])
+
+    const handleAboutClick = () => {
+        setIsAboutOpened((prev) => !prev);
+    };
+
+    const handleMembersClick = () => {
+        setIsMembersListOpened((prev) => !prev);
+    };
+
+    const handleAddMembersClick = () => {
+        setShowAddMembersModal(true);
+        setOpenCommunityDetails(false);
+    };
+
+    const handleCommunityDetailsClick = () => {
+        setOpenCommunityDetails((prev) => !prev);
+    };
 
     return (
         <div
@@ -30,26 +48,28 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
             <div className="pb-4 border-b-2 border-grayHard">
                 <div className="flex items-center justify-end pr-4 py-4 pb-1">
                     <MdOutlineClose
-                        onClick={() => setOpenCommunityDetails((prev) => !prev)}
+                        onClick={handleCommunityDetailsClick}
                         className="cursor-pointer"
                         size={30}/>
                 </div>
                 <div className="flex flex-col items-center">
                     <Link to={`/community/${communityInfo?._id}`}>
-                        {communityInfo?.privacy === "public" ? <BiHash size={60}/> : <AiTwotoneLock size={60} /> }
+                        {communityInfo?.privacy === "public" ? <BiHash size={60}/> : <AiTwotoneLock size={60}/>}
                     </Link>
-                    <Link to={`/community/${communityInfo?._id}`} className="text-2xl">{communityInfo?.name}</Link>
+                    <Link
+                        to={`/community/${communityInfo?._id}`}
+                        className="text-2xl">{communityInfo?.name}</Link>
                 </div>
             </div>
             <div className="flex flex-col gap-4 px-4 pt-4">
                 <div className="flex items-center justify-between">
                     About{" "} {isAboutOpened
                         ? (<BsChevronUp
-                            onClick={() => setIsAboutOpened(!isAboutOpened)}
+                            onClick={handleAboutClick}
                             size={20}
                             className="cursor-pointer"/>)
                         : (<BsChevronDown
-                            onClick={() => setIsAboutOpened(!isAboutOpened)}
+                            onClick={handleAboutClick}
                             size={20}
                             className="cursor-pointer"/>)}
                 </div>
@@ -62,17 +82,19 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
                     className="flex items-center justify-between py-4 border-t-2 border-grayHard select-none">
                     Members
                     <div className="flex items-center gap-4">
-                        {user._id === communityInfo?.creator._id && <div onClick={() => {setShowAddMembersModal(true); setOpenCommunityDetails(false)}} className="flex items-center cursor-pointer text-primary font-medium select-none">
-                            <GoPlus size={20}/>
-                            Add Members
-                        </div>}
+                        {user._id === communityInfo?.creator._id && <div
+                                onClick={handleAddMembersClick}
+                                className="flex items-center cursor-pointer text-primary font-medium select-none">
+                                <GoPlus size={20}/>
+                                Add Members
+                            </div>}
                         {isMembersListOpened
                             ? (<BsChevronUp
-                                onClick={() => setIsMembersListOpened(!isMembersListOpened)}
+                                onClick={handleMembersClick}
                                 size={20}
                                 className="cursor-pointer"/>)
                             : (<BsChevronDown
-                                onClick={() => setIsMembersListOpened(!isMembersListOpened)}
+                                onClick={handleMembersClick}
                                 size={20}
                                 className="cursor-pointer"/>)}
                     </div>
@@ -80,10 +102,9 @@ const index = ({openCommunityDetails, setOpenCommunityDetails, setShowAddMembers
                 {isMembersListOpened && (
                     <div
                         className="flex flex-col gap-2 w-full max-h-[300px] overflow-scroll scrollbar-hide">
-                        {communityInfo && <Member creator={true} online={communityInfo?.creator.online} member={communityInfo?.creator} />}
-                        {communityInfo?.members.map((member, index) => (
-                            <Member online={member.online} key={index} member={member} />
-                        ))}
+                        {communityInfo && <Member creator={true} online={communityInfo?.creator.online}
+                            member={communityInfo?.creator}/>}
+                        {communityInfo?.members.map((member, index) => (<Member online={member.online} key={index} member={member}/>))}
                     </div>
                 )}
             </div>
