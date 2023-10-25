@@ -4,26 +4,51 @@ import {BiSolidBuildingHouse} from "react-icons/bi";
 import {FaLocationDot} from "react-icons/fa6";
 import {Link} from "react-router-dom";
 import UserDetail from "./../UserDetail"
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 const index = ({showUserDetails, setShowUserDetails, conversation}) => {
 
-    const [user, setUser] = useState({})
+    const [user,
+        setUser] = useState({})
 
     useEffect(() => {
         setUser(conversation?.member)
     }, [conversation])
 
+    const toggleShowUserDetails = () => setShowUserDetails((prev) => !prev)
+
+    const userDetailItems = [
+        {
+            condition: user?.email,
+            icon: <MdEmail size={20}/>,
+            label: "Email",
+            value: user.email
+        }, {
+            condition: user?.profile?.major,
+            icon: <RiGraduationCapFill size={20}/>,
+            label: "Major",
+            value: user?.profile.major
+        }, {
+            condition: user?.profile?.university,
+            icon: <BiSolidBuildingHouse size={20}/>,
+            label: "University",
+            value: user?.profile.university
+        }, {
+            condition: user?.profile?.location,
+            icon: <FaLocationDot size={20}/>,
+            label: "Location",
+            value: user?.profile.location
+        }
+    ];
+
     return (
         <div
-            className={`absolute top-0 bg-white dark:bg-black dark:text-white community-details h-screen w-[80%] xs:w-[70%] sm:w-[55%] smd:w-[48%] md:w-[42%] lg:w-[35%] xl:w-[27%] z-50 transition-all duration-300 ease-linear border-l-[2px] ${showUserDetails
-            ? "right-0"
-            : "-left-full"}`}>
+            className={`absolute top-0 bg-white dark:bg-black dark:text-white community-details h-screen w-[80%] xs:w-[70%] sm:w-[55%] smd:w-[48%] md:w-[42%] lg:w-[35%] xl:w-[27%] z-50 transition-all duration-300 ease-linear border-l-[2px] ${showUserDetails ? "right-0" : "-left-full"}`}>
             <div className="pb-4 border-b-2 border-grayHard">
                 <div className="flex items-center justify-end pr-4 py-4 pb-1 ">
                     <div>
                         <MdOutlineClose
-                            onClick={() => setShowUserDetails((prev) => !prev)}
+                            onClick={toggleShowUserDetails}
                             className="cursor-pointer"
                             size={30}/>
                     </div>
@@ -37,26 +62,15 @@ const index = ({showUserDetails, setShowUserDetails, conversation}) => {
                             src="https://img.freepik.com/free-photo/profile-shot-aristocratic-girl-blouse-with-frill-lady-with-flowers-her-hair-posing-proudly-against-blue-wall_197531-14304.jpg?w=360&t=st=1693254715~exp=1693255315~hmac=11fc761d3797e16d0e4b26b5b027e97687491af623985635a159833dfb9f7826"
                             alt="profile-picture"/>
                     </Link>
-                    <Link to={`/profile/${user?.username}`} className="text-2xl cursor-pointer">{user?.name}</Link>
+                    <Link
+                        to={`/profile/${user?.username}`}
+                        className="text-2xl cursor-pointer">
+                        {user?.name}
+                    </Link>
                 </div>
             </div>
             <div className="p-4 flex flex-col gap-2">
-                {user?.email && <UserDetail
-                    icon={<MdEmail size={20}/>}
-                    label="Email"
-                    value={user.email}/>}
-                {user?.profile?.major && <UserDetail
-                    icon={<RiGraduationCapFill size={20}/>}
-                    label="Major"
-                    value={user.profile.major}/>}
-                {user?.profile?.university && <UserDetail
-                    icon={<BiSolidBuildingHouse size={20} />}
-                    label="University"
-                    value={user.profile.university}/>}
-                {user?.profile?.location && <UserDetail
-                    icon={<FaLocationDot size={20}/>}
-                    label="Location"
-                    value={user.profile.location}/>}
+                {userDetailItems.map((item, index) => item.condition && (<UserDetail key={index} icon={item.icon} label={item.label} value={item.value}/>))}
             </div>
         </div>
     );
