@@ -3,7 +3,8 @@ import {MdOutlineClose} from "react-icons/md";
 import {handleCloseModal} from "../../utils/closeModal";
 import {handleChange} from "../../utils/handleChange"
 import {postRequest} from "../../utils/requests"
-import { AuthContext } from "../../Context/AuthContext";
+import {AuthContext} from "../../Context/AuthContext";
+import RadioInput from "./../RadioInput"
 
 const index = ({setShowCommunityModal, setCommunities}) => {
 
@@ -27,17 +28,34 @@ const index = ({setShowCommunityModal, setCommunities}) => {
         if (!name || !description || !privacy) {
             setErrors({isError: true, type: "Missing fields", message: "All fields are required"});
             setTimeout(() => {
-                setErrors({ isError: false, type: "", message: "" });
+                setErrors({isError: false, type: "", message: ""});
             }, 3000)
             return;
         }
-        
+
         setShowCommunityModal(false)
         const response = await postRequest("/community/create", inputs)
         const {name: communityName, privacy: communityPrivacy, _id, creator} = response
-        
-        setCommunities(prev => [{ID: _id, name: communityName, privacy: communityPrivacy, unreadCount: 0, lastMessages: []}, ...prev])
-        dispatch({type: "CREATE_COMMUNITY", payload: {name: communityName, privacy: communityPrivacy, _id, creator}})
+
+        setCommunities(prev => [
+            {
+                ID: _id,
+                name: communityName,
+                privacy: communityPrivacy,
+                unreadCount: 0,
+                lastMessages: []
+            },
+            ...prev
+        ])
+        dispatch({
+            type: "CREATE_COMMUNITY",
+            payload: {
+                name: communityName,
+                privacy: communityPrivacy,
+                _id,
+                creator
+            }
+        })
     }
 
     const closeModal = (e) => handleCloseModal(e, boxRef, setShowCommunityModal);
@@ -83,32 +101,22 @@ const index = ({setShowCommunityModal, setCommunities}) => {
                         Privacy
                     </label>
                     <div className="flex gap-8">
-                        <label
-                            className="flex items-center justify-center gap-2 text-[16px] select-none cursor-pointer"
-                            htmlFor="public">
-                            <input
-                                id="public"
-                                onChange={handleInputChange}
-                                className="w-4 h-4 custom-radio"
-                                type="radio"
-                                name="privacy"
-                                value="public"/>
-                            Public
-                        </label>
-                        <label
-                            className="flex items-center justify-center gap-2 text-[16px] select-none cursor-pointer"
-                            htmlFor="private">
-                            <input
-                                id="private"
-                                onChange={handleInputChange}
-                                className="w-4 h-4 custom-radio"
-                                type="radio"
-                                name="privacy"
-                                value="private"/>
-                            Private
-                        </label>
+                        <RadioInput
+                            id="public"
+                            name="privacy"
+                            value="public"
+                            onChange={handleInputChange}
+                            label="Public"/>
+                        <RadioInput
+                            id="private"
+                            name="privacy"
+                            value="private"
+                            onChange={handleInputChange}
+                            label="Private"/>
                     </div>
-                    {error.isError && <p className="text-danger text-start">{error.message}</p>}
+                    {error.isError && (
+                        <p className="text-danger text-start">{error.message}</p>
+                    )}
                     <div className="mt-2">
                         <button
                             type="submit"
