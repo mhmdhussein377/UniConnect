@@ -41,7 +41,7 @@ const index = ({
         // const handleSocketTimeout = () => {     console.error("WebSocket connection
         // timed out") } socket     .current     .on("connect_error", (error) => {   if
         // (error.message === "timeout") {             handleSocketTimeout()  } else {
-        //   console.error("WebSocket connection error:", error)     }     })
+        // console.error("WebSocket connection error:", error)     }     })
 
         return () => {
             if (socket.current && socket.current.connected) {
@@ -65,11 +65,21 @@ const index = ({
     const [currentEmoji,
         setCurrentEmoji] = useState(null);
 
+    const toggleSidebar = () => {
+        setOpenSidebar(!openSidebar);
+    };
+
+    const toggleCommunityDetails = () => setOpenCommunityDetails((prev) => !prev);
+
+    const showAddMembersModal = () => setShowAddMembersModal(true);
+
+    const toggleEmojiPicker = () => setisPickerVisible(!isPickerVisible);
+
+    const handleFileInputClick = () => fileRef.current.click();
+
     useEffect(() => {
-        setMessages(communityInfo
-            ?.chat);
-    }, [communityInfo
-            ?.chat]);
+        setMessages(communityInfo?.chat);
+    }, [communityInfo?.chat]);
 
     useEffect(() => {
         if (chatRef.current) {
@@ -124,7 +134,8 @@ const index = ({
                 return count;
             }, 0);
 
-    if (communityInfo?.creator.online) {
+    if (communityInfo
+        ?.creator.online) {
         onlineUsers += 1;
     }
 
@@ -134,22 +145,28 @@ const index = ({
         if (!file && !messageInput) 
             return;
         
-        const trimmedMessageInput = messageInput ? messageInput.trim() : "";
+        const trimmedMessageInput = messageInput
+            ? messageInput.trim()
+            : "";
         const sender = user._id;
         const senderName = user.name;
         const roomName = communityInfo._id;
 
         const message = {}
-        const groupMessage = {sender, senderName, roomName}
+        const groupMessage = {
+            sender,
+            senderName,
+            roomName
+        }
 
-        if(trimmedMessageInput) {
+        if (trimmedMessageInput) {
             message.content = trimmedMessageInput
             groupMessage.content = trimmedMessageInput
         }
 
-        if(file) {
+        if (file) {
             const fileURL = await handleImageUpload(file)
-            if(fileURL) {
+            if (fileURL) {
                 message.fileURL = fileURL
                 groupMessage.fileURL = fileURL
             }
@@ -159,7 +176,9 @@ const index = ({
         setisPickerVisible(false);
         setFile(null);
         setNewGroupMessage(message);
-        socket.current.emit("sendGroupMessage", groupMessage);
+        socket
+            .current
+            .emit("sendGroupMessage", groupMessage);
 
         if (message.content || message.fileURL) {
             await postRequest(`/community/${roomName}/add-message`, message);
@@ -172,14 +191,17 @@ const index = ({
         }
     }, [currentEmoji]);
 
-    console.log(openSidebar, "openSidebaaar")
-
     return !communityInfo
         ? (
             <div className="flex-[8.8] flex flex-col">
                 <div
-                    className={`bg-gray-100 w-full flex items-center ${openSidebar ? "justify-end" : "justify-start"} dark:bg-black opacity-50 p-4 lg:hidden`}>
-                    <RxHamburgerMenu onClick={() => setOpenSidebar(openSidebar ? false : true)} className="cursor-pointer" size={35}/>
+                    className={`bg-gray-100 w-full flex items-center ${openSidebar
+                    ? "justify-end"
+                    : "justify-start"} dark:bg-black opacity-50 p-4 lg:hidden`}>
+                    <RxHamburgerMenu
+                        onClick={toggleSidebar}
+                        className="cursor-pointer"
+                        size={35}/>
                 </div>
                 <div
                     className="grow h-full p-8 flex flex-col bg-gray-100 dark:bg-black dark:text-white opacity-50 items-center justify-center">
@@ -195,7 +217,7 @@ const index = ({
                     className="flex items-center justify-between px-4 py-1.5 border-b-[2px] border-grayHard">
                     <div className="flex flex-col items-center">
                         <div
-                            onClick={() => setOpenCommunityDetails((prev) => !prev)}
+                            onClick={toggleCommunityDetails}
                             className="flex items-center gap-2 font-medium text-lg rounded-md px-2 py-1 cursor-pointer transition bg-gray-200 hover:bg-gray-300 select-none dark:text-black">
                             {communityInfo.privacy === "public"
                                 ? (<BsHash className="dark:text-black" size={25}/>)
@@ -203,8 +225,7 @@ const index = ({
                             {communityInfo.name}
                         </div>
                         <div className="flex items-center">
-                            <span className="mr-1">{communityInfo
-                                    ?.members.length + 1}</span>
+                            <span className="mr-1">{communityInfo?.members.length + 1}</span>
                             <span>member</span>
                             <span>
                                 <BsDot size={25}/>
@@ -216,7 +237,7 @@ const index = ({
                         </div>
                     </div>
                     <CgSidebarOpen
-                        onClick={() => setOpenSidebar((prev) => !prev)}
+                        onClick={toggleSidebar}
                         className="lg:hidden cursor-pointer"
                         size={30}/>
                 </div>
@@ -232,7 +253,7 @@ const index = ({
                             </p>
                         </div>
                         <div
-                            onClick={() => setShowAddMembersModal(true)}
+                            onClick={showAddMembersModal}
                             className="py-3 px-4 text-2xl border-2 border-[#CECECE] rounded-md flex items-center gap-4 text-center cursor-pointer">
                             <div className="border-2 p-2 rounded-md bg-primary">
                                 <FiUserPlus className="text-white" size={25}/>
@@ -251,13 +272,10 @@ const index = ({
                                     key={index}
                                     communitMessage={true}
                                     content={message.content}
-                                    sender={message.sender
-                                    ?.name}
-                                    own={message.sender
-                                    ?._id}
+                                    sender={message.sender?.name}
+                                    own={message.sender?._id}
                                     fileURL={message.fileURL}
-                                    date={format(message
-                                    ?.timestamps)}/>);
+                                    date={format(message?.timestamps)}/>);
                             })}
                     </div>
                 )}
@@ -285,16 +303,16 @@ const index = ({
                                 type="text"
                                 placeholder="Send a message"/>
                             <input
-                                onChange={(e) => setFile(e.target.files[0])}
+                                onChange={e => setFile(e.target.files[0])}
                                 ref={fileRef}
                                 type="file"
                                 className="hidden"/>
                             <GrAttachment
-                                onClick={() => fileRef.current.click()}
+                                onClick={handleFileInputClick}
                                 className="cursor-pointer"
                                 size={25}/>
                             <BsEmojiSmile
-                                onClick={() => setisPickerVisible(!isPickerVisible)}
+                                onClick={toggleEmojiPicker}
                                 className="cursor-pointer text-black"
                                 size={25}/>
                         </div>
