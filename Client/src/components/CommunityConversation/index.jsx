@@ -78,12 +78,8 @@ const index = ({
     }, [messages]);
 
     useEffect(() => {
-        if (communityInfo
-            ?._id) {
-            socket
-                .current
-                .emit("joinRoom", communityInfo
-                    ?._id);
+        if (communityInfo?._id) {
+            socket.current.emit("joinRoom", communityInfo?._id);
         }
     }, [communityInfo]);
 
@@ -112,9 +108,7 @@ const index = ({
     }, [communityInfo]);
 
     useEffect(() => {
-        if (arrivalMessage && communityInfo && communityInfo
-            ?._id && arrivalMessage
-                ?.roomName) {
+        if (arrivalMessage && communityInfo && communityInfo?._id && arrivalMessage?.roomName) {
             setMessages((prevMessages) => [
                 ...prevMessages,
                 arrivalMessage
@@ -123,15 +117,14 @@ const index = ({
         setArrivalMessage(null);
     }, [arrivalMessage, communityInfo, messages]);
 
-    let onlineUsers = communityInfo?.members
-            .reduce((count, member) => {
+    let onlineUsers = communityInfo?.members.reduce((count, member) => {
                 if (member.online) {
                     return count + 1;
                 }
                 return count;
             }, 0);
-    if (communityInfo
-        ?.creator.online) {
+
+    if (communityInfo?.creator.online) {
         onlineUsers += 1;
     }
 
@@ -141,83 +134,35 @@ const index = ({
         if (!file && !messageInput) 
             return;
         
-        if (!file && messageInput) {
-            const message = {
-                content: messageInput
-                    .toString()
-                    .trim()
-            };
+        const trimmedMessageInput = messageInput ? messageInput.trim() : "";
+        const sender = user._id;
+        const senderName = user.name;
+        const roomName = communityInfo._id;
 
-            const groupMessage = {
-                sender: user._id,
-                senderName: user.name,
-                content: messageInput
-                    .toString()
-                    .trim(),
-                roomName: communityInfo._id
-            };
+        const message = {}
+        const groupMessage = {sender, senderName, roomName}
 
-            setMessageInput("");
-            setisPickerVisible(false);
-            setFile(null);
-            setNewGroupMessage(message);
-            socket
-                .current
-                .emit("sendGroupMessage", groupMessage);
-            await postRequest(`/community/${communityInfo._id}/add-message`, message);
-        } else if (file && !messageInput) {
-            handleImageUpload(file).then(async(fileURL) => {
-                let message;
-                if (fileURL) {
-                    message = {
-                        fileURL
-                    };
-                }
+        if(trimmedMessageInput) {
+            message.content = trimmedMessageInput
+            groupMessage.content = trimmedMessageInput
+        }
 
-                const groupMessage = {
-                    sender: user._id,
-                    senderName: user.name,
-                    fileURL,
-                    roomName: communityInfo._id
-                };
+        if(file) {
+            const fileURL = await handleImageUpload(file)
+            if(fileURL) {
+                message.fileURL = fileURL
+                groupMessage.fileURL = fileURL
+            }
+        }
 
-                setMessageInput("");
-                setisPickerVisible(false);
-                setFile(null);
-                setNewGroupMessage(message);
-                socket
-                    .current
-                    .emit("sendGroupMessage", groupMessage);
-                await postRequest(`/community/${communityInfo._id}/add-message`, message);
-            });
-        } else if (file && messageInput) {
-            let message = {};
-            let groupMessage = {};
-            message.content = messageInput
-                .toString()
-                .trim();
-            groupMessage.content = messageInput
-                .toString()
-                .trim();
-            setMessageInput("");
-            setisPickerVisible(false);
-            handleImageUpload(file).then(async(fileURL) => {
-                if (fileURL) {
-                    message.fileURL = fileURL;
-                }
+        setMessageInput("");
+        setisPickerVisible(false);
+        setFile(null);
+        setNewGroupMessage(message);
+        socket.current.emit("sendGroupMessage", groupMessage);
 
-                (groupMessage.sender = user._id),
-                (groupMessage.senderName = user.name),
-                (groupMessage.fileURL = fileURL),
-                (groupMessage.roomName = communityInfo._id);
-
-                setFile(null);
-                setNewGroupMessage(message);
-                socket
-                    .current
-                    .emit("sendGroupMessage", groupMessage);
-                await postRequest(`/community/${communityInfo._id}/add-message`, message);
-            });
+        if (message.content || message.fileURL) {
+            await postRequest(`/community/${roomName}/add-message`, message);
         }
     };
 
