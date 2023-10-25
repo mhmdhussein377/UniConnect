@@ -11,16 +11,15 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
     return (
         <div
             className="bg-white dark:bg-black dark:text-white drop-shadow-lg rounded-md p-4 flex flex-col gap-3">
-            <div className="text-xl font-semibold flex items-center justify-between text-primary">
+            <div
+                className="text-xl font-semibold flex items-center justify-between text-primary">
                 {text}
             </div>
             <div className="flex flex-col gap-4">
-                {data
-                    .slice(0, showAllData
-                    ? data?.length : maxDataToShow)
-                    .map((comm, index) => {
-                        const {name, privacy, _id} = comm;
-                        const {username} = comm.creator;
+                {data.slice(0, showAllData ? data?.length : maxDataToShow)
+                    .map((community, index) => {
+                        const {name, privacy, _id} = community;
+                        const {username} = community.creator;
                         return (
                             <div key={index} className="pb-2 border-b border-b-3 border-b-gray-300">
                                 <SearchedCommunity
@@ -33,16 +32,12 @@ const index = ({text, data, maxDataToShow, withoutUsername}) => {
                         );
                     })}
             </div>
-            {data
-                ?.length > maxDataToShow && (
+            {data?.length > maxDataToShow && (
                     <div>
-                        {showAllData
-                            ? (
-                                <Button text={"Show less"} icon={<BsChevronUp />} setShowAllData={setShowAllData} />
-                            )
-                            : (
-                                <Button text={"Show more"} icon={<BsChevronDown />} setShowAllData={setShowAllData} />
-                            )} 
+                        <Button
+                            text={showAllData ? "Show less" : "Show more"}
+                            icon={showAllData ? <BsChevronUp/> : <BsChevronDown/>}
+                            setShowAllData={setShowAllData}/>
                     </div>
                 )}
         </div>
