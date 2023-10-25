@@ -19,8 +19,12 @@ const index = ({setShowAddMembersModal, communityId}) => {
 
     useEffect(() => {
         const getUserFriends = async() => {
-            const response = await getRequest(`/user/friends/${communityId}`);
-            response && setFriends(response.friends)
+            try {
+                const response = await getRequest(`/user/friends/${communityId}`);
+                response && setFriends(response.friends)
+            } catch (error) {
+                console.error("Error fetching user friends: ", error)
+            }
         }
         getUserFriends()
     }, [communityId])
@@ -28,9 +32,14 @@ const index = ({setShowAddMembersModal, communityId}) => {
     useEffect(() => {
         const searchUsers = async() => {
             setLoading(true)
-            const response = await getRequest(`/user/search/${debouncedValue}/${communityId}`)
-            response && setSearchedUsers(response.users)
-            setLoading(false)
+            try {
+                const response = await getRequest(`/user/search/${debouncedValue}/${communityId}`)
+                response && setSearchedUsers(response.users)
+            } catch (error) {
+                console.error("Error searching users: ", error)
+            }finally {
+                setLoading(false)
+            }
         }
         if (debouncedValue !== "") {
             searchUsers()
